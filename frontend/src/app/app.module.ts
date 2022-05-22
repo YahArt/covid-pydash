@@ -11,6 +11,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardOverviewComponent } from './components/dashboard-overview/dashboard-overview.component';
 import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
+import { GridsterModule } from 'angular-gridster2';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
   ],
   imports: [
     BrowserModule,
-    DragDropModule,
+    GridsterModule,
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
