@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { AppRoutes } from './helpers/app-routes';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ export class AppComponent {
   sideBarElements = [
     {
       name: 'Dashboards',
-      route: 'dashboard-overview'
+      route: AppRoutes.DASHBOARD_OVERVIEW
     }
   ]
 
