@@ -1,5 +1,5 @@
 <gridster [options]="options">
   <gridster-item [item]="item" *ngFor="let item of dashboard">
-    <line-chart></line-chart>
+    <dashboard-item [itemType]="item['dashboardItemType']"></dashboard-item>
   </gridster-item>
 </gridster>

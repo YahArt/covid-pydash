@@ -13,13 +13,15 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
 import { GridsterModule } from 'angular-gridster2';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { LineChartComponent } from './components/line-chart/line-chart.component';
+import { DashboardItemComponent } from './components/dashboard-item/dashboard-item.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardOverviewComponent,
     CreateDashboardComponent,
-    LineChartComponent
+    LineChartComponent,
+    DashboardItemComponent
   ],
   imports: [
     BrowserModule,
