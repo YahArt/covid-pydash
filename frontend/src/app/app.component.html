@@ -1,4 +1,27 @@
-<mat-slider min="1" max="100" step="1" value="50"></mat-slider>
+<mat-toolbar class="app-header" color="primary">
+  <span>Covid PyDash</span>
+</mat-toolbar>
 
+<mat-sidenav-container class="app-sidenav-container">
+  <mat-sidenav
+    #sidenav
+    mode="side"
+    opened
+    class="app-sidenav"
+    [fixedInViewport]="false"
+    [fixedTopGap]="0"
+    [fixedBottomGap]="0"
+  >
+    <mat-nav-list>
+      <mat-list-item *ngFor="let sidebarElement of sideBarElements">
+        <a [href]="sidebarElement.route" matLine>{{ sidebarElement.name }}</a>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
 
-<router-outlet></router-outlet>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<mat-toolbar color="secondary" class="app-footer">Footer</mat-toolbar>
