@@ -83,6 +83,8 @@ export class CreateDashboardComponent implements OnInit {
         rows: 2,
         y: 2,
         x: 0,
+        minItemRows: 2,
+        minItemCols: 2,
       },
     ];
   }
