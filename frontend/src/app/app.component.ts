@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
+import { filter, switchScan } from 'rxjs';
 import { AppRoutes } from './helpers/app-routes';
 
 @Component({
@@ -7,12 +9,33 @@ import { AppRoutes } from './helpers/app-routes';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'frontend';
-  sideBarElements = [
+  public title = 'frontend';
+  public readonly sideBarElements = [
     {
       name: 'Dashboards',
       route: AppRoutes.DASHBOARD_OVERVIEW
     }
   ]
+
+  public currentRoute = AppRoutes.DASHBOARD_OVERVIEW;
+
+  public constructor(private readonly _router: Router) {
+    _router.events.pipe(filter(event => event instanceof NavigationEnd))
+    .subscribe((event: any) => 
+     {
+       this.currentRoute = this.constructNameFromUrl(event.url);
+     });
+  }
+
+  private constructNameFromUrl(url: string): string {
+    // Remove '/' in order to match with the actual route name
+    const sanitizedUrl = url.replace('/', '');
+    switch(sanitizedUrl) {
+      case AppRoutes.DASHBOARD_OVERVIEW:
+        return "Dashboard Overview";
+      default:
+        return "";
+    }
+  }
 
 }
