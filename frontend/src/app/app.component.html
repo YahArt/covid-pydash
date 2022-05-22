@@ -17,7 +17,9 @@
   >
     <mat-nav-list>
       <mat-list-item *ngFor="let sidebarElement of sideBarElements">
-        <a [href]="sidebarElement.route" matLine>{{ sidebarElement.name }}</a>
+        <a [href]="sidebarElement.route" class="sidebar-entry" matLine>{{
+          sidebarElement.name
+        }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>

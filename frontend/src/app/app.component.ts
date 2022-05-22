@@ -12,9 +12,13 @@ export class AppComponent {
   public title = 'frontend';
   public readonly sideBarElements = [
     {
-      name: 'Dashboards',
+      name: 'Create a Dashboard',
+      route: AppRoutes.CREATE_DASHBOARD
+    },
+    {
+      name: 'Your Dashboards',
       route: AppRoutes.DASHBOARD_OVERVIEW
-    }
+    },    
   ]
 
   public currentRoute = AppRoutes.DASHBOARD_OVERVIEW;
@@ -33,6 +37,8 @@ export class AppComponent {
     switch(sanitizedUrl) {
       case AppRoutes.DASHBOARD_OVERVIEW:
         return "Dashboard Overview";
+      case AppRoutes.CREATE_DASHBOARD:
+        return "Create your Dashboard";
       default:
         return "";
     }
