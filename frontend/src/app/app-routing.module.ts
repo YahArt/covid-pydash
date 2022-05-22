@@ -5,9 +5,9 @@ import { DashboardOverviewComponent } from './components/dashboard-overview/dash
 import { AppRoutes } from './helpers/app-routes';
 
 const routes: Routes = [
-  { path: '', redirectTo: AppRoutes.DASHBOARD_OVERVIEW, pathMatch: 'full' },
+  { path: '', redirectTo: AppRoutes.CREATE_DASHBOARD, pathMatch: 'full' },
+  { path: AppRoutes.CREATE_DASHBOARD, component: CreateDashboardComponent },
   { path: AppRoutes.DASHBOARD_OVERVIEW, component: DashboardOverviewComponent },
-  { path: AppRoutes.CREATE_DASHBOARD, component: CreateDashboardComponent }
 ];
 
 @NgModule({

@@ -4,6 +4,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,6 +20,7 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
   ],
   imports: [
     BrowserModule,
+    DragDropModule,
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
