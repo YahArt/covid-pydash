@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { EChartsOption } from 'echarts';
 
 @Component({
-  selector: 'line-chart',
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.sass']
+  selector: 'line-chart-widget',
+  templateUrl: './line-chart-widget.component.html',
+  styleUrls: ['./line-chart-widget.component.sass']
 })
-export class LineChartComponent implements OnInit {
+export class LineChartWidgetComponent implements OnInit {
 
   public chartOption: EChartsOption = {
     xAxis: {

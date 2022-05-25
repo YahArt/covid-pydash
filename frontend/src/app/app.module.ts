@@ -9,19 +9,19 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardOverviewComponent } from './components/dashboard-overview/dashboard-overview.component';
-import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GridsterModule } from 'angular-gridster2';
 import { NgxEchartsModule } from 'ngx-echarts';
-import { LineChartComponent } from './components/line-chart/line-chart.component';
-import { DashboardItemComponent } from './components/dashboard-item/dashboard-item.component';
+import { LineChartWidgetComponent } from './components/widgets/line-chart-widget/line-chart-widget.component';
+import { DashboardWidgetComponent } from './components/dashboard-widget/dashboard-widget.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DashboardOverviewComponent,
-    CreateDashboardComponent,
-    LineChartComponent,
-    DashboardItemComponent
+    DashboardComponent,
+    LineChartWidgetComponent,
+    DashboardWidgetComponent
   ],
   imports: [
     BrowserModule,

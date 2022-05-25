@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DashboardOverviewComponent } from './components/dashboard-overview/dashboard-overview.component';
-import { AppRoutes } from './helpers/app-routes';
+import { AppRoutes } from './config/app-routes';
 
 const routes: Routes = [
-  { path: '', redirectTo: AppRoutes.CREATE_DASHBOARD, pathMatch: 'full' },
-  { path: AppRoutes.CREATE_DASHBOARD, component: CreateDashboardComponent },
+  { path: '', redirectTo: AppRoutes.DASHBOARD, pathMatch: 'full' },
+  { path: AppRoutes.DASHBOARD, component: DashboardComponent },
   { path: AppRoutes.DASHBOARD_OVERVIEW, component: DashboardOverviewComponent },
 ];
 

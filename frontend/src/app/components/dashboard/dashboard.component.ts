@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType }  from 'angular-gridster2';
-import { DashboardItemType } from 'src/app/helpers/dashboard-item-type.enum';
+import { CompactType, DisplayGrid, GridsterConfig, GridsterItem, GridType } from 'angular-gridster2';
+import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 @Component({
-  selector: 'app-create-dashboard',
-  templateUrl: './create-dashboard.component.html',
-  styleUrls: ['./create-dashboard.component.sass']
+  selector: 'dashboard',
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.sass']
 })
-export class CreateDashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit {
 
   public options!: GridsterConfig;
   public dashboard!: Array<GridsterItem>;
@@ -78,7 +78,7 @@ export class CreateDashboardComponent implements OnInit {
         x: 5,
         minItemRows: 2,
         minItemCols: 2,
-        dashboardItemType: DashboardItemType.LineChart
+        dashboardWidgetType: DashboardWidgetType.LineChart
       },
       {
         cols: 2,
@@ -87,7 +87,7 @@ export class CreateDashboardComponent implements OnInit {
         x: 0,
         minItemRows: 2,
         minItemCols: 2,
-        dashboardItemType: DashboardItemType.Text
+        dashboardWidgetType: DashboardWidgetType.Text
       },
     ];
   }
