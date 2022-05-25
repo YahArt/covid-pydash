@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
+import { MatButtonModule } from '@angular/material/button';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -30,7 +30,7 @@ import { DashboardWidgetComponent } from './components/dashboard-widget/dashboar
     AppRoutingModule,
     MatToolbarModule,
     MatIconModule,
-    MatSidenavModule,
+    MatButtonModule,
     MatListModule,
     LineChartModule,
     BrowserAnimationsModule

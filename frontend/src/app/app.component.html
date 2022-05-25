@@ -1,25 +1,23 @@
 <mat-toolbar class="app-header" color="primary">
-  <span>Covid PyDash</span>
-  <span class="spacer"></span>
-  <h1>{{ currentRoute }}</h1>
-  <span class="spacer"></span>
+  <a mat-button routerLink="/asdf">
+    <mat-icon>more_vert</mat-icon> asdf
+  </a>
 </mat-toolbar>
 
-<mat-sidenav-container class="app-sidenav-container">
-  <mat-sidenav
-    #sidenav
-    mode="side"
-    opened
-    class="app-sidenav"
-    [fixedInViewport]="false"
-    [fixedTopGap]="0"
-    [fixedBottomGap]="0"
-  >
+<div class="app-content">
+  <router-outlet></router-outlet>
+</div>
+
+<!-- <router-outlet></router-outlet> -->
+
+<!-- <mat-sidenav-container class="app-sidenav-container">
+  <mat-sidenav #sidenav mode="side" opened class="app-sidenav" [fixedInViewport]="false" [fixedTopGap]="0"
+    [fixedBottomGap]="0">
     <mat-nav-list>
       <mat-list-item *ngFor="let sidebarElement of sideBarElements">
         <a [href]="sidebarElement.route" class="sidebar-entry" matLine>{{
           sidebarElement.name
-        }}</a>
+          }}</a>
       </mat-list-item>
     </mat-nav-list>
   </mat-sidenav>
@@ -27,6 +25,8 @@
   <mat-sidenav-content>
     <router-outlet></router-outlet>
   </mat-sidenav-content>
-</mat-sidenav-container>
+</mat-sidenav-container> -->
+
+
 
 <mat-toolbar color="secondary" class="app-footer">Footer</mat-toolbar>
