@@ -1,32 +1,15 @@
 <mat-toolbar class="app-header" color="primary">
-  <a mat-button routerLink="/asdf">
-    <mat-icon>more_vert</mat-icon> asdf
+  <a mat-button routerLinkActive="active-link" routerLink="/home">
+    <mat-icon>dashboard</mat-icon>Covid-PyDash
+  </a>
+  <a *ngFor="let toolbarElement of TOOLBAR_ELEMENTS" mat-flat-button color="primary" routerLinkActive="active-link"
+    [routerLink]="toolbarElement.route">
+    {{toolbarElement.title}}
   </a>
 </mat-toolbar>
 
-<div class="app-content">
+<div class="app-container">
   <router-outlet></router-outlet>
 </div>
-
-<!-- <router-outlet></router-outlet> -->
-
-<!-- <mat-sidenav-container class="app-sidenav-container">
-  <mat-sidenav #sidenav mode="side" opened class="app-sidenav" [fixedInViewport]="false" [fixedTopGap]="0"
-    [fixedBottomGap]="0">
-    <mat-nav-list>
-      <mat-list-item *ngFor="let sidebarElement of sideBarElements">
-        <a [href]="sidebarElement.route" class="sidebar-entry" matLine>{{
-          sidebarElement.name
-          }}</a>
-      </mat-list-item>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <mat-sidenav-content>
-    <router-outlet></router-outlet>
-  </mat-sidenav-content>
-</mat-sidenav-container> -->
-
-
 
 <mat-toolbar color="secondary" class="app-footer">Footer</mat-toolbar>
