@@ -4,7 +4,7 @@ export class GridsterConfig {
     public static readonly DEFAULT = {
         gridType: GridType.Fixed,
         compactType: CompactType.None,
-        margin: 10,
+        margin: 20,
         outerMargin: true,
         outerMarginTop: null,
         outerMarginRight: null,
@@ -25,8 +25,8 @@ export class GridsterConfig {
         minItemArea: 1,
         defaultItemCols: 1,
         defaultItemRows: 1,
-        fixedColWidth: 105,
-        fixedRowHeight: 105,
+        fixedColWidth: 100,
+        fixedRowHeight: 100,
         keepFixedHeightInMobile: false,
         keepFixedWidthInMobile: false,
         scrollSensitivity: 10,
@@ -51,7 +51,7 @@ export class GridsterConfig {
         disablePushOnResize: false,
         pushDirections: { north: true, east: true, south: true, west: true },
         pushResizeItems: false,
-        displayGrid: DisplayGrid.Always,
+        displayGrid: DisplayGrid.None,
         disableWindowResize: false,
         disableWarnings: false,
         scrollToNewItems: false

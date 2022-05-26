@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatCardModule } from '@angular/material/card';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -37,6 +38,7 @@ import { HomeComponent } from './components/home/home.component';
     MatListModule,
     MatSidenavModule,
     LineChartModule,
+    MatCardModule,
     BrowserAnimationsModule
   ],
   providers: [],

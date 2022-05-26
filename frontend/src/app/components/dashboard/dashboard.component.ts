@@ -16,7 +16,8 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.options = {
-      ...GridsterConfig.DEFAULT
+      ...GridsterConfig.DEFAULT,
+      itemResizeCallback: () => console.log('item resized...')
     }
 
     this.dashboard = [

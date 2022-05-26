@@ -1,9 +1,12 @@
 <div class="dashboard-container">
-  <header><button mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-      <mat-icon>home</mat-icon>
-    </button></header>
-  <gridster [options]="options">
-    <gridster-item [item]="item" *ngFor="let item of dashboard">
+  <mat-toolbar class="mat-elevation-z2" color="secondary">
+    <div class="spacer"></div>
+    <button mat-icon-button color="primary">
+      <mat-icon>filter_alt</mat-icon>
+    </button>
+  </mat-toolbar>
+  <gridster class="grid" [options]="options">
+    <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard">
       <dashboard-widget [widgetType]="item['dashboardWidgetType']">
       </dashboard-widget>
     </gridster-item>
