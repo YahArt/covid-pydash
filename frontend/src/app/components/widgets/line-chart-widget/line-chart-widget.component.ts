@@ -1,12 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { multi } from 'src/app/models/line-chart-data';
+import { DashboardService } from 'src/app/services/dashboard.service';
+import { DashboardWidgetComponent } from '../../dashboard-widget/dashboard-widget.component';
 
 @Component({
   selector: 'line-chart-widget',
   templateUrl: './line-chart-widget.component.html',
-  styleUrls: ['./line-chart-widget.component.sass']
+  styleUrls: ['./line-chart-widget.component.sass'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LineChartWidgetComponent {
+export class LineChartWidgetComponent implements OnInit {
 
   public multi: any[] = [];
   public view: [number, number] = [700, 400];
@@ -25,8 +28,16 @@ export class LineChartWidgetComponent {
 
   public colorScheme = 'cool';
 
-  constructor() {
+  constructor(private readonly dashboardService: DashboardService, private readonly changeDetectorRef: ChangeDetectorRef) {
     Object.assign(this, { multi });
+  }
+
+  public ngOnInit(): void {
+    this.dashboardService.widgetSizeChanged$.pipe().subscribe(widgetSizeChangedEvent => {
+      console.log('line-chart got widget size changed event', widgetSizeChangedEvent);
+      this.view = [widgetSizeChangedEvent.width, widgetSizeChangedEvent.height];
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   public onSelect(data: any): void {
