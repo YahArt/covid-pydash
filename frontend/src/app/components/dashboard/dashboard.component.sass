@@ -3,12 +3,15 @@
 .filter-area
     height: $dashboard-filter-area-height
 
+.add-widget-button
+    position: absolute
+    bottom: 50px
+    right: 50px
+    z-index: $add-widget-button-z-index
+
 .widget-container
     background-color: #424242
 
 gridster
     height: calc(100vh - $app-header-height - $route-heading-height - $dashboard-filter-area-height)
     background-color: #323232
-
-.spacer
-    flex: 1 1 auto

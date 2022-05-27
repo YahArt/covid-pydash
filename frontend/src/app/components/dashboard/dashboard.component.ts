@@ -16,7 +16,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private readonly dashboardService: DashboardService) { }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.options = {
       ...GridsterConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
@@ -40,9 +40,24 @@ export class DashboardComponent implements OnInit {
         x: 0,
         minItemRows: 2,
         minItemCols: 2,
-        type: DashboardWidgetType.Text,
+        type: DashboardWidgetType.LineChart,
         identifier: Guid.create().toString()
       },
     ];
+  }
+
+  public addWidget() {
+    this.dashboard.push(
+      {
+        cols: 2,
+        rows: 2,
+        y: 3,
+        x: 5,
+        minItemRows: 2,
+        minItemCols: 2,
+        type: DashboardWidgetType.LineChart,
+        identifier: Guid.create().toString()
+      },
+    )
   }
 }

@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -41,6 +42,7 @@ import { RouteHeadingComponent } from './components/route-heading/route-heading.
     MatSidenavModule,
     LineChartModule,
     MatCardModule,
+    MatProgressBarModule,
     BrowserAnimationsModule
   ],
   providers: [],

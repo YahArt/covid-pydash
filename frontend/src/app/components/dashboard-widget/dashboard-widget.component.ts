@@ -24,10 +24,14 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
 
-  public ngOnInit(): void {
+  private subscribeWidgetResize() {
     this.dashboardService.widgetSizeChanged$.pipe(filter(e => e.identifier === this.item.identifier), takeUntil(this.destroy)).subscribe(widgetSizeChangedEvent => {
       this.widgetInstance?.onWidgetResize(widgetSizeChangedEvent);
     });
+  }
+
+  public ngOnInit(): void {
+    this.subscribeWidgetResize();
   }
 
   public ngAfterViewInit(): void {
