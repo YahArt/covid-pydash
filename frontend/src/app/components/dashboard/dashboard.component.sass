@@ -1,15 +1,14 @@
-.grid
-    background-color: #323232
+@import "../../../styles"
+
+.filter-area
+    height: $dashboard-filter-area-height
 
 .widget-container
     background-color: #424242
 
-.dashboard-container
-    position: absolute
-    top: 0
-    bottom: 65px
-    left: 0
-    right: 0
+gridster
+    height: calc(100vh - $app-header-height - $app-header-height)
+    background-color: #323232
 
 .spacer
     flex: 1 1 auto

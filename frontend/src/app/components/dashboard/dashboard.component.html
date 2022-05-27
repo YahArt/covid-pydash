@@ -1,14 +1,12 @@
-<div class="dashboard-container">
-  <mat-toolbar class="mat-elevation-z2" color="secondary">
-    <div class="spacer"></div>
-    <button mat-icon-button color="primary">
-      <mat-icon>filter_alt</mat-icon>
-    </button>
-  </mat-toolbar>
-  <gridster class="grid" [options]="options">
-    <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard">
-      <dashboard-widget [widgetType]="item['dashboardWidgetType']">
-      </dashboard-widget>
-    </gridster-item>
-  </gridster>
-</div>
+<mat-toolbar class="filter-area" color="secondary">
+  <div class="spacer"></div>
+  <button mat-icon-button color="primary">
+    <mat-icon>filter_alt</mat-icon>
+  </button>
+</mat-toolbar>
+<gridster class="grid" [options]="options">
+  <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard">
+    <dashboard-widget [widgetType]="item['dashboardWidgetType']">
+    </dashboard-widget>
+  </gridster-item>
+</gridster>
