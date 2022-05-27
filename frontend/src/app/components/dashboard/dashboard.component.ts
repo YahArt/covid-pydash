@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { GridsterItem } from 'angular-gridster2';
+import { Guid } from "guid-typescript";
 import { GridsterConfig } from 'src/app/config/gridster-config';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
+import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { DashboardService } from 'src/app/services/dashboard.service';
 @Component({
   selector: 'dashboard',
@@ -11,14 +12,14 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 export class DashboardComponent implements OnInit {
 
   public options!: GridsterConfig;
-  public dashboard!: Array<GridsterItem>;
+  public dashboard!: Array<IDashboardWidgetItem>;
 
   constructor(private readonly dashboardService: DashboardService) { }
 
   ngOnInit(): void {
     this.options = {
       ...GridsterConfig.DEFAULT,
-      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(itemComponent.identifier, itemComponent.width, itemComponent.height)
+      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
 
     this.dashboard = [
@@ -29,8 +30,8 @@ export class DashboardComponent implements OnInit {
         x: 5,
         minItemRows: 2,
         minItemCols: 2,
-        dashboardWidgetType: DashboardWidgetType.LineChart,
-        identifier: 'line-chart'
+        type: DashboardWidgetType.LineChart,
+        identifier: Guid.create().toString()
       },
       {
         cols: 2,
@@ -39,18 +40,9 @@ export class DashboardComponent implements OnInit {
         x: 0,
         minItemRows: 2,
         minItemCols: 2,
-        dashboardWidgetType: DashboardWidgetType.Text,
-        identifier: 'text'
+        type: DashboardWidgetType.Text,
+        identifier: Guid.create().toString()
       },
     ];
   }
-
-  private itemChange(item: any, itemComponent: any) {
-    console.info('itemChanged', item, itemComponent);
-  }
-
-  private itemResize(item: any, itemComponent: any) {
-    console.info('itemResized', item, itemComponent);
-  }
-
 }

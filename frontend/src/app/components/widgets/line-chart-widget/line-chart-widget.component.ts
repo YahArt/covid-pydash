@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { IWidgetSize } from 'src/app/models/iwidget-size';
 import { multi } from 'src/app/models/line-chart-data';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { DashboardWidgetComponent } from '../../dashboard-widget/dashboard-widget.component';
+import { WidgetBase } from '../widget-base';
 
 @Component({
   selector: 'line-chart-widget',
@@ -9,8 +11,7 @@ import { DashboardWidgetComponent } from '../../dashboard-widget/dashboard-widge
   styleUrls: ['./line-chart-widget.component.sass'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class LineChartWidgetComponent implements OnInit {
-
+export class LineChartWidgetComponent extends WidgetBase {
   public multi: any[] = [];
   public view: [number, number] = [700, 400];
 
@@ -28,16 +29,15 @@ export class LineChartWidgetComponent implements OnInit {
 
   public colorScheme = 'cool';
 
-  constructor(private readonly dashboardService: DashboardService, private readonly changeDetectorRef: ChangeDetectorRef) {
+  constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
+    super();
     Object.assign(this, { multi });
   }
 
-  public ngOnInit(): void {
-    this.dashboardService.widgetSizeChanged$.pipe().subscribe(widgetSizeChangedEvent => {
-      console.log('line-chart got widget size changed event', widgetSizeChangedEvent);
-      this.view = [widgetSizeChangedEvent.width, widgetSizeChangedEvent.height];
-      this.changeDetectorRef.markForCheck();
-    });
+  public onWidgetResize(widgetSize: IWidgetSize): void {
+    console.log('line chart go widget resize event...');
+    this.view = [widgetSize.width, widgetSize.height];
+    this.changeDetectorRef.markForCheck();
   }
 
   public onSelect(data: any): void {
