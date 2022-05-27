@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { filter, Subject, takeUntil } from 'rxjs';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
@@ -22,6 +22,11 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   @Input()
   public item!: IDashboardWidgetItem;
 
+  @Output()
+  public onDelete = new EventEmitter<string>();
+
+  public isLoading = false;
+
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
 
   private subscribeWidgetResize() {
@@ -43,9 +48,18 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
       }
       default:
       // Do nothign
-
     }
     this._changeDetectorRef.detectChanges();
+  }
+
+  public delete() {
+    this.onDelete.next(this.item.identifier);
+  }
+
+  public reload() {
+    // TODO make correct backend request
+    this.isLoading = !this.isLoading;
+
   }
 
   public ngOnDestroy(): void {

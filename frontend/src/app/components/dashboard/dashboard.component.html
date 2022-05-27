@@ -6,7 +6,7 @@
 </mat-toolbar>
 <gridster class="grid" [options]="options">
   <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard">
-    <dashboard-widget [item]="item">
+    <dashboard-widget (onDelete)="deleteWidget($event)" [item]="item">
     </dashboard-widget>
   </gridster-item>
 </gridster>

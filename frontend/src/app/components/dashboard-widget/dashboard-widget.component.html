@@ -1,14 +1,12 @@
 <div class="container">
-    <mat-progress-bar class="loading-indicator" mode="indeterminate"></mat-progress-bar>
+    <mat-progress-bar *ngIf="isLoading" class="loading-indicator" mode="indeterminate"></mat-progress-bar>
     <div class="header-section">
         <div class="header">
             <div class="actions">
-                <button mat-button>DELETE</button>
-                <button mat-button>RELOAD</button>
+                <button mat-button (click)="delete()">DELETE</button>
+                <button mat-button (click)="reload()">RELOAD</button>
             </div>
-            <div class="subtitle">
-                <h4>Schweregrad der Pandemie</h4>
-            </div>
+            <h4 class="subtitle">Schweregrad der Pandemie</h4>
             <div class="title">
                 <h2>Corona Fallzahlen</h2>
             </div>
