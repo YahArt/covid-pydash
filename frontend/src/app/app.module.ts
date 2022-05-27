@@ -18,6 +18,7 @@ import { GridsterModule } from 'angular-gridster2';
 import { LineChartWidgetComponent } from './components/widgets/line-chart-widget/line-chart-widget.component';
 import { DashboardWidgetComponent } from './components/dashboard-widget/dashboard-widget.component';
 import { HomeComponent } from './components/home/home.component';
+import { RouteHeadingComponent } from './components/route-heading/route-heading.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { HomeComponent } from './components/home/home.component';
     DashboardComponent,
     LineChartWidgetComponent,
     DashboardWidgetComponent,
-    HomeComponent
+    HomeComponent,
+    RouteHeadingComponent
   ],
   imports: [
     BrowserModule,

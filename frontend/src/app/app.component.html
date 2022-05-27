@@ -1,6 +1,6 @@
-<mat-toolbar class="app-header" color="primary">
-  <a mat-button routerLinkActive="active-link" routerLink="/home">
-    <mat-icon>dashboard</mat-icon>Covid-PyDash
+<mat-toolbar class="mat-elevation-z4 app-header" color="primary">
+  <a mat-flat-button color="primary" routerLinkActive="active-link" routerLink="/home">
+    Home
   </a>
   <a *ngFor="let toolbarElement of TOOLBAR_ELEMENTS" mat-flat-button color="primary" routerLinkActive="active-link"
     [routerLink]="toolbarElement.route">
@@ -9,5 +9,6 @@
 </mat-toolbar>
 
 <div class="app-container">
+  <route-heading></route-heading>
   <router-outlet></router-outlet>
 </div>
