@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Select which widget to create</h1>
+<div mat-dialog-content>
+    <mat-selection-list #widgetTypes>
+        <mat-list-option [value]="widgetType" *ngFor="let widgetType of supportedWidgetTypes">
+            {{descriptionForType(widgetType)}}
+        </mat-list-option>
+    </mat-selection-list>
+</div>
+<div class="dialog-actions" mat-dialog-actions>
+    <button mat-button (click)="closeWithoutResult()">CANCEL</button>
+    <button mat-button (click)="closeWithResults(widgetTypes.selectedOptions.selected)" cdkFocusInitial>CREATE</button>
+</div>

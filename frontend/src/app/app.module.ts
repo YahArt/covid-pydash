@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -20,6 +21,7 @@ import { LineChartWidgetComponent } from './components/widgets/line-chart-widget
 import { DashboardWidgetComponent } from './components/dashboard-widget/dashboard-widget.component';
 import { HomeComponent } from './components/home/home.component';
 import { RouteHeadingComponent } from './components/route-heading/route-heading.component';
+import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-dialog/create-widget-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { RouteHeadingComponent } from './components/route-heading/route-heading.
     LineChartWidgetComponent,
     DashboardWidgetComponent,
     HomeComponent,
-    RouteHeadingComponent
+    RouteHeadingComponent,
+    CreateWidgetDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -40,6 +43,7 @@ import { RouteHeadingComponent } from './components/route-heading/route-heading.
     MatButtonModule,
     MatListModule,
     MatSidenavModule,
+    MatDialogModule,
     LineChartModule,
     MatCardModule,
     MatProgressBarModule,
