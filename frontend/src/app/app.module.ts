@@ -9,6 +9,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -23,6 +24,7 @@ import { DashboardWidgetComponent } from './components/dashboard-widget/dashboar
 import { HomeComponent } from './components/home/home.component';
 import { RouteHeadingComponent } from './components/route-heading/route-heading.component';
 import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-dialog/create-widget-dialog.component';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -48,6 +50,8 @@ import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-
     LineChartModule,
     MatCardModule,
     MatProgressBarModule,
+    MatNativeDateModule,
+    MatDatepickerModule,
     MatSnackBarModule,
     BrowserAnimationsModule
   ],
