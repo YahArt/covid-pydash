@@ -62,8 +62,6 @@ export class DashboardComponent implements OnInit {
 
   public addWidget() {
     const dialogRef = this.dialog.open(CreateWidgetDialogComponent, {
-      width: '40vw',
-      height: '40vh',
       disableClose: true
     });
 
@@ -74,8 +72,8 @@ export class DashboardComponent implements OnInit {
             {
               cols: 2,
               rows: 2,
-              y: 3,
-              x: 5,
+              y: 0,
+              x: 0,
               minItemRows: 2,
               minItemCols: 2,
               type: widgetType,
