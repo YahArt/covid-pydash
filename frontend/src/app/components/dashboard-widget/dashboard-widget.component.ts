@@ -27,6 +27,8 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   public isLoading = false;
 
+  public editModeEnabled = false;
+
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
 
   private subscribeWidgetResize() {
@@ -35,8 +37,16 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
     });
   }
 
+  private subscribeEditModeChanged() {
+    this.dashboardService.editModeChanged$.pipe(takeUntil(this.destroy)).subscribe(editModeEnabled => {
+      this.editModeEnabled = editModeEnabled;
+      this._changeDetectorRef.markForCheck();
+    });
+  }
+
   public ngOnInit(): void {
     this.subscribeWidgetResize();
+    this.subscribeEditModeChanged();
   }
 
   public ngAfterViewInit(): void {

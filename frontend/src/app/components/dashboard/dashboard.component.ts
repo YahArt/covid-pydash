@@ -1,7 +1,9 @@
 import { OnInit, Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
-import { GridsterConfig } from 'src/app/config/gridster-config';
+import { GridConfig } from 'src/app/config/grid-config';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -13,14 +15,16 @@ import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/cre
 })
 export class DashboardComponent implements OnInit {
 
+  private editModeEnabled = false;
+
   public options!: GridsterConfig;
   public dashboard!: Array<IDashboardWidgetItem>;
 
-  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar) { }
 
   public ngOnInit(): void {
     this.options = {
-      ...GridsterConfig.DEFAULT,
+      ...GridConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
 
@@ -46,6 +50,42 @@ export class DashboardComponent implements OnInit {
         identifier: Guid.create().toString()
       },
     ];
+  }
+
+  public toggleEditMode() {
+    this.editModeEnabled = !this.editModeEnabled;
+
+    // Notify all widgets that edit mode has changed...
+    this.dashboardService.notifyEditModeChanged(this.editModeEnabled);
+
+    // Update options for grid
+    this.options = {
+      ...this.options,
+      draggable: {
+        enabled: this.editModeEnabled
+      },
+      resizable: {
+        enabled: this.editModeEnabled
+      }
+    };
+
+    if (this.options.api?.optionsChanged) {
+      this.options.api.optionsChanged();
+    }
+
+    // Show toast / snackbar message
+    const message = this.editModeEnabled ? 'Edit mode activated' : 'Edit mode deactivated';
+    this.snackbar.open(message, undefined, {
+      duration: 1000
+    });
+
+  }
+
+  public getEditModeColor(): string {
+    if (this.editModeEnabled) {
+      return 'primary';
+    }
+    return 'secondary';
   }
 
   public deleteWidget(identifier: string) {

@@ -3,11 +3,16 @@
 .filter-area
     height: $dashboard-filter-area-height
 
-.add-widget-button
+.dashboard-actions
     position: absolute
+    display: flex
+    flex-direction: column
     bottom: 50px
     right: 50px
-    z-index: $add-widget-button-z-index
+    z-index: $dashboard-actions-z-index
+
+    button
+        margin-bottom: $default-margin
 
 .widget-container
     background-color: #424242

@@ -3,7 +3,7 @@
     <div class="header-section">
         <div class="header">
             <div class="actions">
-                <button mat-button (click)="delete()">DELETE</button>
+                <button *ngIf="editModeEnabled" mat-button (click)="delete()">DELETE</button>
                 <button mat-button (click)="reload()">RELOAD</button>
             </div>
             <h4 class="subtitle">Schweregrad der Pandemie</h4>

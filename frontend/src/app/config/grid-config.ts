@@ -1,6 +1,6 @@
 import { CompactType, DisplayGrid, GridType } from "angular-gridster2";
 
-export class GridsterConfig {
+export class GridConfig {
     public static readonly DEFAULT = {
         gridType: GridType.Fixed,
         compactType: CompactType.None,
@@ -40,10 +40,10 @@ export class GridsterConfig {
         emptyCellDragMaxRows: 50,
         ignoreMarginInRow: false,
         draggable: {
-            enabled: true
+            enabled: false
         },
         resizable: {
-            enabled: true
+            enabled: false
         },
         swap: false,
         pushItems: true,

@@ -12,6 +12,12 @@
 </gridster>
 
 
-<button mat-fab color="primary" (click)="addWidget()" class="add-widget-button">
-  <mat-icon>add</mat-icon>
-</button>
+<div class="dashboard-actions">
+  <button mat-fab [color]="getEditModeColor()" (click)="toggleEditMode()" class="edit-mode-button">
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button mat-fab color="primary" (click)="addWidget()" class="add-widget-button">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

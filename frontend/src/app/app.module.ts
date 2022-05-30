@@ -8,6 +8,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -47,6 +48,7 @@ import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-
     LineChartModule,
     MatCardModule,
     MatProgressBarModule,
+    MatSnackBarModule,
     BrowserAnimationsModule
   ],
   providers: [],
