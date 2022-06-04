@@ -9,7 +9,7 @@ import { WidgetBase } from '../widgets/widget-base';
 @Component({
   selector: 'dashboard-widget',
   templateUrl: './dashboard-widget.component.html',
-  styleUrls: ['./dashboard-widget.component.sass'],
+  styleUrls: ['./dashboard-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestroy {

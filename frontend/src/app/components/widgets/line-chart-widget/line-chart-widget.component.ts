@@ -1,14 +1,12 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IWidgetSize } from 'src/app/models/iwidget-size';
 import { multi } from 'src/app/models/line-chart-data';
-import { DashboardService } from 'src/app/services/dashboard.service';
-import { DashboardWidgetComponent } from '../../dashboard-widget/dashboard-widget.component';
 import { WidgetBase } from '../widget-base';
 
 @Component({
   selector: 'line-chart-widget',
   templateUrl: './line-chart-widget.component.html',
-  styleUrls: ['./line-chart-widget.component.sass'],
+  styleUrls: ['./line-chart-widget.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LineChartWidgetComponent extends WidgetBase {

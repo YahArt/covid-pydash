@@ -1,0 +1,17 @@
+@import "../../../styles.scss";
+
+
+
+.container {
+    background-color: mat-color($primary, Light);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: $route-heading-height;
+    padding-left: $default-margin;
+    padding-right: $default-margin;
+
+    h1 {
+        margin: 0;
+    }
+}

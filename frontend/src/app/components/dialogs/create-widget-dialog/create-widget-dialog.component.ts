@@ -6,7 +6,7 @@ import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 @Component({
   selector: 'create-widget-dialog',
   templateUrl: './create-widget-dialog.component.html',
-  styleUrls: ['./create-widget-dialog.component.sass']
+  styleUrls: ['./create-widget-dialog.component.scss']
 })
 export class CreateWidgetDialogComponent implements OnInit {
 

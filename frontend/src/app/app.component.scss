@@ -1,0 +1,23 @@
+@import "../styles.scss";
+
+.app-header {
+    position: fixed;
+    height: $app-header-height;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: $app-header-z-index;
+}
+
+
+.app-container {
+    position: absolute;
+    top: $app-header-height;
+    left: 0;
+    right: 0;
+}
+
+
+.active-link {
+    background-color: mat-color($primary, Light) !important;
+}

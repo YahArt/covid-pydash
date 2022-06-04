@@ -1,0 +1,46 @@
+// Implemented with reference to: https://medium.datadriveninvestor.com/custom-theming-in-angular-material-a9b0d7cd68a8
+
+@import '../node_modules/@angular/material/theming';
+@include mat-core();
+
+
+// Colors generated with: https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=212121&secondary.color=90A4AE&primary.text.color=ffffff&secondary.text.color=000000
+$primary: (
+    Main:#212121,
+    Light:#484848,
+    Dark: #000000,
+    contrast: (Main: #ffffff,
+        Light: #ffffff,
+        Dark: #ffffff)
+);
+$accent: (
+    Main: #90a4ae,
+    Light: #c1d5e0,
+    Dark: #62757f,
+    contrast: (Main: #000000,
+        Light: #000000,
+        Dark: #000000)
+);
+$warn: $mat-pink;
+
+$custom-theme-primary: mat-palette($primary, Main, Light, Dark);
+$custom-theme-accent: mat-palette($accent, Main, Light, Dark);
+$custom-theme-warn: mat-palette($warn, A200, A400, A700);
+
+//creating your theme
+$custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $custom-theme-warn);
+//updating main theme 
+@include angular-material-theme($custom-theme);
+
+@mixin cust-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+}
+
+// @mixin angular-material-theme($theme) {
+//     @include mat-button-theme($theme);
+//     @include mat-dialog-theme($theme);
+//     @include mat-button-toggle-theme($theme);
+//     @include mat-card-theme($theme);
+// }

@@ -6,7 +6,7 @@ import { AppRoutes } from 'src/app/config/app-routes';
 @Component({
   selector: 'route-heading',
   templateUrl: './route-heading.component.html',
-  styleUrls: ['./route-heading.component.sass']
+  styleUrls: ['./route-heading.component.scss']
 })
 export class RouteHeadingComponent implements OnInit {
 

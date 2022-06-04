@@ -11,7 +11,7 @@ import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/cre
 @Component({
   selector: 'dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.sass'],
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
 
