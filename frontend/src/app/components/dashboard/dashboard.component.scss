@@ -1,7 +1,19 @@
 @import "../../../styles.scss";
 
+.filters-form {
+    display: flex;
+    flex-direction: column;
+
+    #applyFilterButton {
+        margin: $default-margin 0;
+    }
+}
+
 .filter-area {
     height: $dashboard-filter-area-height;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .dashboard-actions {
@@ -16,7 +28,6 @@
         margin-bottom: $default-margin;
     }
 }
-
 
 .widget-container {
     background-color: $widget-bg;

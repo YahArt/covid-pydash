@@ -1,11 +1,15 @@
-import { OnInit, Component } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { OnInit, Component, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MAT_DATEPICKER_VALIDATORS } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
 import { GridConfig } from 'src/app/config/grid-config';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
+import { TimeRange } from 'src/app/models/time-range';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/create-widget-dialog.component';
 @Component({
@@ -20,7 +24,55 @@ export class DashboardComponent implements OnInit {
   public options!: GridsterConfig;
   public dashboard!: Array<IDashboardWidgetItem>;
 
+  public filters = new FormGroup(
+    {
+      startDate: new FormControl(null, Validators.required),
+      endDate: new FormControl(null, Validators.required),
+    }
+  );
+
+  public timeRanges: TimeRange[] = [
+    new TimeRange(new Date(), new Date())
+  ];
+
+  @ViewChild('filterSidebar')
+  public filterSidebar!: MatSidenav;
+
   constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar) { }
+
+
+  private initFilters() {
+    this.filters.patchValue({
+      startDate: new Date(),
+      endDate: new Date()
+    });
+  }
+
+  private addTimeRange(timeRange: TimeRange) {
+    // Time range already exists...
+    if (this.timeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
+      return;
+    }
+    this.timeRanges.push(timeRange);
+  }
+
+  public toggleFilterSidebar() {
+    this.filterSidebar.toggle();
+  }
+
+  public removeTimeRange(timeRange: TimeRange) {
+    const removeIndex = this.timeRanges.findIndex(t => t.identifier === timeRange.identifier);
+    if (removeIndex < 0) {
+      return;
+    }
+    this.timeRanges.splice(removeIndex, 1);
+  }
+
+  public onApplyTimeRange(timeRange: TimeRange) {
+    // TODO Perhaps propagate down to widgets for showing specific overlays...
+    console.log('Applying time range: ', timeRange);
+  }
+
 
   public ngOnInit(): void {
     this.options = {
@@ -50,7 +102,9 @@ export class DashboardComponent implements OnInit {
         identifier: Guid.create().toString()
       },
     ];
+    this.initFilters();
   }
+
 
   public toggleEditMode() {
     this.editModeEnabled = !this.editModeEnabled;
@@ -123,6 +177,11 @@ export class DashboardComponent implements OnInit {
         });
       }
     });
+  }
 
+  public onApplyFilters() {
+    const newTimeRange = new TimeRange(this.filters.value.startDate, this.filters.value.endDate);
+    this.addTimeRange(newTimeRange);
+    this.filterSidebar.toggle();
   }
 }

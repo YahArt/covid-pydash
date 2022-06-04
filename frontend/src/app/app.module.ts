@@ -7,9 +7,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -25,6 +27,7 @@ import { HomeComponent } from './components/home/home.component';
 import { RouteHeadingComponent } from './components/route-heading/route-heading.component';
 import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-dialog/create-widget-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatButtonModule,
     MatListModule,
     MatSidenavModule,
+    MatFormFieldModule,
     MatDialogModule,
     LineChartModule,
     MatCardModule,
@@ -53,6 +57,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatNativeDateModule,
     MatDatepickerModule,
     MatSnackBarModule,
+    ReactiveFormsModule,
+    MatChipsModule,
     BrowserAnimationsModule
   ],
   providers: [],
