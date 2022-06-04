@@ -85,7 +85,7 @@ export class DashboardComponent implements OnInit {
     if (this.editModeEnabled) {
       return 'primary';
     }
-    return 'secondary';
+    return 'accent';
   }
 
   public deleteWidget(identifier: string) {

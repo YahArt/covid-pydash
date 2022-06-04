@@ -19,10 +19,10 @@
 
 
 .widget-container {
-    background-color: mat-color($primary, Light);
+    background-color: $widget-bg;
 }
 
 gridster {
     height: calc(100vh - $app-header-height - $route-heading-height - $dashboard-filter-area-height);
-    background-color: mat-color($primary, Main);
+    background-color: $gridster-bg;
 }

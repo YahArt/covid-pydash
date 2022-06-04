@@ -37,10 +37,3 @@ $custom-theme: mat-light-theme($custom-theme-primary, $custom-theme-accent, $cus
     $accent: map-get($theme, accent);
     $warn: map-get($theme, warn);
 }
-
-// @mixin angular-material-theme($theme) {
-//     @include mat-button-theme($theme);
-//     @include mat-dialog-theme($theme);
-//     @include mat-button-toggle-theme($theme);
-//     @include mat-card-theme($theme);
-// }
