@@ -24,7 +24,7 @@ export class DashboardComponent implements OnInit {
   private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
 
   public options!: GridsterConfig;
-  public dashboard!: Array<IDashboardWidgetItem>;
+  public dashboard: Array<IDashboardWidgetItem> = [];
 
   public filters = new FormGroup(
     {
@@ -55,22 +55,6 @@ export class DashboardComponent implements OnInit {
       ...GridConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
-
-
-    this.dashboard = [
-      {
-        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
-        type: DashboardWidgetType.LineChart,
-        identifier: Guid.create().toString(),
-        informationAbout: CovidInformationType.CovidDeaths
-      },
-      {
-        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
-        type: DashboardWidgetType.LineChart,
-        identifier: Guid.create().toString(),
-        informationAbout: CovidInformationType.CovidDeaths
-      },
-    ];
   }
 
   private addTimeRange(timeRange: TimeRange) {
@@ -177,7 +161,7 @@ export class DashboardComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe((selectedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[]) => {
+    dialogRef.afterClosed().subscribe((selectedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType, title: string, subtitle: string }[]) => {
       if (selectedWidgets) {
         selectedWidgets.forEach(selectedWidget => {
           this.dashboard.push(
@@ -185,7 +169,9 @@ export class DashboardComponent implements OnInit {
               ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
               identifier: Guid.create().toString(),
               informationAbout: selectedWidget.informationAbout,
-              type: selectedWidget.type
+              type: selectedWidget.type,
+              title: selectedWidget.title,
+              subtitle: selectedWidget.subtitle
             },
           )
         });

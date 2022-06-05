@@ -32,6 +32,9 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   public isLoading = false;
 
+  public title = '';
+  public subtitle = '';
+
   public editModeEnabled = false;
 
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
@@ -86,6 +89,9 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
       default:
       // Do nothign
     }
+
+    this.title = this.item.title;
+    this.subtitle = this.item.subtitle;
     this._changeDetectorRef.detectChanges();
   }
 

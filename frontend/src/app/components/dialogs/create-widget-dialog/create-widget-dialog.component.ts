@@ -13,15 +13,13 @@ export class CreateWidgetDialogComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<CreateWidgetDialogComponent>) { }
 
-  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[] = [
+  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType, title: string, subtitle: string }[] = [
     {
       type: DashboardWidgetType.LineChart,
-      informationAbout: CovidInformationType.CovidDeaths
+      informationAbout: CovidInformationType.CovidDeaths,
+      title: 'Covid Deaths over time',
+      subtitle: 'Severity of Pandemic'
     },
-    {
-      type: DashboardWidgetType.LineChart,
-      informationAbout: CovidInformationType.CovidDeaths
-    }
   ];
 
   public ngOnInit(): void {
@@ -30,7 +28,7 @@ export class CreateWidgetDialogComponent implements OnInit {
   public description(widget: { type: DashboardWidgetType, informationAbout: CovidInformationType }): string {
     switch (widget.informationAbout) {
       case CovidInformationType.CovidDeaths:
-        return 'Information about deaths related to COVID'
+        return 'Information about deaths related to Covid over time'
       default:
         return '';
     }
