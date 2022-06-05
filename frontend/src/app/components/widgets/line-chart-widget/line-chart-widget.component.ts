@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
+import { IDashboardData } from 'src/app/models/idashboard-data';
 import { IWidgetSize } from 'src/app/models/iwidget-size';
 import { multi } from 'src/app/models/line-chart-data';
 import { WidgetBase } from '../widget-base';
@@ -37,16 +38,9 @@ export class LineChartWidgetComponent extends WidgetBase {
     this.changeDetectorRef.markForCheck();
   }
 
-  public onSelect(data: any): void {
-    console.log('Item clicked', JSON.parse(JSON.stringify(data)));
-  }
-
-  public onActivate(data: any): void {
-    console.log('Activate', JSON.parse(JSON.stringify(data)));
-  }
-
-  public onDeactivate(data: any): void {
-    console.log('Deactivate', JSON.parse(JSON.stringify(data)));
+  public onDataChanged(data: IDashboardData | undefined): void {
+    this.multi = [data?.value]
+    this.changeDetectorRef.markForCheck();
   }
 
 }

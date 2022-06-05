@@ -6,7 +6,9 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
+import { finalize } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
+import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { TimeRange } from 'src/app/models/time-range';
@@ -48,12 +50,53 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private initDashboard() {
+    this.options = {
+      ...GridConfig.DEFAULT,
+      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
+    }
+
+    this.dashboard = [
+      {
+        cols: 2,
+        rows: 2,
+        y: 3,
+        x: 5,
+        minItemRows: 2,
+        minItemCols: 2,
+        type: DashboardWidgetType.LineChart,
+        identifier: Guid.create().toString(),
+        informationAbout: CovidInformationType.CovidDeaths
+      },
+      {
+        cols: 2,
+        rows: 2,
+        y: 2,
+        x: 0,
+        minItemRows: 2,
+        minItemCols: 2,
+        type: DashboardWidgetType.LineChart,
+        identifier: Guid.create().toString(),
+        informationAbout: CovidInformationType.CovidDeaths
+      },
+    ];
+  }
+
   private addTimeRange(timeRange: TimeRange) {
     // Time range already exists...
     if (this.timeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
       return;
     }
     this.timeRanges.push(timeRange);
+    this.loadDashboardData(timeRange);
+  }
+
+  private loadDashboardData(timeRange: TimeRange): void {
+    // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
+    this.dashboardService.notifyLoading(true);
+    this.dashboardService.loadData$(timeRange, this.dashboard).pipe(finalize(() => this.dashboardService.notifyLoading(false))).subscribe(response => {
+      this.dashboardService.notifyDashboardDataChanged(response)
+    });
   }
 
   public toggleFilterSidebar() {
@@ -69,40 +112,17 @@ export class DashboardComponent implements OnInit {
   }
 
   public onApplyTimeRange(timeRange: TimeRange) {
-    // TODO Perhaps propagate down to widgets for showing specific overlays...
-    console.log('Applying time range: ', timeRange);
+    this.loadDashboardData(timeRange);
   }
 
 
   public ngOnInit(): void {
-    this.options = {
-      ...GridConfig.DEFAULT,
-      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
-    }
-
-    this.dashboard = [
-      {
-        cols: 2,
-        rows: 2,
-        y: 3,
-        x: 5,
-        minItemRows: 2,
-        minItemCols: 2,
-        type: DashboardWidgetType.LineChart,
-        identifier: Guid.create().toString()
-      },
-      {
-        cols: 2,
-        rows: 2,
-        y: 2,
-        x: 0,
-        minItemRows: 2,
-        minItemCols: 2,
-        type: DashboardWidgetType.LineChart,
-        identifier: Guid.create().toString()
-      },
-    ];
+    this.initDashboard();
     this.initFilters();
+
+    // TODO: Remove this initial time range...
+    const timeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
+    this.loadDashboardData(timeRange);
   }
 
 
@@ -159,9 +179,10 @@ export class DashboardComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe((selectedWidgetTypes: DashboardWidgetType[]) => {
-      if (selectedWidgetTypes) {
-        selectedWidgetTypes.forEach(widgetType => {
+    dialogRef.afterClosed().subscribe((selectedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[]) => {
+      if (selectedWidgets) {
+        selectedWidgets.forEach(selectedWidget => {
+          // TODO: Provide some sort of default config...
           this.dashboard.push(
             {
               cols: 2,
@@ -170,8 +191,9 @@ export class DashboardComponent implements OnInit {
               x: 0,
               minItemRows: 2,
               minItemCols: 2,
-              type: widgetType,
-              identifier: Guid.create().toString()
+              type: selectedWidget.type,
+              identifier: Guid.create().toString(),
+              informationAbout: selectedWidget.informationAbout
             },
           )
         });

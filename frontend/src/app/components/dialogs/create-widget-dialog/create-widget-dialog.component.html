@@ -1,8 +1,8 @@
 <h1 mat-dialog-title>Select which widget to create</h1>
 <div mat-dialog-content>
     <mat-selection-list #widgetTypes>
-        <mat-list-option [value]="widgetType" *ngFor="let widgetType of supportedWidgetTypes">
-            {{descriptionForType(widgetType)}}
+        <mat-list-option [value]="widget" *ngFor="let widget of supportedWidgets">
+            {{description(widget)}}
         </mat-list-option>
     </mat-selection-list>
 </div>

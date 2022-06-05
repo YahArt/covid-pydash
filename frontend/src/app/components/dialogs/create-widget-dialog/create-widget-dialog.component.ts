@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatListOption, MatListOptionCheckboxPosition, MatSelectionList } from '@angular/material/list';
+import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 
 @Component({
@@ -12,15 +13,24 @@ export class CreateWidgetDialogComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<CreateWidgetDialogComponent>) { }
 
-  public readonly supportedWidgetTypes: DashboardWidgetType[] = [DashboardWidgetType.LineChart, DashboardWidgetType.LineChart];
+  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[] = [
+    {
+      type: DashboardWidgetType.LineChart,
+      informationAbout: CovidInformationType.CovidDeaths
+    },
+    {
+      type: DashboardWidgetType.LineChart,
+      informationAbout: CovidInformationType.CovidDeaths
+    }
+  ];
 
   public ngOnInit(): void {
   }
 
-  public descriptionForType(widgetType: DashboardWidgetType): string {
-    switch (widgetType) {
-      case DashboardWidgetType.LineChart:
-        return 'Informing about severity - Number of Covid Cases over time'
+  public description(widget: { type: DashboardWidgetType, informationAbout: CovidInformationType }): string {
+    switch (widget.informationAbout) {
+      case CovidInformationType.CovidDeaths:
+        return 'Information about deaths related to COVID'
       default:
         return '';
     }

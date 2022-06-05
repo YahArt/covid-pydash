@@ -28,6 +28,7 @@ import { RouteHeadingComponent } from './components/route-heading/route-heading.
 import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-dialog/create-widget-dialog.component';
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     GridsterModule,
     AppRoutingModule,
     MatToolbarModule,

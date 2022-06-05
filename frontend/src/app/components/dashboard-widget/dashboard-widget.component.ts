@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { filter, Subject, takeUntil } from 'rxjs';
+import { filter, find, first, Subject, takeUntil } from 'rxjs';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -44,9 +44,26 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
     });
   }
 
+  private subscribeLoading() {
+    this.dashboardService.loading$.pipe(takeUntil(this.destroy)).subscribe(loading => {
+      this.isLoading = loading;
+      this._changeDetectorRef.markForCheck();
+    });
+  }
+
+  private subscribeDashboardDataChanged() {
+    this.dashboardService.dashboardDataChanged$.pipe(filter(e => e.findIndex(b => b.identifier === this.item.identifier) >= 0), takeUntil(this.destroy)).subscribe(data => {
+      // There should only ever be one widget data item per identifier so we can take the first one...
+      this.widgetInstance?.onDataChanged(data[0]);
+    });
+  }
+
+
   public ngOnInit(): void {
     this.subscribeWidgetResize();
     this.subscribeEditModeChanged();
+    this.subscribeLoading();
+    this.subscribeDashboardDataChanged();
   }
 
   public ngAfterViewInit(): void {
