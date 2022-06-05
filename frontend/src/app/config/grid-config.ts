@@ -1,6 +1,32 @@
-import { CompactType, DisplayGrid, GridType } from "angular-gridster2";
+import { CompactType, DisplayGrid, GridsterItem, GridType } from "angular-gridster2";
+import { DashboardWidgetType } from "../models/dashboard-widget-type.enum";
 
 export class GridConfig {
+    public static getDefaultForWidgetType(widgetType: DashboardWidgetType): any {
+        switch (widgetType) {
+            case DashboardWidgetType.LineChart: {
+                return {
+                    cols: 4,
+                    rows: 4,
+                    y: 0,
+                    x: 0,
+                    minItemRows: 4,
+                    minItemCols: 4,
+                };
+            }
+            default:
+                return {
+                    cols: 1,
+                    rows: 2,
+                    y: 0,
+                    x: 0,
+                    minItemRows: 2,
+                    minItemCols: 2,
+                };
+        }
+    }
+
+
     public static readonly DEFAULT = {
         gridType: GridType.Fixed,
         compactType: CompactType.None,

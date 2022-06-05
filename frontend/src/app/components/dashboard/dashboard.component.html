@@ -1,8 +1,8 @@
 <mat-toolbar class="filter-area" color="secondary">
   <mat-chip-list>
     <mat-chip (click)="onApplyTimeRange(timeRange)" *ngFor="let timeRange of timeRanges"
-      (removed)="removeTimeRange(timeRange)">
-      {{timeRange.identifier}} <button matChipRemove>
+      [selected]="isSelectedTimeRange(timeRange)" (removed)="removeTimeRange(timeRange)">
+      {{timeRange.identifier}} <button *ngIf="canRemoveTimeRange()" matChipRemove>
         <mat-icon>cancel</mat-icon>
       </button></mat-chip>
   </mat-chip-list>
@@ -13,7 +13,7 @@
 </mat-toolbar>
 
 <mat-drawer-container>
-  <mat-drawer position="end" #filterSidebar mode="over" opened>
+  <mat-drawer position="end" #filterSidebar mode="over" closed>
     <form [formGroup]="filters" (ngSubmit)="onApplyFilters()" class="filters-form">
       <mat-form-field appearance="fill">
         <mat-label>Enter a date range</mat-label>

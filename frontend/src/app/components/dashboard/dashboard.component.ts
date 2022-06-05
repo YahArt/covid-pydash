@@ -22,6 +22,7 @@ import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/cre
 export class DashboardComponent implements OnInit {
 
   private editModeEnabled = false;
+  private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
 
   public options!: GridsterConfig;
   public dashboard!: Array<IDashboardWidgetItem>;
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit {
   );
 
   public timeRanges: TimeRange[] = [
-    new TimeRange(new Date(), new Date())
+    this.selectedTimeRange
   ];
 
   @ViewChild('filterSidebar')
@@ -56,25 +57,16 @@ export class DashboardComponent implements OnInit {
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
 
+
     this.dashboard = [
       {
-        cols: 2,
-        rows: 2,
-        y: 3,
-        x: 5,
-        minItemRows: 2,
-        minItemCols: 2,
+        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
         type: DashboardWidgetType.LineChart,
         identifier: Guid.create().toString(),
         informationAbout: CovidInformationType.CovidDeaths
       },
       {
-        cols: 2,
-        rows: 2,
-        y: 2,
-        x: 0,
-        minItemRows: 2,
-        minItemCols: 2,
+        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
         type: DashboardWidgetType.LineChart,
         identifier: Guid.create().toString(),
         informationAbout: CovidInformationType.CovidDeaths
@@ -88,7 +80,8 @@ export class DashboardComponent implements OnInit {
       return;
     }
     this.timeRanges.push(timeRange);
-    this.loadDashboardData(timeRange);
+    this.selectedTimeRange = timeRange;
+    this.loadDashboardData(this.selectedTimeRange);
   }
 
   private loadDashboardData(timeRange: TimeRange): void {
@@ -112,17 +105,23 @@ export class DashboardComponent implements OnInit {
   }
 
   public onApplyTimeRange(timeRange: TimeRange) {
-    this.loadDashboardData(timeRange);
+    this.selectedTimeRange = timeRange;
+    this.loadDashboardData(this.selectedTimeRange);
   }
 
 
   public ngOnInit(): void {
     this.initDashboard();
     this.initFilters();
+    this.loadDashboardData(this.selectedTimeRange);
+  }
 
-    // TODO: Remove this initial time range...
-    const timeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
-    this.loadDashboardData(timeRange);
+  public isSelectedTimeRange(timeRange: TimeRange): boolean {
+    return this.selectedTimeRange.identifier === timeRange.identifier;
+  }
+
+  public canRemoveTimeRange(): boolean {
+    return this.timeRanges.length > 1;
   }
 
 
@@ -182,21 +181,16 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe((selectedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[]) => {
       if (selectedWidgets) {
         selectedWidgets.forEach(selectedWidget => {
-          // TODO: Provide some sort of default config...
           this.dashboard.push(
             {
-              cols: 2,
-              rows: 2,
-              y: 0,
-              x: 0,
-              minItemRows: 2,
-              minItemCols: 2,
-              type: selectedWidget.type,
+              ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
               identifier: Guid.create().toString(),
-              informationAbout: selectedWidget.informationAbout
+              informationAbout: selectedWidget.informationAbout,
+              type: selectedWidget.type
             },
           )
         });
+        this.loadDashboardData(this.selectedTimeRange);
       }
     });
   }

@@ -23,8 +23,8 @@ export class LineChartWidgetComponent extends WidgetBase {
   public showYAxisLabel: boolean = true;
   public showXAxisLabel: boolean = true;
   public xAxisLabel: string = 'Year';
-  public yAxisLabel: string = 'Population';
-  public timeline: boolean = true;
+  public yAxisLabel: string = 'Deaths';
+  public timeline: boolean = false;
 
   public colorScheme = 'cool';
 

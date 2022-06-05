@@ -36,7 +36,7 @@ export class DashboardService {
                 name: covidDeathValue.geoRegion,
                 series: covidDeathValue.data.map(d => {
                   return {
-                    name: new Date(d.datum).toLocaleDateString().toString(),
+                    name: new Date(d.datum),
                     value: d.sumTotal
                   }
                 })
