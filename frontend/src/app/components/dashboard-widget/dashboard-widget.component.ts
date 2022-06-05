@@ -1,7 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
+import { ThisReceiver } from '@angular/compiler';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { filter, find, first, Subject, takeUntil } from 'rxjs';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
+import { IWidgetSize } from 'src/app/models/iwidget-size';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { LineChartWidgetComponent } from '../widgets/line-chart-widget/line-chart-widget.component';
 import { WidgetBase } from '../widgets/widget-base';
@@ -19,6 +21,9 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   @ViewChild("itemTemplate", { read: ViewContainerRef })
   public itemTemplate!: ViewContainerRef;
 
+  @ViewChild("chartContainer")
+  public chartContainer!: ElementRef;
+
   @Input()
   public item!: IDashboardWidgetItem;
 
@@ -32,7 +37,12 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
 
   private subscribeWidgetResize() {
-    this.dashboardService.widgetSizeChanged$.pipe(filter(e => e.identifier === this.item.identifier), takeUntil(this.destroy)).subscribe(widgetSizeChangedEvent => {
+    this.dashboardService.widgetSizeChanged$.pipe(filter(e => e.identifier === this.item.identifier), takeUntil(this.destroy)).subscribe(() => {
+      const widgetSizeChangedEvent: IWidgetSize = {
+        width: this.chartContainer.nativeElement.offsetWidth,
+        height: this.chartContainer.nativeElement.offsetHeight,
+        identifier: this.item.identifier
+      }
       this.widgetInstance?.onWidgetResize(widgetSizeChangedEvent);
     });
   }
@@ -81,12 +91,6 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   public delete() {
     this.onDelete.next(this.item.identifier);
-  }
-
-  public reload() {
-    // TODO make correct backend request
-    this.isLoading = !this.isLoading;
-
   }
 
   public ngOnDestroy(): void {

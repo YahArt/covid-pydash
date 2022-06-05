@@ -12,7 +12,7 @@ import { WidgetBase } from '../widget-base';
 })
 export class LineChartWidgetComponent extends WidgetBase {
   public multi: any[] = [];
-  public view: [number, number] = [350, 200];
+  public view: [number, number] = [350, 350];
 
   // options
   public legend: boolean = true;
@@ -34,7 +34,7 @@ export class LineChartWidgetComponent extends WidgetBase {
   }
 
   public onWidgetResize(widgetSize: IWidgetSize): void {
-    this.view = [widgetSize.width, widgetSize.height * 0.8];
+    this.view = [widgetSize.width, widgetSize.height];
     this.changeDetectorRef.markForCheck();
   }
 

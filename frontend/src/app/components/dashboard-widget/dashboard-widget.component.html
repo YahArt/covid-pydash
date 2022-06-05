@@ -1,19 +1,18 @@
 <div class="container">
     <mat-progress-bar *ngIf="isLoading" class="loading-indicator" mode="indeterminate"></mat-progress-bar>
-    <div class="header-section">
-        <div class="header">
-            <div class="actions">
-                <button *ngIf="editModeEnabled" mat-button (click)="delete()">DELETE</button>
-                <button mat-button (click)="reload()">RELOAD</button>
-            </div>
-            <h4 class="subtitle">Schweregrad der Pandemie</h4>
-            <div class="title">
-                <h2>Corona Fallzahlen</h2>
-            </div>
+    <div class="header">
+        <div class="actions">
+            <button *ngIf="editModeEnabled" color="primary" mat-icon-button (click)="delete()">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+        <h4 class="subtitle">Schweregrad der Pandemie</h4>
+        <div class="title">
+            <h2>Corona Fallzahlen</h2>
         </div>
     </div>
 
-    <ng-template #itemTemplate></ng-template>
-
-
+    <div #chartContainer class="content">
+        <ng-template #itemTemplate></ng-template>
+    </div>
 </div>
