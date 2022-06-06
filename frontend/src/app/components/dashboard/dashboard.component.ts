@@ -10,6 +10,7 @@ import { GridConfig } from 'src/app/config/grid-config';
 import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
 import { ICreateWidgetDialogEntry } from 'src/app/models/icreate-widget-dialog-entry';
+import { IDashboard } from 'src/app/models/idashboard';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { TimeRange } from 'src/app/models/time-range';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -25,7 +26,7 @@ export class DashboardComponent implements OnInit {
   private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
 
   public options!: GridsterConfig;
-  public dashboard: Array<IDashboardWidgetItem> = [];
+  public dashboard!: IDashboard;
 
   public filters = new FormGroup(
     {
@@ -56,17 +57,6 @@ export class DashboardComponent implements OnInit {
       ...GridConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
-
-    this.dashboard.push(
-      {
-        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
-        identifier: Guid.create().toString(),
-        informationAbout: CovidInformationType.CovidDeaths,
-        type: DashboardWidgetType.LineChart,
-        title: 'Accumulated Covid Deaths over time',
-        subtitle: 'Severity of Pandemic'
-      },
-    )
   }
 
   private addTimeRange(timeRange: TimeRange) {
@@ -82,7 +72,7 @@ export class DashboardComponent implements OnInit {
   private loadDashboardData(timeRange: TimeRange): void {
     // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
     this.dashboardService.notifyLoading(true);
-    this.dashboardService.loadData$(timeRange, this.dashboard).pipe(finalize(() => this.dashboardService.notifyLoading(false))).subscribe(response => {
+    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.dashboardService.notifyLoading(false))).subscribe(response => {
       this.dashboardService.notifyDashboardDataChanged(response)
     });
   }
@@ -108,7 +98,6 @@ export class DashboardComponent implements OnInit {
   public ngOnInit(): void {
     this.initDashboard();
     this.initFilters();
-    this.loadDashboardData(this.selectedTimeRange);
   }
 
   public isSelectedTimeRange(timeRange: TimeRange): boolean {
@@ -157,14 +146,14 @@ export class DashboardComponent implements OnInit {
   }
 
   public deleteWidget(identifier: string) {
-    const deleteIndex = this.dashboard.findIndex(d => d.identifier === identifier);
+    const deleteIndex = this.dashboard.widgets.findIndex(d => d.identifier === identifier);
     if (deleteIndex < 0) {
       return;
     }
 
     // Hacky solution to get rid of the backdrop preview, see: https://github.com/tiberiuzuld/angular-gridster2/issues/516
     setTimeout(() => {
-      this.dashboard.splice(deleteIndex, 1);
+      this.dashboard.widgets.splice(deleteIndex, 1);
     }, 0);
   }
 
@@ -176,7 +165,7 @@ export class DashboardComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((selectedWidget: ICreateWidgetDialogEntry | null) => {
       if (selectedWidget) {
-        this.dashboard.push(
+        this.dashboard.widgets.push(
           {
             ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
             identifier: Guid.create().toString(),

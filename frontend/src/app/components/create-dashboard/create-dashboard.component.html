@@ -1,0 +1,20 @@
+<form [formGroup]="createDashboard" (ngSubmit)="onCreateDashboard()" class="create-dashboard-form">
+    <mat-form-field>
+        <mat-label>Enter a name for your dashboard</mat-label>
+        <input matInput placeholder="My awesome dashboard" formControlName="name" required>
+        <mat-error *ngIf="createDashboard.controls.name.errors?.required">Name is required</mat-error>
+        <mat-error *ngIf="createDashboard.controls.name.errors?.minlength">Name has to be at least 2 characters long
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Select a Template if you wish</mat-label>
+        <mat-select formControlName="selectedTemplate">
+            <mat-option value="none">None</mat-option>
+            <mat-option value="one">Template 1</mat-option>
+            <mat-option value="two">Template 2</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button mat-button color="primary" type="submit" [disabled]="!createDashboard.valid">CREATE DASHBOARD</button>
+</form>

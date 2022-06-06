@@ -1,0 +1,7 @@
+@import "../../../styles.scss";
+
+.create-dashboard-form {
+    display: flex;
+    flex-direction: column;
+    padding: $default-margin;
+}

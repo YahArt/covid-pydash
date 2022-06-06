@@ -7,13 +7,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule, MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -31,6 +33,7 @@ import { CreateWidgetDialogComponent } from './components/dialogs/create-widget-
 import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import { HttpClientModule } from '@angular/common/http';
     DashboardWidgetComponent,
     HomeComponent,
     RouteHeadingComponent,
-    CreateWidgetDialogComponent
+    CreateWidgetDialogComponent,
+    CreateDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +58,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatListModule,
     MatSidenavModule,
     MatFormFieldModule,
+    MatInputModule,
     MatDialogModule,
+    MatSelectModule,
     LineChartModule,
     MatCardModule,
     MatProgressBarModule,
@@ -67,7 +73,9 @@ import { HttpClientModule } from '@angular/common/http';
     MatRadioModule,
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

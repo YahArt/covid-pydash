@@ -36,7 +36,7 @@
   </mat-drawer>
   <mat-drawer-content>
     <gridster class=" grid" [options]="options">
-      <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard">
+      <gridster-item class="widget-container" [item]="item" *ngFor="let item of dashboard?.widgets">
         <dashboard-widget (onDelete)="deleteWidget($event)" [item]="item">
         </dashboard-widget>
       </gridster-item>

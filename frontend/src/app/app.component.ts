@@ -11,7 +11,7 @@ export class AppComponent {
   public readonly TOOLBAR_ELEMENTS = [
     {
       title: 'Create a Dashboard',
-      route: AppRoutes.DASHBOARD
+      route: AppRoutes.CREATE_DASHBOARD
     },
     {
       title: 'Dashboard Overview',

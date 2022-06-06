@@ -1,12 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Guid } from 'guid-typescript';
 import { Observable, map, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { GridConfig } from '../config/grid-config';
 import { CovidInformationType } from '../models/covid-information-type.enum';
 import { DashboardWidgetType } from '../models/dashboard-widget-type.enum';
 import { ICovidDeathsReponse } from '../models/icovid-deaths-response';
+import { IDashboard } from '../models/idashboard';
 import { IDashboardData } from '../models/idashboard-data';
-import { IDashboardResponse } from '../models/idashboard-response';
+import { IDashboardDataResponse } from '../models/idashboard-data-response';
 import { IDashboardWidgetItem } from '../models/idashboard-widget-item';
 import { ILineChartSeries } from '../models/iline-chart-series';
 import { IWidgetSize } from '../models/iwidget-size';
@@ -16,6 +19,21 @@ import { TimeRange } from '../models/time-range';
   providedIn: 'root'
 })
 export class DashboardService {
+
+  private readonly DEFAULT_DASHBOARD: IDashboard = {
+    title: '',
+    identifier: '',
+    widgets: [
+      {
+        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
+        identifier: Guid.create().toString(),
+        informationAbout: CovidInformationType.CovidDeaths,
+        type: DashboardWidgetType.LineChart,
+        title: 'Accumulated Covid Deaths over time',
+        subtitle: 'Severity of Pandemic'
+      },
+    ]
+  }
 
   private widgetSizeChangedSubject = new Subject<IWidgetSize>();
   private editModeChangedSubject = new Subject<boolean>();
@@ -85,10 +103,17 @@ export class DashboardService {
     return this.dashboardDataSubject.asObservable();
   }
 
+  public createDashboardFromTemplate(template: string | null): IDashboard {
+    if (template) {
+      // TODO: Add handling for creating dashboard via template
+    }
+    return this.DEFAULT_DASHBOARD;
+  }
+
   public loadData$(timeRange: TimeRange, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
     const informationAbout = dashboard.map(d => d.informationAbout);
     // TODO: Convert dashboard response to appropriate data types
-    return this.httpClient.post<IDashboardResponse>(`${environment.restApi}/dashboard_data`, {
+    return this.httpClient.post<IDashboardDataResponse>(`${environment.restApi}/dashboard_data`, {
       startDate: timeRange.startDateString,
       endDate: timeRange.endDateString,
       informationAbout

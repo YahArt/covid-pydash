@@ -25,8 +25,10 @@ export class RouteHeadingComponent implements OnInit {
     switch (sanitizedUrl) {
       case AppRoutes.HOME:
         return "Home";
+      case AppRoutes.CREATE_DASHBOARD:
+        return "Create your own Dashboard"
       case AppRoutes.DASHBOARD:
-        return "Create your Dashboard";
+        return "Welcome to your Dashboard";
       case AppRoutes.DASHBOARD_OVERVIEW:
         return "Dashboard Overview";
       default:
