@@ -9,6 +9,7 @@ import { finalize } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
 import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
+import { ICreateWidgetDialogEntry } from 'src/app/models/icreate-widget-dialog-entry';
 import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
 import { TimeRange } from 'src/app/models/time-range';
 import { DashboardService } from 'src/app/services/dashboard.service';
@@ -158,23 +159,22 @@ export class DashboardComponent implements OnInit {
 
   public addWidget() {
     const dialogRef = this.dialog.open(CreateWidgetDialogComponent, {
-      disableClose: true
+      disableClose: true,
+      width: '60vw'
     });
 
-    dialogRef.afterClosed().subscribe((selectedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType, title: string, subtitle: string }[]) => {
-      if (selectedWidgets) {
-        selectedWidgets.forEach(selectedWidget => {
-          this.dashboard.push(
-            {
-              ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
-              identifier: Guid.create().toString(),
-              informationAbout: selectedWidget.informationAbout,
-              type: selectedWidget.type,
-              title: selectedWidget.title,
-              subtitle: selectedWidget.subtitle
-            },
-          )
-        });
+    dialogRef.afterClosed().subscribe((selectedWidget: ICreateWidgetDialogEntry | null) => {
+      if (selectedWidget) {
+        this.dashboard.push(
+          {
+            ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
+            identifier: Guid.create().toString(),
+            informationAbout: selectedWidget.informationAbout,
+            type: selectedWidget.type,
+            title: selectedWidget.description,
+            subtitle: selectedWidget.informationCategory
+          },
+        )
         this.loadDashboardData(this.selectedTimeRange);
       }
     });

@@ -22,6 +22,8 @@
         }
 
         .actions {
+            position: absolute;
+            right: $default-margin;
             display: flex;
             flex-direction: row;
             justify-content: flex-end;

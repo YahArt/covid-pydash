@@ -1,8 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatListOption, MatListOptionCheckboxPosition, MatSelectionList } from '@angular/material/list';
+import { MatRadioChange } from '@angular/material/radio';
 import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
+import { ICreateWidgetDialogEntry } from 'src/app/models/icreate-widget-dialog-entry';
 
 @Component({
   selector: 'create-widget-dialog',
@@ -22,20 +24,24 @@ export class CreateWidgetDialogComponent implements OnInit {
     },
   ];
 
+  public selectedElement: ICreateWidgetDialogEntry | null = null;
+
+  public readonly dataSource: Array<ICreateWidgetDialogEntry> = [
+    { informationCategory: 'Severity of Pandemic', informationAbout: CovidInformationType.CovidDeaths, informationAboutDesc: 'Covid Deaths', description: 'Covid Deaths accumulated over time', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
+    { informationCategory: 'Severity of Pandemic', informationAbout: CovidInformationType.CovidDeaths, informationAboutDesc: 'Covid Deaths', description: 'Covid Deaths accumulated over time', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
+  ];
+
+  public readonly displayedColumns: string[] = ['selection', 'informationCategory', 'informationAbout', 'description', 'visualizationType'];
+
   public ngOnInit(): void {
   }
 
-  public description(widget: { type: DashboardWidgetType, informationAbout: CovidInformationType }): string {
-    switch (widget.informationAbout) {
-      case CovidInformationType.CovidDeaths:
-        return 'Information about deaths related to Covid over time'
-      default:
-        return '';
-    }
+  public onSelect($event: MatRadioChange) {
+    this.selectedElement = $event.value;
   }
 
-  public closeWithResults(selectedElements: MatListOption[]) {
-    this.dialogRef.close(selectedElements.map(s => s.value));
+  public closeWithResult() {
+    this.dialogRef.close(this.selectedElement);
   }
 
   public closeWithoutResult() {

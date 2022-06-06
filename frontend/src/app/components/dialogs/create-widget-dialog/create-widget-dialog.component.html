@@ -1,12 +1,39 @@
-<h1 mat-dialog-title>Select which widget to create</h1>
+<h1 mat-dialog-title>Select which Covid Widget to create</h1>
 <div mat-dialog-content>
-    <mat-selection-list #widgetTypes>
-        <mat-list-option [value]="widget" *ngFor="let widget of supportedWidgets">
-            {{description(widget)}}
-        </mat-list-option>
-    </mat-selection-list>
+    <table mat-table [dataSource]="dataSource">
+
+        <ng-container matColumnDef="selection">
+            <th mat-header-cell *matHeaderCellDef>Selection</th>
+            <td mat-cell *matCellDef="let element">
+                <mat-radio-button (change)="onSelect($event)" [value]="element"></mat-radio-button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="informationCategory">
+            <th mat-header-cell *matHeaderCellDef>Information Category</th>
+            <td mat-cell *matCellDef="let element"> {{element.informationCategory}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="informationAbout">
+            <th mat-header-cell *matHeaderCellDef>Information About</th>
+            <td mat-cell *matCellDef="let element"> {{element.informationAboutDesc}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="visualizationType">
+            <th mat-header-cell *matHeaderCellDef>Visualization Type</th>
+            <td mat-cell *matCellDef="let element"> {{element.typeDesc}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="closeWithoutResult()">CANCEL</button>
-    <button mat-button (click)="closeWithResults(widgetTypes.selectedOptions.selected)" cdkFocusInitial>CREATE</button>
+    <button mat-button [disabled]="!this.selectedElement" (click)="closeWithResult()">CREATE</button>
 </div>

@@ -12,6 +12,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatTableModule } from '@angular/material/table';
+import { MatRadioModule } from '@angular/material/radio';
 
 import { LineChartModule } from '@swimlane/ngx-charts';
 
@@ -61,6 +63,8 @@ import { HttpClientModule } from '@angular/common/http';
     MatSnackBarModule,
     ReactiveFormsModule,
     MatChipsModule,
+    MatTableModule,
+    MatRadioModule,
     BrowserAnimationsModule
   ],
   providers: [],
