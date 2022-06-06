@@ -29,17 +29,25 @@ def dashboard_data():
 
     for information in information_about_unique:
         value = None
-        # TODO: Handle other information types...
-        if information == "covid_death":
-            value = covid_service.get_deaths(start_date, end_date)
+        error = None
+        no_data = None
+        try:
+            # TODO: Handle other information types...
+            if information == "covid_death":
+                value = covid_service.get_deaths(start_date, end_date)
+                no_data = len(value['data']) == 0
+        except BaseException as err:
+            error = err
+        finally:
+            response['values'].append(
+                {
+                    'informationAbout': information,
+                    'value': value,
+                    'error': error,
+                    'noData': no_data
+                }
+            )
 
-        response['values'].append(
-            {
-                'informationAbout': information,
-                'value': value,
-                'error': None
-            }
-        )
     return response
 
 

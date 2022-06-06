@@ -31,6 +31,8 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   public onDelete = new EventEmitter<string>();
 
   public isLoading = false;
+  public noData = false;
+  public error = 'asdfasdf';
 
   public title = '';
   public subtitle = '';
@@ -67,7 +69,13 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   private subscribeDashboardDataChanged() {
     this.dashboardService.dashboardDataChanged$.pipe(filter(e => e.findIndex(b => b.identifier === this.item.identifier) >= 0), takeUntil(this.destroy)).subscribe(data => {
       // There should only ever be one widget data item per identifier so we can take the first one...
-      this.widgetInstance?.onDataChanged(data[0]);
+      const widgetValue = data[0];
+      this.error = widgetValue.error;
+      this.noData = widgetValue.noData;
+      if (this.error || this.noData) {
+        return;
+      }
+      this.widgetInstance?.onDataChanged(widgetValue);
     });
   }
 

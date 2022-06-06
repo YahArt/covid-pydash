@@ -13,6 +13,17 @@
     </div>
 
     <div #chartContainer class="content">
+        <div *ngIf="noData" class="no-data">
+            <h1>No Data Available
+            </h1>
+            <mat-icon color="warn">warning</mat-icon>
+        </div>
+        <div *ngIf="error" class="error">
+            <h1>An error occurred:
+            </h1>
+            <p>{{error}}</p>
+            <mat-icon color="warn">error</mat-icon>
+        </div>
         <ng-template #itemTemplate></ng-template>
     </div>
 </div>

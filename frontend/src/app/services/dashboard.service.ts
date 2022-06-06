@@ -103,7 +103,8 @@ export class DashboardService {
           return {
             identifier: widgetWithSameInformationType.identifier,
             error: v.error,
-            value
+            value,
+            noData: v.noData
           }
         })
       });

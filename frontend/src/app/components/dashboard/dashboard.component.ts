@@ -56,6 +56,17 @@ export class DashboardComponent implements OnInit {
       ...GridConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
     }
+
+    this.dashboard.push(
+      {
+        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
+        identifier: Guid.create().toString(),
+        informationAbout: CovidInformationType.CovidDeaths,
+        type: DashboardWidgetType.LineChart,
+        title: 'Accumulated Covid Deaths over time',
+        subtitle: 'Severity of Pandemic'
+      },
+    )
   }
 
   private addTimeRange(timeRange: TimeRange) {

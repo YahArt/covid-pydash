@@ -4,5 +4,6 @@ export interface IDashboardData {
     // TODO: Add further data types...
     identifier: string;
     value: ILineChartSeries | null;
-    error: string
+    error: string;
+    noData: boolean;
 }

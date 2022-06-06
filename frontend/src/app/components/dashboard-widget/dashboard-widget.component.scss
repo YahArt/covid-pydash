@@ -30,6 +30,21 @@
         }
     }
 
+    .no-data,
+    .error {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        top: 0;
+        width: 100%;
+        left: 0;
+        bottom: 0;
+        z-index: $overlay-z-index;
+        background-color: white;
+    }
+
     .content {
         position: absolute;
         width: 100%;
