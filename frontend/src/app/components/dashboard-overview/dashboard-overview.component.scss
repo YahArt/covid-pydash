@@ -1,0 +1,11 @@
+@import "../../../styles.scss";
+
+table {
+    width: 100%;
+}
+
+.actions {
+    button {
+        margin-right: $default-margin;
+    }
+}

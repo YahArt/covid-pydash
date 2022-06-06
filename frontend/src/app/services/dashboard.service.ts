@@ -7,10 +7,13 @@ import { GridConfig } from '../config/grid-config';
 import { CovidInformationType } from '../models/covid-information-type.enum';
 import { DashboardWidgetType } from '../models/dashboard-widget-type.enum';
 import { ICovidDeathsReponse } from '../models/icovid-deaths-response';
+import { ICreateDashboardResponse } from '../models/icreate-dashboard-response';
 import { IDashboard } from '../models/idashboard';
 import { IDashboardData } from '../models/idashboard-data';
 import { IDashboardDataResponse } from '../models/idashboard-data-response';
 import { IDashboardWidgetItem } from '../models/idashboard-widget-item';
+import { IGetDashboardResponse } from '../models/iget-dashboard-response';
+import { IGetDashboardsResponse } from '../models/iget-dashboards-response';
 import { ILineChartSeries } from '../models/iline-chart-series';
 import { IWidgetSize } from '../models/iwidget-size';
 import { TimeRange } from '../models/time-range';
@@ -108,6 +111,20 @@ export class DashboardService {
       // TODO: Add handling for creating dashboard via template
     }
     return this.DEFAULT_DASHBOARD;
+  }
+
+  public createDashboard$(dashboard: IDashboard): Observable<ICreateDashboardResponse> {
+    return this.httpClient.post<ICreateDashboardResponse>(`${environment.restApi}/dashboard`, {
+      dashboard
+    });
+  }
+
+  public getDashboards$(): Observable<IGetDashboardsResponse> {
+    return this.httpClient.get<IGetDashboardsResponse>(`${environment.restApi}/dashboards`);
+  }
+
+  public getDashboard$(identifier: string, title: string): Observable<IGetDashboardResponse> {
+    return this.httpClient.get<IGetDashboardResponse>(`${environment.restApi}/dashboard/${identifier}/${title}`);
   }
 
   public loadData$(timeRange: TimeRange, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {

@@ -3,9 +3,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
-import { finalize } from 'rxjs';
+import { filter, finalize } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
 import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
@@ -42,7 +43,7 @@ export class DashboardComponent implements OnInit {
   @ViewChild('filterSidebar')
   public filterSidebar!: MatSidenav;
 
-  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute) { }
 
 
   private initFilters() {
@@ -52,7 +53,7 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private initDashboard() {
+  private initGridster() {
     this.options = {
       ...GridConfig.DEFAULT,
       itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
@@ -77,6 +78,14 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  private loadDashboardByIdentifierAndTitle(identifier: string, title: string) {
+    this.dashboardService.getDashboard$(identifier, title).subscribe(response => {
+      this.dashboard = response.dashboard;
+      this.loadDashboardData(this.selectedTimeRange);
+    })
+
+  }
+
   public toggleFilterSidebar() {
     this.filterSidebar.toggle();
   }
@@ -96,8 +105,16 @@ export class DashboardComponent implements OnInit {
 
 
   public ngOnInit(): void {
-    this.initDashboard();
+    this.initGridster();
     this.initFilters();
+
+    this.route.queryParams.pipe(filter(params => params.identifier && params.title))
+      .subscribe(params => {
+        console.log(params);
+        const dashboardIdentifier = params.identifier;
+        const dashboardTitle = params.title;
+        this.loadDashboardByIdentifierAndTitle(dashboardIdentifier, dashboardTitle);
+      });
   }
 
   public isSelectedTimeRange(timeRange: TimeRange): boolean {

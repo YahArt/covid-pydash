@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
 import { AppRoutes } from 'src/app/config/app-routes';
@@ -20,22 +21,23 @@ export class CreateDashboardComponent implements OnInit {
   );
 
 
-  constructor(private readonly dashboardService: DashboardService, private readonly router: Router) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly router: Router, private readonly snackbar: MatSnackBar) { }
 
-  public ngOnInit(): void {
-  }
+  public ngOnInit(): void { }
 
   public onCreateDashboard() {
     // TODO: Pass in correct template...
-    // TODO: Perhaps add possbility to only create dashboard and one other for creating and directly editing
     const dashboard = this.dashboardService.createDashboardFromTemplate(null);
     dashboard.title = this.createDashboard.controls.name.value;
     dashboard.identifier = Guid.create().toString();
 
-
-    // this.router.navigate([AppRoutes.DASHBOARD], {
-    //   queryParams: { identifier: dashboard.identifier }
-    // });
+    this.dashboardService.createDashboard$(dashboard).subscribe(result => {
+      const dashboardTitle = result.dashboard.title
+      const message = result.error ? `Error creating dashboard "${dashboardTitle}", Error: ${result.error}` : `Dashboard: "${dashboardTitle}" was successfully created`
+      this.snackbar.open(message, undefined, {
+        duration: 1000
+      });
+    })
   }
 
 

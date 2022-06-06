@@ -32,7 +32,7 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   public isLoading = false;
   public noData = false;
-  public error = 'asdfasdf';
+  public error: string | null = null;
 
   public title = '';
   public subtitle = '';
