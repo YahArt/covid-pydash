@@ -3,7 +3,6 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
-import { AppRoutes } from 'src/app/config/app-routes';
 import { DashboardService } from 'src/app/services/dashboard.service';
 
 @Component({

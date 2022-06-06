@@ -1,9 +1,8 @@
-import { ThisReceiver } from '@angular/compiler';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
-import { filter, find, first, Subject, takeUntil } from 'rxjs';
-import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
-import { IDashboardWidgetItem } from 'src/app/models/idashboard-widget-item';
-import { IWidgetSize } from 'src/app/models/iwidget-size';
+import { filter, Subject, takeUntil } from 'rxjs';
+import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
+import { IDashboardWidgetItem } from 'src/app/interfaces/idashboard-widget-item';
+import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { LineChartWidgetComponent } from '../widgets/line-chart-widget/line-chart-widget.component';
 import { WidgetBase } from '../widgets/widget-base';

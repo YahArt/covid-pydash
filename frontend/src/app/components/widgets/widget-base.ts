@@ -1,5 +1,5 @@
-import { IDashboardData } from "src/app/models/idashboard-data";
-import { IWidgetSize } from "src/app/models/iwidget-size";
+import { IDashboardData } from "src/app/interfaces/idashboard-data";
+import { IWidgetSize } from "src/app/interfaces/iwidget-size";
 
 export abstract class WidgetBase {
     public abstract onWidgetResize(widgetSize: IWidgetSize): void; // Called when the widget is resized...

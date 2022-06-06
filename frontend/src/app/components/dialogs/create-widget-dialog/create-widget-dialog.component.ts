@@ -1,10 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatListOption, MatListOptionCheckboxPosition, MatSelectionList } from '@angular/material/list';
 import { MatRadioChange } from '@angular/material/radio';
-import { CovidInformationType } from 'src/app/models/covid-information-type.enum';
-import { DashboardWidgetType } from 'src/app/models/dashboard-widget-type.enum';
-import { ICreateWidgetDialogEntry } from 'src/app/models/icreate-widget-dialog-entry';
+import { CovidInformationType } from 'src/app/enums/covid-information-type.enum';
+import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
+import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
 
 @Component({
   selector: 'create-widget-dialog',

@@ -1,5 +1,5 @@
 import { CompactType, DisplayGrid, GridsterItem, GridType } from "angular-gridster2";
-import { DashboardWidgetType } from "../models/dashboard-widget-type.enum";
+import { DashboardWidgetType } from "../enums/dashboard-widget-type.enum";
 
 export class GridConfig {
     public static getDefaultForWidgetType(widgetType: DashboardWidgetType): any {

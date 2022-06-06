@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
-import { IDashboardData } from 'src/app/models/idashboard-data';
-import { IWidgetSize } from 'src/app/models/iwidget-size';
-import { multi } from 'src/app/models/line-chart-data';
+import { IDashboardData } from 'src/app/interfaces/idashboard-data';
+import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { WidgetBase } from '../widget-base';
 
 @Component({
@@ -30,7 +29,6 @@ export class LineChartWidgetComponent extends WidgetBase {
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
     super();
-    Object.assign(this, { multi });
   }
 
   public onWidgetResize(widgetSize: IWidgetSize): void {
