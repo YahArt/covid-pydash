@@ -7,6 +7,7 @@ from flask import make_response
 import services.covid_service
 import json
 import glob
+import os
 
 app = Flask("Covid-PyDash REST API")
 
@@ -59,6 +60,10 @@ def load_dashboard_file(full_path):
     return dashboard
 
 
+def delete_dashboard_file(full_path):
+    os.remove(full_path)
+
+
 @app.route('/dashboards', methods=['GET'])
 def dashboards():
     response_code = 201
@@ -76,14 +81,18 @@ def dashboards():
         return make_response(jsonify(response_data), response_code)
 
 
-@app.route('/dashboard/<identifier>', methods=['GET'])
+@app.route('/dashboard/<identifier>', methods=['GET', 'DELETE'])
 def dashboard_by_identifier(identifier):
     dashboard = None
     error = None
 
     try:
         dashboard_full_path = get_dashboard_full_path(identifier)
-        dashboard = load_dashboard_file(dashboard_full_path)
+        if request.method == 'GET':
+            dashboard = load_dashboard_file(dashboard_full_path)
+        elif request.method == 'DELETE':
+            dashboard = load_dashboard_file(dashboard_full_path)
+            delete_dashboard_file(dashboard_full_path)
     except FileNotFoundError:
         error = 'Dashboard could not be found...'
     except BaseException as exception_error:

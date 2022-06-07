@@ -12,6 +12,7 @@ import { IDashboard } from '../interfaces/idashboard';
 import { IDashboardData } from '../interfaces/idashboard-data';
 import { IDashboardDataResponse } from '../interfaces/idashboard-data-response';
 import { IDashboardWidgetItem } from '../interfaces/idashboard-widget-item';
+import { IDeleteDashboardResponse } from '../interfaces/idelete-dashboard-response';
 import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
 import { ILineChartSeries } from '../interfaces/iline-chart-series';
@@ -123,6 +124,10 @@ export class DashboardService {
 
   public getDashboard$(identifier: string): Observable<IGetDashboardResponse> {
     return this.httpClient.get<IGetDashboardResponse>(`${environment.restApi}/dashboard/${identifier}`);
+  }
+
+  public deleteDashboard$(identifier: string): Observable<IDeleteDashboardResponse> {
+    return this.httpClient.delete<IDeleteDashboardResponse>(`${environment.restApi}/dashboard/${identifier}`);
   }
 
   public loadData$(timeRange: TimeRange, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
