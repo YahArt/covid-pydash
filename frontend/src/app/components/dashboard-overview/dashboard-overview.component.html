@@ -1,22 +1,33 @@
-<table mat-table [dataSource]="dashboards">
-    <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Title</th>
-        <td mat-cell *matCellDef="let dashboard"> {{dashboard.title}} </td>
-    </ng-container>
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
-    <ng-container matColumnDef="identifier">
-        <th mat-header-cell *matHeaderCellDef>Identifier</th>
-        <td mat-cell *matCellDef="let dashboard"> {{dashboard.identifier}} </td>
-    </ng-container>
+<ng-container *ngIf="hasDashboards; else noDashboards">
+    <table mat-table [dataSource]="dashboards">
+        <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let dashboard"> {{dashboard.title}} </td>
+        </ng-container>
 
-    <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef>Actions</th>
-        <td mat-cell *matCellDef="let dashboard" class="actions">
-            <button mat-flat-button color="primary" (click)="openDashboard(dashboard)">Open Dashboard</button>
-            <button mat-flat-button color="primary" (click)="deleteDashboard(dashboard)">Delete Dashboard</button>
-        </td>
-    </ng-container>
+        <ng-container matColumnDef="identifier">
+            <th mat-header-cell *matHeaderCellDef>Identifier</th>
+            <td mat-cell *matCellDef="let dashboard"> {{dashboard.identifier}} </td>
+        </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+        <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let dashboard" class="actions">
+                <button mat-flat-button color="primary" (click)="openDashboard(dashboard)">Open Dashboard</button>
+                <button mat-flat-button color="primary" (click)="deleteDashboard(dashboard)">Delete Dashboard</button>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</ng-container>
+
+<ng-template #noDashboards>
+    <div class="no-dashboards">
+        <h1>Seems like you don't have any dashboards yet, how about creating one?</h1>
+        <button mat-flat-button color="primary" (click)="navigateToCreateDashboard($event)">Create a dashboard</button>
+    </div>
+</ng-template>

@@ -1,4 +1,4 @@
-<form [formGroup]="createDashboard" (ngSubmit)="onCreateDashboard()" class="create-dashboard-form">
+<form [formGroup]="createDashboard" class="create-dashboard-form">
     <mat-form-field>
         <mat-label>Enter a name for your dashboard</mat-label>
         <input matInput placeholder="My awesome dashboard" formControlName="name" required>
@@ -16,5 +16,8 @@
         </mat-select>
     </mat-form-field>
 
-    <button mat-button color="primary" type="submit" [disabled]="!createDashboard.valid">CREATE DASHBOARD</button>
+    <button mat-button color="primary" [disabled]="!createDashboard.valid" (click)="onCreateDashboard(false)">CREATE
+        DASHBOARD</button>
+    <button mat-button color="primary" [disabled]="!createDashboard.valid" (click)="onCreateDashboard(true)">CREATE AND
+        EDIT DASHBOARD</button>
 </form>
