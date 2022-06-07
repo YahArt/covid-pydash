@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { RouteHeadingService } from 'src/app/services/route-heading.service';
 
 @Component({
   selector: 'app-create-dashboard',
@@ -20,9 +21,11 @@ export class CreateDashboardComponent implements OnInit {
   );
 
 
-  constructor(private readonly dashboardService: DashboardService, private readonly router: Router, private readonly snackbar: MatSnackBar) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly snackbar: MatSnackBar, private readonly routeHeadingService: RouteHeadingService) { }
 
-  public ngOnInit(): void { }
+  public ngOnInit(): void {
+    this.routeHeadingService.updateRouteHeadingTitle("Create a new Dashboard");
+  }
 
   public onCreateDashboard() {
     // TODO: Pass in correct template...

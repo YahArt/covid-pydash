@@ -1,42 +1,31 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 import { AppRoutes } from 'src/app/config/app-routes';
+import { RouteHeadingService } from 'src/app/services/route-heading.service';
 
 @Component({
   selector: 'route-heading',
   templateUrl: './route-heading.component.html',
   styleUrls: ['./route-heading.component.scss']
 })
-export class RouteHeadingComponent implements OnInit {
+export class RouteHeadingComponent implements OnInit, OnDestroy {
+
+  private destroy = new Subject<void>();
 
   public heading = "";
 
-  constructor(private readonly _router: Router) {
-    _router.events.pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
-        this.heading = this.constructNameFromUrl(event.url);
-      });
-  }
-
-  private constructNameFromUrl(url: string): string {
-    // Remove '/' in order to match with the actual route name
-    const sanitizedUrl = url.replace('/', '');
-    switch (sanitizedUrl) {
-      case AppRoutes.HOME:
-        return "Home";
-      case AppRoutes.CREATE_DASHBOARD:
-        return "Create your own Dashboard"
-      case AppRoutes.DASHBOARD:
-        return "Welcome to your Dashboard";
-      case AppRoutes.DASHBOARD_OVERVIEW:
-        return "Dashboard Overview";
-      default:
-        return "";
-    }
-  }
+  constructor(private readonly routeHeadingService: RouteHeadingService) { }
 
   public ngOnInit(): void {
+    this.routeHeadingService.titleChanged$().pipe(takeUntil(this.destroy)).subscribe(newTitle => {
+      this.heading = newTitle;
+    });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
 }

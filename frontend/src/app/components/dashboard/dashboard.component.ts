@@ -12,6 +12,7 @@ import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dial
 import { IDashboard } from 'src/app/interfaces/idashboard';
 import { TimeRange } from 'src/app/models/time-range';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { RouteHeadingService } from 'src/app/services/route-heading.service';
 import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/create-widget-dialog.component';
 @Component({
   selector: 'dashboard',
@@ -41,7 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('filterSidebar')
   public filterSidebar!: MatSidenav;
 
-  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute, private readonly routeHeadingService: RouteHeadingService) { }
 
   private initGridster() {
     this.options = {
@@ -74,10 +75,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.snackbar.open(`An error occurred: ${response.error}`, 'Close');
         return;
       }
+      this.routeHeadingService.updateRouteHeadingTitle(`Welcome to your Dashboard: "${response.dashboard.title}"`);
       this.dashboard = response.dashboard;
       this.loadDashboardData(this.selectedTimeRange);
     })
-
   }
 
   public toggleFilterSidebar() {
