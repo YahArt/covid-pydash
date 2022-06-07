@@ -31,7 +31,6 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   @Output()
   public onDelete = new EventEmitter<string>();
 
-  public isLoading = false;
   public noData = false;
   public error: string | null = null;
 
@@ -60,13 +59,6 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
     });
   }
 
-  private subscribeLoading() {
-    this.dashboardService.loading$.pipe(takeUntil(this.destroy)).subscribe(loading => {
-      this.isLoading = loading;
-      this._changeDetectorRef.markForCheck();
-    });
-  }
-
   private subscribeDashboardDataChanged() {
     this.dashboardService.dashboardDataChanged$.pipe(filter(e => e.findIndex(b => b.identifier === this.item.identifier) >= 0), takeUntil(this.destroy)).subscribe(data => {
       // There should only ever be one widget data item per identifier so we can take the first one...
@@ -84,7 +76,6 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   public ngOnInit(): void {
     this.subscribeWidgetResize();
     this.subscribeEditModeChanged();
-    this.subscribeLoading();
     this.subscribeDashboardDataChanged();
   }
 

@@ -39,6 +39,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedTimeRange
   ];
 
+  public loading = false;
+
   @ViewChild('filterSidebar')
   public filterSidebar!: MatSidenav;
 
@@ -63,14 +65,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private loadDashboardData(timeRange: TimeRange): void {
     // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
-    this.dashboardService.notifyLoading(true);
-    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.dashboardService.notifyLoading(false)), takeUntil(this.destroy)).subscribe(response => {
+    this.loading = true;
+    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       this.dashboardService.notifyDashboardDataChanged(response)
     });
   }
 
   private loadDashboardByIdentifier(identifier: string) {
-    this.dashboardService.getDashboard$(identifier).pipe(takeUntil(this.destroy)).subscribe(response => {
+    this.loading = true;
+    this.dashboardService.getDashboard$(identifier).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       if (response.error) {
         this.snackbar.open(`An error occurred: ${response.error}`, 'Close');
         return;
@@ -194,7 +197,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public saveDashboard() {
     // TODO: Add global loading progress...
-    this.dashboardService.createDashboard$(this.dashboard).pipe(takeUntil(this.destroy)).subscribe(response => {
+    this.loading = true;
+    this.dashboardService.createDashboard$(this.dashboard).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       if (response.error) {
         this.snackbar.open(`Failed to save dashboard: "${this.dashboard.title}", Error: ${response.error}`, 'Close');
         return;

@@ -8,12 +8,6 @@
     position: relative;
     padding: $default-margin;
 
-    .loading-indicator {
-        position: absolute;
-        top: 0;
-        left: 0;
-    }
-
     .header {
         height: $dashboard-widget-header-height;
 

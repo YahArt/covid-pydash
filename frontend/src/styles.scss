@@ -10,7 +10,8 @@ $app-header-height: 60px;
 $app-header-z-index: 2;
 $overlay-z-index: 2;
 
-$dashboard-actions-z-index: 3;
+$dashboard-actions-z-index: 2;
+$dashboard-loading-indicator-z-index: 2;
 
 $route-heading-height: 80px;
 $dashboard-filter-area-height: 60px;
@@ -23,4 +24,8 @@ $dashboard-widget-header-height: 100px;
 
 .spacer {
     flex: 1 1 auto;
+}
+
+body {
+    overflow-y: hidden;
 }

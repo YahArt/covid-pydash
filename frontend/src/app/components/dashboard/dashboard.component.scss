@@ -33,6 +33,12 @@
     background-color: $widget-bg;
 }
 
+mat-progress-bar {
+    position: absolute;
+    top: calc($route-heading-height + $dashboard-filter-area-height);
+    z-index: $dashboard-loading-indicator-z-index;
+}
+
 gridster {
     height: calc(100vh - $app-header-height - $route-heading-height - $dashboard-filter-area-height);
     background-color: $gridster-bg;

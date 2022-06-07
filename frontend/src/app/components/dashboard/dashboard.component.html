@@ -11,6 +11,7 @@
     <mat-icon>filter_alt</mat-icon>
   </button>
 </mat-toolbar>
+<mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
 <mat-drawer-container>
   <mat-drawer position="end" #filterSidebar mode="over" closed>
@@ -31,8 +32,6 @@
       <button id="applyFilterButton" mat-button color="primary" type="submit" [disabled]="!filters.valid">APPLY
         FILTERS</button>
     </form>
-
-
   </mat-drawer>
   <mat-drawer-content>
     <gridster class=" grid" [options]="options" *ngIf="dashboard">

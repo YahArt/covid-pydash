@@ -40,7 +40,6 @@ export class DashboardService {
   private widgetSizeChangedSubject = new Subject<IWidgetSize>();
   private editModeChangedSubject = new Subject<boolean>();
   private dashboardDataSubject = new Subject<Array<IDashboardData>>();
-  private loadingSubject = new Subject<boolean>();
 
   constructor(private readonly httpClient: HttpClient) { }
 
@@ -76,11 +75,6 @@ export class DashboardService {
     this.editModeChangedSubject.next(enabled);
   }
 
-  public notifyLoading(loading: boolean) {
-    this.loadingSubject.next(loading);
-
-  }
-
   public notifyDashboardDataChanged(data: Array<IDashboardData>) {
     this.dashboardDataSubject.next(data);
   }
@@ -95,10 +89,6 @@ export class DashboardService {
 
   public get editModeChanged$(): Observable<boolean> {
     return this.editModeChangedSubject.asObservable();
-  }
-
-  public get loading$(): Observable<boolean> {
-    return this.loadingSubject.asObservable();
   }
 
   public get dashboardDataChanged$(): Observable<Array<IDashboardData>> {
