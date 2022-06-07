@@ -25,7 +25,7 @@ export class DashboardOverviewComponent implements OnInit {
 
   public openDashboard(dashboard: { identifier: string, title: string }) {
     this.router.navigate([AppRoutes.DASHBOARD], {
-      queryParams: { identifier: dashboard.identifier, title: dashboard.title }
+      queryParams: { identifier: dashboard.identifier }
     });
   }
 

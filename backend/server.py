@@ -16,31 +16,28 @@ covid_service = services.covid_service.CovidService()
 CORS(app)
 
 
-def get_dashboard_full_path(dashboard):
-    dashboard_identifier = dashboard['identifier']
-    dashboard_title = dashboard['title']
+def get_dashboard_full_path(dashboard_identifier):
 
     unique_dashboard_file_name_full_path = './dashboards/' + \
-        dashboard_title + '_' + dashboard_identifier + '.json'
+        dashboard_identifier + '.json'
 
     return unique_dashboard_file_name_full_path
 
 
 def get_dashboard_information_from_full_path(full_path):
-    dashboard_file_name = full_path.split('/')[-1]
-    dashboard_file_name = dashboard_file_name.replace('.json', '')
+    dashboard = None
+    with open(full_path, 'r') as dashboard_file:
+        dashboard = json.load(dashboard_file)
 
-    dashboard_information = dashboard_file_name.split('_')
-    title = dashboard_information[0]
-    identifier = dashboard_information[-1]
     return {
-        'title': title,
-        'identifier': identifier
+        'title': dashboard["title"],
+        'identifier': dashboard["identifier"]
     }
 
 
 def save_dashboard(dashboard):
-    unique_dashboard_file_name_full_path = get_dashboard_full_path(dashboard)
+    unique_dashboard_file_name_full_path = get_dashboard_full_path(
+        dashboard["identifier"])
 
     with open(unique_dashboard_file_name_full_path, 'w') as f:
         json.dump(dashboard, f, indent=2)
@@ -79,15 +76,14 @@ def dashboards():
         return make_response(jsonify(response_data), response_code)
 
 
-@app.route('/dashboard/<identifier>/<title>', methods=['GET'])
-def dashboard_by_identifier(identifier, title):
+@app.route('/dashboard/<identifier>', methods=['GET'])
+def dashboard_by_identifier(identifier):
     response_code = 201
     dashboard = None
     error = None
 
     try:
-        dashboard_full_path = get_dashboard_full_path(
-            {'identifier': identifier, 'title': title})
+        dashboard_full_path = get_dashboard_full_path(identifier)
         dashboard = load_dashboard_file(dashboard_full_path)
     except BaseException as error:
         response_code = 501

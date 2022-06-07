@@ -75,8 +75,8 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private loadDashboardByIdentifierAndTitle(identifier: string, title: string) {
-    this.dashboardService.getDashboard$(identifier, title).subscribe(response => {
+  private loadDashboardByIdentifier(identifier: string) {
+    this.dashboardService.getDashboard$(identifier).subscribe(response => {
       this.dashboard = response.dashboard;
       this.loadDashboardData(this.selectedTimeRange);
     })
@@ -105,12 +105,10 @@ export class DashboardComponent implements OnInit {
     this.initGridster();
     this.initFilters();
 
-    this.route.queryParams.pipe(filter(params => params.identifier && params.title))
+    this.route.queryParams.pipe(filter(params => params.identifier))
       .subscribe(params => {
-        console.log(params);
         const dashboardIdentifier = params.identifier;
-        const dashboardTitle = params.title;
-        this.loadDashboardByIdentifierAndTitle(dashboardIdentifier, dashboardTitle);
+        this.loadDashboardByIdentifier(dashboardIdentifier);
       });
   }
 

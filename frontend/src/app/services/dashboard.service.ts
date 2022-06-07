@@ -123,8 +123,8 @@ export class DashboardService {
     return this.httpClient.get<IGetDashboardsResponse>(`${environment.restApi}/dashboards`);
   }
 
-  public getDashboard$(identifier: string, title: string): Observable<IGetDashboardResponse> {
-    return this.httpClient.get<IGetDashboardResponse>(`${environment.restApi}/dashboard/${identifier}/${title}`);
+  public getDashboard$(identifier: string): Observable<IGetDashboardResponse> {
+    return this.httpClient.get<IGetDashboardResponse>(`${environment.restApi}/dashboard/${identifier}`);
   }
 
   public loadData$(timeRange: TimeRange, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
