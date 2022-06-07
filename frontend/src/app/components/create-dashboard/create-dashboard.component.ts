@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
@@ -12,10 +12,10 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 })
 export class CreateDashboardComponent implements OnInit {
 
-  public createDashboard = new FormGroup(
+  public createDashboard = new UntypedFormGroup(
     {
-      name: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-      selectedTemplate: new FormControl("none"),
+      name: new UntypedFormControl(null, [Validators.required, Validators.minLength(2)]),
+      selectedTemplate: new UntypedFormControl("none"),
     }
   );
 

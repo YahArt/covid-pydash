@@ -1,5 +1,5 @@
 import { OnInit, Component, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -26,10 +26,10 @@ export class DashboardComponent implements OnInit {
   public options!: GridsterConfig;
   public dashboard!: IDashboard;
 
-  public filters = new FormGroup(
+  public filters = new UntypedFormGroup(
     {
-      startDate: new FormControl(null, Validators.required),
-      endDate: new FormControl(null, Validators.required),
+      startDate: new UntypedFormControl(null, Validators.required),
+      endDate: new UntypedFormControl(null, Validators.required),
     }
   );
 
