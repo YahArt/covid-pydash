@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.routeHeadingService.updateRouteHeadingTitle(`Welcome to your Dashboard: "${response.dashboard.title}"`);
       this.dashboard = response.dashboard;
       this.loadDashboardData(this.selectedTimeRange);
-    })
+    });
   }
 
   public toggleFilterSidebar() {
@@ -190,6 +190,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadDashboardData(this.selectedTimeRange);
       }
     });
+  }
+
+  public saveDashboard() {
+    // TODO: Add global loading progress...
+    this.dashboardService.createDashboard$(this.dashboard).pipe(takeUntil(this.destroy)).subscribe(response => {
+      if (response.error) {
+        this.snackbar.open(`Failed to save dashboard: "${this.dashboard.title}", Error: ${response.error}`, 'Close');
+        return;
+      }
+      this.snackbar.open(`Successfully saved dashboard: "${this.dashboard.title}"`, undefined, {
+        duration: 1000
+      });
+
+    })
   }
 
   public onApplyFilters() {

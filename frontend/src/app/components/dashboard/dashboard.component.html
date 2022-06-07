@@ -43,11 +43,15 @@
     </gridster>
 
     <div class="dashboard-actions">
-      <button mat-fab [color]="getEditModeColor()" (click)="toggleEditMode()" class="edit-mode-button">
+      <button mat-fab color="accent" (click)="saveDashboard()">
+        <mat-icon>save</mat-icon>
+      </button>
+
+      <button mat-fab [color]="getEditModeColor()" (click)="toggleEditMode()">
         <mat-icon>edit</mat-icon>
       </button>
 
-      <button mat-fab color="accent" (click)="addWidget()" class="add-widget-button">
+      <button mat-fab color="accent" (click)="addWidget()">
         <mat-icon>add</mat-icon>
       </button>
     </div>
