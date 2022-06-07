@@ -30,8 +30,8 @@ export class ChartConfig {
                         title: 'Covid Deaths over time',
                         subtitle: 'Severity of Pandemic',
                         yAxisLabel: 'Deaths Accumulated',
-                        xAxisLabel: 'Date'
-
+                        xAxisLabel: 'Date',
+                        timeline: true
                     };
                     return config;
                 }

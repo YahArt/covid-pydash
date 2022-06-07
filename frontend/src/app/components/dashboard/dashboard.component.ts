@@ -1,10 +1,9 @@
-import { ReturnStatement } from '@angular/compiler';
 import { OnInit, Component, ViewChild, OnDestroy } from '@angular/core';
-import { FormControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
 import { filter, finalize, Subject, takeUntil } from 'rxjs';
@@ -28,7 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public options!: GridsterConfig;
   public dashboard!: IDashboard;
 
-  public filters = new UntypedFormGroup(
+  public filters = new FormGroup(
     {
       startDate: new FormControl<Date>(new Date(), Validators.required),
       endDate: new FormControl<Date>(new Date(), Validators.required),
@@ -193,7 +192,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public onApplyFilters() {
-    const newTimeRange = new TimeRange(this.filters.value.startDate, this.filters.value.endDate);
+    const newTimeRange = new TimeRange(this.filters.value.startDate as Date, this.filters.value.endDate as Date);
     this.addTimeRange(newTimeRange);
     this.filterSidebar.toggle();
   }

@@ -32,8 +32,6 @@ export class DashboardService {
         identifier: Guid.create().toString(),
         informationAbout: CovidInformationType.CovidDeaths,
         type: DashboardWidgetType.LineChart,
-        title: 'Accumulated Covid Deaths over time',
-        subtitle: 'Severity of Pandemic'
       },
     ]
   }

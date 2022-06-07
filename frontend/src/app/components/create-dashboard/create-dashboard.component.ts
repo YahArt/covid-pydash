@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
@@ -12,7 +12,7 @@ import { DashboardService } from 'src/app/services/dashboard.service';
 })
 export class CreateDashboardComponent implements OnInit {
 
-  public createDashboard = new UntypedFormGroup(
+  public createDashboard = new FormGroup(
     {
       name: new FormControl<string>("", [Validators.required, Validators.minLength(2)]),
       selectedTemplate: new FormControl<string>("none"),
@@ -27,7 +27,7 @@ export class CreateDashboardComponent implements OnInit {
   public onCreateDashboard() {
     // TODO: Pass in correct template...
     const dashboard = this.dashboardService.createDashboardFromTemplate(null);
-    dashboard.title = this.createDashboard.controls.name.value;
+    dashboard.title = this.createDashboard.controls.name.value as string;
     dashboard.identifier = Guid.create().toString();
 
     this.dashboardService.createDashboard$(dashboard).subscribe(result => {
