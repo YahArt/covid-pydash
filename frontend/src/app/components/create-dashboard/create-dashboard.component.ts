@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Guid } from 'guid-typescript';
@@ -14,8 +14,8 @@ export class CreateDashboardComponent implements OnInit {
 
   public createDashboard = new UntypedFormGroup(
     {
-      name: new UntypedFormControl(null, [Validators.required, Validators.minLength(2)]),
-      selectedTemplate: new UntypedFormControl("none"),
+      name: new FormControl<string>("", [Validators.required, Validators.minLength(2)]),
+      selectedTemplate: new FormControl<string>("none"),
     }
   );
 

@@ -1,5 +1,5 @@
 import { OnInit, Component, ViewChild } from '@angular/core';
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,8 +28,8 @@ export class DashboardComponent implements OnInit {
 
   public filters = new UntypedFormGroup(
     {
-      startDate: new UntypedFormControl(null, Validators.required),
-      endDate: new UntypedFormControl(null, Validators.required),
+      startDate: new FormControl<Date>(new Date(), Validators.required),
+      endDate: new FormControl<Date>(new Date(), Validators.required),
     }
   );
 
@@ -41,14 +41,6 @@ export class DashboardComponent implements OnInit {
   public filterSidebar!: MatSidenav;
 
   constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute) { }
-
-
-  private initFilters() {
-    this.filters.patchValue({
-      startDate: new Date(),
-      endDate: new Date()
-    });
-  }
 
   private initGridster() {
     this.options = {
@@ -103,7 +95,6 @@ export class DashboardComponent implements OnInit {
 
   public ngOnInit(): void {
     this.initGridster();
-    this.initFilters();
 
     this.route.queryParams.pipe(filter(params => params.identifier))
       .subscribe(params => {
