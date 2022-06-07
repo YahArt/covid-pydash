@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { IDashboardData } from 'src/app/interfaces/idashboard-data';
+import { ILineChartConfig } from 'src/app/interfaces/iline-chart-config';
+import { ILineChartSeries } from 'src/app/interfaces/iline-chart-series';
 import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { WidgetBase } from '../widget-base';
 
@@ -12,20 +14,7 @@ import { WidgetBase } from '../widget-base';
 export class LineChartWidgetComponent extends WidgetBase {
   public multi: any[] = [];
   public view: [number, number] = [350, 350];
-
-  // options
-  public legend: boolean = true;
-  public showLabels: boolean = true;
-  public animations: boolean = true;
-  public xAxis: boolean = true;
-  public yAxis: boolean = true;
-  public showYAxisLabel: boolean = true;
-  public showXAxisLabel: boolean = true;
-  public xAxisLabel: string = 'Year';
-  public yAxisLabel: string = 'Deaths';
-  public timeline: boolean = false;
-
-  public colorScheme = 'cool';
+  public config!: ILineChartConfig;
 
   constructor(private readonly changeDetectorRef: ChangeDetectorRef) {
     super();
@@ -36,8 +25,12 @@ export class LineChartWidgetComponent extends WidgetBase {
     this.changeDetectorRef.markForCheck();
   }
 
+  public setConfig(config: ILineChartConfig): void {
+    this.config = config;
+  }
+
   public onDataChanged(data: IDashboardData | undefined): void {
-    this.multi = [data?.value]
+    this.multi = [data?.value as ILineChartSeries]
     this.changeDetectorRef.markForCheck();
   }
 

@@ -6,6 +6,4 @@ export interface IDashboardWidgetItem extends GridsterItem {
     identifier: string,
     type: DashboardWidgetType,
     informationAbout: CovidInformationType,
-    title: string,
-    subtitle: string
 }

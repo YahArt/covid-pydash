@@ -14,12 +14,10 @@ export class CreateWidgetDialogComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<CreateWidgetDialogComponent>) { }
 
-  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType, title: string, subtitle: string }[] = [
+  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[] = [
     {
       type: DashboardWidgetType.LineChart,
       informationAbout: CovidInformationType.CovidDeaths,
-      title: 'Covid Deaths over time',
-      subtitle: 'Severity of Pandemic'
     },
   ];
 

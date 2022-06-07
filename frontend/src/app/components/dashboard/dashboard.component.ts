@@ -1,4 +1,5 @@
-import { OnInit, Component, ViewChild } from '@angular/core';
+import { ReturnStatement } from '@angular/compiler';
+import { OnInit, Component, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
@@ -6,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
-import { filter, finalize } from 'rxjs';
+import { filter, finalize, Subject, takeUntil } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
 import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
 import { IDashboard } from 'src/app/interfaces/idashboard';
@@ -18,10 +19,11 @@ import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/cre
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
 
   private editModeEnabled = false;
-  private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25))
+  private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
+  private destroy = new Subject<void>();
 
   public options!: GridsterConfig;
   public dashboard!: IDashboard;
@@ -62,13 +64,17 @@ export class DashboardComponent implements OnInit {
   private loadDashboardData(timeRange: TimeRange): void {
     // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
     this.dashboardService.notifyLoading(true);
-    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.dashboardService.notifyLoading(false))).subscribe(response => {
+    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.dashboardService.notifyLoading(false)), takeUntil(this.destroy)).subscribe(response => {
       this.dashboardService.notifyDashboardDataChanged(response)
     });
   }
 
   private loadDashboardByIdentifier(identifier: string) {
-    this.dashboardService.getDashboard$(identifier).subscribe(response => {
+    this.dashboardService.getDashboard$(identifier).pipe(takeUntil(this.destroy)).subscribe(response => {
+      if (response.error) {
+        this.snackbar.open(`An error occurred: ${response.error}`, 'Close');
+        return;
+      }
       this.dashboard = response.dashboard;
       this.loadDashboardData(this.selectedTimeRange);
     })
@@ -96,11 +102,16 @@ export class DashboardComponent implements OnInit {
   public ngOnInit(): void {
     this.initGridster();
 
-    this.route.queryParams.pipe(filter(params => params.identifier))
+    this.route.queryParams.pipe(takeUntil(this.destroy), filter(params => params.identifier))
       .subscribe(params => {
         const dashboardIdentifier = params.identifier;
         this.loadDashboardByIdentifier(dashboardIdentifier);
       });
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 
   public isSelectedTimeRange(timeRange: TimeRange): boolean {
@@ -166,7 +177,7 @@ export class DashboardComponent implements OnInit {
       width: '60vw'
     });
 
-    dialogRef.afterClosed().subscribe((selectedWidget: ICreateWidgetDialogEntry | null) => {
+    dialogRef.afterClosed().pipe(takeUntil(this.destroy)).subscribe((selectedWidget: ICreateWidgetDialogEntry | null) => {
       if (selectedWidget) {
         this.dashboard.widgets.push(
           {
@@ -174,8 +185,6 @@ export class DashboardComponent implements OnInit {
             identifier: Guid.create().toString(),
             informationAbout: selectedWidget.informationAbout,
             type: selectedWidget.type,
-            title: selectedWidget.description,
-            subtitle: selectedWidget.informationCategory
           },
         )
         this.loadDashboardData(this.selectedTimeRange);

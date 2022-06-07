@@ -1,7 +1,9 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewContainerRef } from '@angular/core';
 import { filter, Subject, takeUntil } from 'rxjs';
+import { ChartConfig } from 'src/app/config/chart-config';
 import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/interfaces/idashboard-widget-item';
+import { ILineChartConfig } from 'src/app/interfaces/iline-chart-config';
 import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { LineChartWidgetComponent } from '../widgets/line-chart-widget/line-chart-widget.component';
@@ -90,15 +92,16 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
     switch (this.item.type) {
       case DashboardWidgetType.LineChart: {
         const lineChartWidget = this.itemTemplate.createComponent(LineChartWidgetComponent);
+        const chartConfig = ChartConfig.getConfig(this.item.type, this.item.informationAbout) as ILineChartConfig;
         this.widgetInstance = lineChartWidget.instance;
+        this.widgetInstance.setConfig(chartConfig);
+        this.title = chartConfig.title;
+        this.subtitle = chartConfig.subtitle;
         break;
       }
       default:
       // Do nothign
     }
-
-    this.title = this.item.title;
-    this.subtitle = this.item.subtitle;
     this._changeDetectorRef.detectChanges();
   }
 

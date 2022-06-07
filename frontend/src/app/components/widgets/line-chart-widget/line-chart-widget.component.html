@@ -1,4 +1,5 @@
-<ngx-charts-line-chart [view]="view" [scheme]="colorScheme" [legend]="legend" [showXAxisLabel]="showXAxisLabel"
-    [showYAxisLabel]="showYAxisLabel" [xAxis]="xAxis" [yAxis]="yAxis" [xAxisLabel]="xAxisLabel"
-    [yAxisLabel]="yAxisLabel" [timeline]="true" [results]="multi">
+<ngx-charts-line-chart *ngIf="config" [view]="view" [scheme]="config.colorScheme" [legend]="config.legend"
+    [showXAxisLabel]="config.showXAxisLabel" [showYAxisLabel]="config.showYAxisLabel" [xAxis]="config.xAxis"
+    [yAxis]="config.yAxis" [xAxisLabel]="config.xAxisLabel" [yAxisLabel]="config.yAxisLabel"
+    [timeline]="config.timeline" [results]="multi">
 </ngx-charts-line-chart>

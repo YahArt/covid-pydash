@@ -78,25 +78,24 @@ def dashboards():
 
 @app.route('/dashboard/<identifier>', methods=['GET'])
 def dashboard_by_identifier(identifier):
-    response_code = 201
     dashboard = None
     error = None
 
     try:
         dashboard_full_path = get_dashboard_full_path(identifier)
         dashboard = load_dashboard_file(dashboard_full_path)
-    except BaseException as error:
-        response_code = 501
-        error = error
+    except FileNotFoundError:
+        error = 'Dashboard could not be found...'
+    except BaseException as exception_error:
+        error = str(exception_error)
     finally:
         response_data = {'dashboard': dashboard, 'error': error}
-        return make_response(jsonify(response_data), response_code)
+        return make_response(jsonify(response_data), 201)
 
 
 @app.route('/dashboard', methods=['POST'])
 def dashboard():
-    response_code = 201
-    data = None
+    dashboard = None
     error = None
 
     try:
@@ -104,12 +103,11 @@ def dashboard():
         dashboard = body.get('dashboard')
         save_dashboard(dashboard)
 
-    except BaseException as error:
-        response_code = 501
-        error = error
+    except BaseException as exception_error:
+        error = str(exception_error)
     finally:
         response_data = {'dashboard': dashboard, 'error': error}
-        return make_response(jsonify(response_data), response_code)
+        return make_response(jsonify(response_data), 201)
 
 
 @app.route('/dashboard_data', methods=['POST'])
@@ -135,8 +133,8 @@ def dashboard_data():
             if information == "covid_death":
                 value = covid_service.get_deaths(start_date, end_date)
                 no_data = len(value['data']) == 0
-        except BaseException as err:
-            error = err
+        except BaseException as exception_error:
+            error = str(exception_error)
         finally:
             response['values'].append(
                 {
