@@ -8,6 +8,7 @@ import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
 import { filter, finalize, Subject, takeUntil } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
+import { Region } from 'src/app/enums/region.enum';
 import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
 import { IDashboard } from 'src/app/interfaces/idashboard';
 import { IDashboardFilter } from 'src/app/interfaces/idashboard-filter';
@@ -24,7 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private editModeEnabled = false;
   private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
-  private selectedRegions: string[] = ['CH'];
+  private selectedRegions: Region[] = [Region.CH];
 
   private destroy = new Subject<void>();
 
@@ -35,11 +36,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     {
       startDate: new FormControl<Date>(this.selectedTimeRange.start, Validators.required),
       endDate: new FormControl<Date>(this.selectedTimeRange.end, Validators.required),
-      regions: new FormControl<Array<string>>(this.selectedRegions, Validators.required)
+      regions: new FormControl<Array<Region>>(this.selectedRegions, [Validators.required, Validators.maxLength(4)])
     }
   );
 
-  regionList: string[] = ['CH', 'GR'];
+  regionList: Region[] = Object.values(Region);
 
   public timeRanges: TimeRange[] = [
     this.selectedTimeRange
@@ -236,7 +237,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   public onApplyFilters() {
-    this.selectedRegions = this.filters.value.regions as string[];
+    this.selectedRegions = this.filters.value.regions as Region[];
     const filter = this.getCurrentFilter();
     this.filterSidebar.toggle();
     this.loadDashboardData(filter);

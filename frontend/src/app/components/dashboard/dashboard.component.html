@@ -43,7 +43,8 @@
         <mat-select formControlName="regions" multiple>
           <mat-option *ngFor="let region of regionList" [value]="region">{{region}}</mat-option>
         </mat-select>
-        <mat-error *ngIf="filters.controls.regions.errors">At least one region has to be selected</mat-error>
+        <mat-error *ngIf="filters.controls.regions.errors?.required">At least one region has to be selected</mat-error>
+        <mat-error *ngIf="filters.controls.regions.errors?.maxlength">You can only select up to 4 regions</mat-error>
       </mat-form-field>
 
       <button id="applyFilterButton" mat-button color="primary" type="submit" [disabled]="!filters.valid">APPLY
