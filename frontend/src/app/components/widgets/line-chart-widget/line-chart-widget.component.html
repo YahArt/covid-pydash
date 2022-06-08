@@ -1,5 +1,3 @@
-<ngx-charts-line-chart *ngIf="config" [view]="view" [scheme]="config.colorScheme" [legend]="config.legend"
-    [showXAxisLabel]="config.showXAxisLabel" [showYAxisLabel]="config.showYAxisLabel" [xAxis]="config.xAxis"
-    [yAxis]="config.yAxis" [xAxisLabel]="config.xAxisLabel" [yAxisLabel]="config.yAxisLabel"
-    [timeline]="config.timeline" [results]="multi">
-</ngx-charts-line-chart>
+<highcharts-chart [Highcharts]="Highcharts" [options]="options" (chartInstance)="chartInstanceCallback($event)"
+    style="width: 100%; height: 100%; display: block;">
+</highcharts-chart>

@@ -1,4 +1,4 @@
 export interface ILineChartData {
-    name: Date;
+    ticks: number;
     value: number;
 }

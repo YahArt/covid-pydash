@@ -59,7 +59,7 @@ export class DashboardService {
                     name: d.region,
                     series: d.deaths.map(deaths => {
                       const seriesData: ILineChartData = {
-                        name: new Date(deaths.datum),
+                        ticks: deaths.datum,
                         value: deaths.sumTotal
 
                       }

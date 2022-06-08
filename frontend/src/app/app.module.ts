@@ -17,7 +17,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 
-import { LineChartModule } from '@swimlane/ngx-charts';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -61,7 +61,6 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
     MatInputModule,
     MatDialogModule,
     MatSelectModule,
-    LineChartModule,
     MatCardModule,
     MatProgressBarModule,
     MatNativeDateModule,
@@ -71,7 +70,8 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
     MatChipsModule,
     MatTableModule,
     MatRadioModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    HighchartsChartModule
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'fill' } }
