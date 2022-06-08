@@ -1,17 +1,21 @@
-from flask import Flask
-from flask import request
-from flask_cors import CORS
-from flask import jsonify
+# Monkeypatch to fix import in flask-cache
 from flask import make_response
-
+from flask import jsonify
+from flask_cors import CORS
+from flask import request
+from flask import Flask
 import services.covid_service
 import json
 import glob
 import os
 import datetime
+from flask_caching import Cache
 
 
 app = Flask("Covid-PyDash REST API")
+
+# Initialize cache
+cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 # Create covid service for data handling
 covid_service = services.covid_service.CovidService()
@@ -64,6 +68,33 @@ def load_dashboard_file(full_path):
 
 def delete_dashboard_file(full_path):
     os.remove(full_path)
+
+
+@cache.memoize(timeout=50)
+def handle_covid_death_request(start_date, end_date, regions):
+    covid_death_obj = {'data': []}
+    deaths_in_time_range = covid_service.get_deaths_in_time_range(
+        start_date, end_date)
+    no_data_per_region_list = []
+    for region in regions:
+        deaths_for_region = covid_service.filter_deaths_by_region(
+            deaths_in_time_range, region)
+        deaths = json.loads(deaths_for_region.to_json(orient="records"))
+
+        no_data_per_region = len(deaths) == 0
+        no_data_per_region_list.append(no_data_per_region)
+        result = {
+            'region': region,
+            'deaths': json.loads(deaths_for_region.to_json(orient="records")),
+        }
+        covid_death_obj['data'].append(result)
+
+    no_data_overall = all(
+        no_data == True for no_data in no_data_per_region_list)
+    result = {
+        'covidDeath': covid_death_obj
+    }
+    return (result, no_data_overall)
 
 
 @app.route('/dashboards', methods=['GET'])
@@ -138,30 +169,20 @@ def dashboard_data():
     dashboard_data = []
 
     for information in information_about_unique:
-        value_obj = None
-        # TODO Set no Data
-        no_data = False
-        error = None
-        # TODO: Handle other information types...
-        if information == "covid_death":
-            covid_death_obj = {'data': []}
-            for region in regions:
-                try:
-                    deaths_for_region = covid_service.get_deaths_for_region(
-                        start_date, end_date, region)
-                    print('Got: ', deaths_for_region)
-                except BaseException as exception_error:
-                    error = str(exception_error)
-                finally:
-                    covid_death_obj['data'].append(
-                        deaths_for_region
-                    )
-            value_obj = {
-                'covidDeath': covid_death_obj
-            }
-        response_obj = {'informationAbout': information,
-                        'value': value_obj, 'noData': no_data, 'error': error}
-        dashboard_data.append(response_obj)
+        try:
+            value = None
+            no_data = False
+            error = None
+            # TODO: Handle other information types...
+            if information == "covid_death":
+                value, no_data = handle_covid_death_request(
+                    start_date, end_date, regions)
+        except BaseException as exception_error:
+            error = str(exception_error)
+        finally:
+            response_obj = {'informationAbout': information,
+                            'value': value, 'noData': no_data, 'error': error}
+            dashboard_data.append(response_obj)
     response_data = {'dashboardData': dashboard_data}
     return make_response(jsonify(response_data), 201)
 

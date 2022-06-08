@@ -14,20 +14,10 @@ class CovidService:
 
         self.covid_deaths = covid_deaths
 
-    def get_deaths_for_region(self, start_date, end_date, region):
-        deaths_in_time_range = self.covid_deaths[(
+    def get_deaths_in_time_range(self, start_date, end_date):
+        return self.covid_deaths[(
             self.covid_deaths['datum'] > start_date) & (self.covid_deaths['datum'] < end_date)]
 
-        # Filter by region
-        deaths_in_time_range = deaths_in_time_range[(
-            deaths_in_time_range['geoRegion'] == region)]
-
-        # Keep only relevant columns
-        deaths_in_time_range = deaths_in_time_range[[
-            'datum', 'entries', 'sumTotal']]
-
-        result = {
-            'region': region,
-            'deaths': json.loads(deaths_in_time_range.to_json(orient="records"))
-        }
-        return result
+    def filter_deaths_by_region(self, covid_deaths, region):
+        return covid_deaths[(
+            covid_deaths['geoRegion'] == region)]
