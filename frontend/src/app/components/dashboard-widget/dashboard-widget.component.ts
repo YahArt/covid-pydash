@@ -66,6 +66,7 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
       this.error = widgetValue.error;
       this.noData = widgetValue.noData;
       if (this.error || this.noData) {
+        this._changeDetectorRef.markForCheck();
         return;
       }
       this.widgetInstance?.onDataChanged(widgetValue);

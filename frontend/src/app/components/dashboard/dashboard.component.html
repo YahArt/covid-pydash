@@ -1,11 +1,4 @@
 <mat-toolbar class="filter-area" color="secondary">
-  <mat-chip-list>
-    <mat-chip (click)="onApplyTimeRange(timeRange)" *ngFor="let timeRange of timeRanges"
-      [selected]="isSelectedTimeRange(timeRange)" (removed)="removeTimeRange(timeRange)">
-      {{timeRange}} <button *ngIf="canRemoveTimeRange()" matChipRemove>
-        <mat-icon>cancel</mat-icon>
-      </button></mat-chip>
-  </mat-chip-list>
   <div class="spacer"></div>
   <button mat-mini-fab color="primary" (click)="toggleFilterSidebar()">
     <mat-icon>filter_alt</mat-icon>
@@ -16,7 +9,7 @@
 <mat-drawer-container>
   <mat-drawer position="end" #filterSidebar mode="over" closed>
     <form [formGroup]="filters" (ngSubmit)="onApplyFilters()" class="filters-form">
-      <mat-form-field appearance="fill">
+      <mat-form-field>
         <mat-label>Enter a date range</mat-label>
         <mat-date-range-input [rangePicker]="picker">
           <input matStartDate formControlName="startDate" placeholder="Start date">
@@ -27,6 +20,30 @@
         <mat-date-range-picker #picker></mat-date-range-picker>
         <mat-error *ngIf="filters.controls.startDate.errors">No valid start date specified</mat-error>
         <mat-error *ngIf="filters.controls.endDate.errors">No valid end date specified</mat-error>
+      </mat-form-field>
+
+      <button mat-button color="primary" (click)="addTimeRangeAndSetSelected($event)"
+        [disabled]="!this.validTimeRange()">ADD TO
+        TIMERANGES</button>
+
+      <mat-form-field>
+        <mat-label>Your time ranges:</mat-label>
+        <mat-chip-list>
+          <mat-chip (click)="setSelectedTimeRange(timeRange)" *ngFor="let timeRange of timeRanges"
+            [selected]="isSelectedTimeRange(timeRange)" (removed)="removeTimeRange(timeRange)">
+            {{timeRange}} <button *ngIf="canRemoveTimeRange()" matChipRemove>
+              <mat-icon>cancel</mat-icon>
+            </button></mat-chip>
+        </mat-chip-list>
+
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Regions</mat-label>
+        <mat-select formControlName="regions" multiple>
+          <mat-option *ngFor="let region of regionList" [value]="region">{{region}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="filters.controls.regions.errors">At least one region has to be selected</mat-error>
       </mat-form-field>
 
       <button id="applyFilterButton" mat-button color="primary" type="submit" [disabled]="!filters.valid">APPLY

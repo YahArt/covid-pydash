@@ -3,10 +3,17 @@
 .filters-form {
     display: flex;
     flex-direction: column;
+    padding: $default-margin;
 
     #applyFilterButton {
         margin: $default-margin 0;
     }
+
+    mat-chip-list {
+        padding: 0 $default-margin;
+    }
+
+
 }
 
 .filter-area {

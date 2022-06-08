@@ -10,6 +10,7 @@ import { filter, finalize, Subject, takeUntil } from 'rxjs';
 import { GridConfig } from 'src/app/config/grid-config';
 import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
 import { IDashboard } from 'src/app/interfaces/idashboard';
+import { IDashboardFilter } from 'src/app/interfaces/idashboard-filter';
 import { TimeRange } from 'src/app/models/time-range';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { RouteHeadingService } from 'src/app/services/route-heading.service';
@@ -23,6 +24,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   private editModeEnabled = false;
   private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
+  private selectedRegions: string[] = ['CH'];
+
   private destroy = new Subject<void>();
 
   public options!: GridsterConfig;
@@ -30,10 +33,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public filters = new FormGroup(
     {
-      startDate: new FormControl<Date>(new Date(), Validators.required),
-      endDate: new FormControl<Date>(new Date(), Validators.required),
+      startDate: new FormControl<Date>(this.selectedTimeRange.start, Validators.required),
+      endDate: new FormControl<Date>(this.selectedTimeRange.end, Validators.required),
+      regions: new FormControl<Array<string>>(this.selectedRegions, Validators.required)
     }
   );
+
+  regionList: string[] = ['CH', 'GR'];
 
   public timeRanges: TimeRange[] = [
     this.selectedTimeRange
@@ -53,20 +59,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  private addTimeRange(timeRange: TimeRange) {
-    // Time range already exists...
-    if (this.timeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
-      return;
-    }
-    this.timeRanges.push(timeRange);
-    this.selectedTimeRange = timeRange;
-    this.loadDashboardData(this.selectedTimeRange);
-  }
-
-  private loadDashboardData(timeRange: TimeRange): void {
+  private loadDashboardData(dashboardFilter: IDashboardFilter): void {
     // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
     this.loading = true;
-    this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
+    this.dashboardService.loadData$(dashboardFilter.timeRange, this.dashboard.widgets).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       const errors = response.filter(r => r.error !== null).map(r => r.error);
       if (errors && errors.length > 0) {
         const errorMessage = errors.join('\nError: ');
@@ -75,6 +71,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       this.dashboardService.notifyDashboardDataChanged(response)
     });
+  }
+
+  private getCurrentFilter(): IDashboardFilter {
+    return {
+      timeRange: this.selectedTimeRange,
+      regions: this.selectedRegions
+    };
   }
 
   private loadDashboardByIdentifier(identifier: string) {
@@ -86,12 +89,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       this.routeHeadingService.updateRouteHeadingTitle(`Welcome to your Dashboard: "${response.dashboard.title}"`);
       this.dashboard = response.dashboard;
-      this.loadDashboardData(this.selectedTimeRange);
+      const filter = this.getCurrentFilter();
+      this.loadDashboardData(filter);
     });
+  }
+
+  public addTimeRangeAndSetSelected($event: any) {
+    $event.preventDefault();
+    const timeRange = new TimeRange(this.filters.value.startDate as Date, this.filters.value.endDate as Date);
+    // Time range already exists...
+    if (this.timeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
+      return;
+    }
+    this.timeRanges.push(timeRange);
+    this.selectedTimeRange = timeRange;
   }
 
   public toggleFilterSidebar() {
     this.filterSidebar.toggle();
+  }
+
+  public validTimeRange(): boolean {
+    return this.filters.controls.startDate.valid && this.filters.controls.endDate.valid;
   }
 
   public removeTimeRange(timeRange: TimeRange) {
@@ -102,11 +121,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.timeRanges.splice(removeIndex, 1);
   }
 
-  public onApplyTimeRange(timeRange: TimeRange) {
+  public setSelectedTimeRange(timeRange: TimeRange) {
     this.selectedTimeRange = timeRange;
-    this.loadDashboardData(this.selectedTimeRange);
   }
-
 
   public ngOnInit(): void {
     this.initGridster();
@@ -196,13 +213,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
             type: selectedWidget.type,
           },
         )
-        this.loadDashboardData(this.selectedTimeRange);
+        const filter = this.getCurrentFilter();
+        this.loadDashboardData(filter);
       }
     });
   }
 
   public saveDashboard() {
-    // TODO: Add global loading progress...
     this.loading = true;
     this.dashboardService.createDashboard$(this.dashboard).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       if (response.error) {
@@ -216,9 +233,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     })
   }
 
+
+
   public onApplyFilters() {
-    const newTimeRange = new TimeRange(this.filters.value.startDate as Date, this.filters.value.endDate as Date);
-    this.addTimeRange(newTimeRange);
+    this.selectedRegions = this.filters.value.regions as string[];
+    const filter = this.getCurrentFilter();
     this.filterSidebar.toggle();
+    this.loadDashboardData(filter);
   }
 }
