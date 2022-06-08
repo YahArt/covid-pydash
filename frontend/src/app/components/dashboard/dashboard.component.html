@@ -2,7 +2,7 @@
   <mat-chip-list>
     <mat-chip (click)="onApplyTimeRange(timeRange)" *ngFor="let timeRange of timeRanges"
       [selected]="isSelectedTimeRange(timeRange)" (removed)="removeTimeRange(timeRange)">
-      {{timeRange.identifier}} <button *ngIf="canRemoveTimeRange()" matChipRemove>
+      {{timeRange}} <button *ngIf="canRemoveTimeRange()" matChipRemove>
         <mat-icon>cancel</mat-icon>
       </button></mat-chip>
   </mat-chip-list>

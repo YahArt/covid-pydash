@@ -67,6 +67,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
     this.loading = true;
     this.dashboardService.loadData$(timeRange, this.dashboard.widgets).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
+      const errors = response.filter(r => r.error !== null).map(r => r.error);
+      if (errors && errors.length > 0) {
+        const errorMessage = errors.join('\nError: ');
+        this.snackbar.open(`Something went wrong while loading data: ${errorMessage}`, 'Close');
+        return;
+      }
       this.dashboardService.notifyDashboardDataChanged(response)
     });
   }

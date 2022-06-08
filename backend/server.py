@@ -8,6 +8,8 @@ import services.covid_service
 import json
 import glob
 import os
+import datetime
+
 
 app = Flask("Covid-PyDash REST API")
 
@@ -123,20 +125,21 @@ def dashboard():
 def dashboard_data():
     body = request.get_json()
 
-    start_date = body.get('startDate')
-    end_date = body.get('endDate')
+    start_date_ticks = body.get('startDateEpochTicks')
+    end_date_ticks = body.get('endDateEpochTicks')
+
+    # Convert ticks to date objects
+    start_date = datetime.datetime.fromtimestamp(start_date_ticks)
+    end_date = datetime.datetime.fromtimestamp(end_date_ticks)
 
     information_about = body.get('informationAbout')
     information_about_unique = list(set(information_about))
-
-    response = {
-        'values': []
-    }
 
     for information in information_about_unique:
         value = None
         error = None
         no_data = False
+        values = []
         try:
             # TODO: Handle other information types...
             if information == "covid_death":
@@ -145,16 +148,15 @@ def dashboard_data():
         except BaseException as exception_error:
             error = str(exception_error)
         finally:
-            response['values'].append(
-                {
-                    'informationAbout': information,
-                    'value': value,
-                    'error': error,
-                    'noData': no_data
-                }
-            )
+            values.append({
+                'informationAbout': information,
+                'value': value,
+                'error': error,
+                'noData': no_data
+            })
 
-    return response
+    response_data = {'values': values}
+    return make_response(jsonify(response_data), 201)
 
 
 app.run(host='0.0.0.0', port=81)

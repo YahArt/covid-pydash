@@ -124,8 +124,8 @@ export class DashboardService {
     const informationAbout = dashboard.map(d => d.informationAbout);
     // TODO: Convert dashboard response to appropriate data types
     return this.httpClient.post<IDashboardDataResponse>(`${environment.restApi}/dashboard_data`, {
-      startDate: timeRange.startDateString,
-      endDate: timeRange.endDateString,
+      startDateEpochTicks: timeRange.start.getTime() / 1000,
+      endDateEpochTicks: timeRange.end.getTime() / 1000,
       informationAbout
     }).pipe(map(dashboardResponse => {
       let dasbhoardData: Array<IDashboardData> = [];
