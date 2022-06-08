@@ -127,6 +127,7 @@ def dashboard_data():
 
     start_date_ticks = body.get('startDateEpochTicks')
     end_date_ticks = body.get('endDateEpochTicks')
+    regions = body.get('regions')
 
     # Convert ticks to date objects
     start_date = datetime.datetime.fromtimestamp(start_date_ticks)
@@ -134,28 +135,34 @@ def dashboard_data():
 
     information_about = body.get('informationAbout')
     information_about_unique = list(set(information_about))
+    dashboard_data = []
 
     for information in information_about_unique:
-        value = None
-        error = None
+        value_obj = None
+        # TODO Set no Data
         no_data = False
-        values = []
-        try:
-            # TODO: Handle other information types...
-            if information == "covid_death":
-                value = covid_service.get_deaths(start_date, end_date)
-                no_data = len(value['data']) == 0
-        except BaseException as exception_error:
-            error = str(exception_error)
-        finally:
-            values.append({
-                'informationAbout': information,
-                'value': value,
-                'error': error,
-                'noData': no_data
-            })
-
-    response_data = {'values': values}
+        error = None
+        # TODO: Handle other information types...
+        if information == "covid_death":
+            covid_death_obj = {'data': []}
+            for region in regions:
+                try:
+                    deaths_for_region = covid_service.get_deaths_for_region(
+                        start_date, end_date, region)
+                    print('Got: ', deaths_for_region)
+                except BaseException as exception_error:
+                    error = str(exception_error)
+                finally:
+                    covid_death_obj['data'].append(
+                        deaths_for_region
+                    )
+            value_obj = {
+                'covidDeath': covid_death_obj
+            }
+        response_obj = {'informationAbout': information,
+                        'value': value_obj, 'noData': no_data, 'error': error}
+        dashboard_data.append(response_obj)
+    response_data = {'dashboardData': dashboard_data}
     return make_response(jsonify(response_data), 201)
 
 

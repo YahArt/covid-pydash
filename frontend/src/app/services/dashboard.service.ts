@@ -11,10 +11,12 @@ import { ICreateDashboardResponse } from '../interfaces/icreate-dashboard-respon
 import { IDashboard } from '../interfaces/idashboard';
 import { IDashboardData } from '../interfaces/idashboard-data';
 import { IDashboardDataResponse } from '../interfaces/idashboard-data-response';
+import { IDashboardFilter } from '../interfaces/idashboard-filter';
 import { IDashboardWidgetItem } from '../interfaces/idashboard-widget-item';
 import { IDeleteDashboardResponse } from '../interfaces/idelete-dashboard-response';
 import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
+import { ILineChartData } from '../interfaces/iline-chart-data';
 import { ILineChartSeries } from '../interfaces/iline-chart-series';
 import { IWidgetSize } from '../interfaces/iwidget-size';
 import { TimeRange } from '../models/time-range';
@@ -44,23 +46,29 @@ export class DashboardService {
   constructor(private readonly httpClient: HttpClient) { }
 
   // TODO: Add other supported visualization types...
-  private convertBackendResponseValue(value: ICovidDeathsReponse, informationType: CovidInformationType, widgetType: DashboardWidgetType): ILineChartSeries | null {
+  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, widgetType: DashboardWidgetType): ILineChartSeries | null {
     switch (informationType) {
       case CovidInformationType.CovidDeaths:
         {
-          const covidDeathValue = value as ICovidDeathsReponse;
+          const covidDeathsResponse = responseValue as ICovidDeathsReponse;
           switch (widgetType) {
             case DashboardWidgetType.LineChart: {
-              const convertedValue: ILineChartSeries = {
-                name: covidDeathValue.geoRegion,
-                series: covidDeathValue.data.map(d => {
+              const lineChartSeries: ILineChartSeries = {
+                series: covidDeathsResponse.covidDeath.data.map(d => {
                   return {
-                    name: new Date(d.datum),
-                    value: d.sumTotal
+                    name: d.region,
+                    series: d.deaths.map(deaths => {
+                      const seriesData: ILineChartData = {
+                        name: new Date(deaths.datum),
+                        value: deaths.sumTotal
+
+                      }
+                      return seriesData;
+                    })
                   }
                 })
               };
-              return convertedValue;
+              return lineChartSeries;
             }
             default:
               // Not supported yet...
@@ -120,18 +128,19 @@ export class DashboardService {
     return this.httpClient.delete<IDeleteDashboardResponse>(`${environment.restApi}/dashboard/${identifier}`);
   }
 
-  public loadData$(timeRange: TimeRange, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
+  public loadData$(dashboardFilter: IDashboardFilter, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
     const informationAbout = dashboard.map(d => d.informationAbout);
     // TODO: Convert dashboard response to appropriate data types
     return this.httpClient.post<IDashboardDataResponse>(`${environment.restApi}/dashboard_data`, {
-      startDateEpochTicks: timeRange.start.getTime() / 1000,
-      endDateEpochTicks: timeRange.end.getTime() / 1000,
+      startDateEpochTicks: dashboardFilter.timeRange.start.getTime() / 1000,
+      endDateEpochTicks: dashboardFilter.timeRange.end.getTime() / 1000,
+      regions: dashboardFilter.regions,
       informationAbout
     }).pipe(map(dashboardResponse => {
       let dasbhoardData: Array<IDashboardData> = [];
       // The response contains all the values PER INFORMATION TYPE in order to save network bandwith
       // Otherwise we would send the same data multiplied by each widget (e.g having two data trends widget for information type covid deaths etc.)
-      dashboardResponse.values.forEach(v => {
+      dashboardResponse.dashboardData.forEach(v => {
         const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationAbout === v.informationAbout);
         dasbhoardData = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
           const value = this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationAbout, widgetWithSameInformationType.type);

@@ -30,7 +30,8 @@ export class LineChartWidgetComponent extends WidgetBase {
   }
 
   public onDataChanged(data: IDashboardData | undefined): void {
-    this.multi = [data?.value as ILineChartSeries]
+    const seriesData = data?.value as ILineChartSeries
+    this.multi = seriesData.series;
     this.changeDetectorRef.markForCheck();
   }
 

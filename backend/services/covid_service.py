@@ -12,19 +12,22 @@ class CovidService:
         covid_deaths['datum'] = pd.to_datetime(
             covid_deaths['datum'], format="%Y-%m-%d")
 
-        # TODO: Perhaps filter by other regions etc.
-        self.covid_deaths = covid_deaths[(covid_deaths['geoRegion'] == 'CH')]
+        self.covid_deaths = covid_deaths
 
-    def get_deaths(self, start_date, end_date):
+    def get_deaths_for_region(self, start_date, end_date, region):
         deaths_in_time_range = self.covid_deaths[(
             self.covid_deaths['datum'] > start_date) & (self.covid_deaths['datum'] < end_date)]
+
+        # Filter by region
+        deaths_in_time_range = deaths_in_time_range[(
+            deaths_in_time_range['geoRegion'] == region)]
 
         # Keep only relevant columns
         deaths_in_time_range = deaths_in_time_range[[
             'datum', 'entries', 'sumTotal']]
 
         result = {
-            'geoRegion': 'CH',
-            'data': json.loads(deaths_in_time_range.to_json(orient="records"))
+            'region': region,
+            'deaths': json.loads(deaths_in_time_range.to_json(orient="records"))
         }
         return result

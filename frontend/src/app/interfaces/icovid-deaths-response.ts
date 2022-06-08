@@ -1,4 +1,7 @@
+import { ICovidDeath } from "./icovid-death";
+
 export interface ICovidDeathsReponse {
-    geoRegion: string; // 'CH'
-    data: Array<{ datum: number, sumTotal: number, entries: number }>;
+    covidDeath: {
+        data: Array<{ region: string; deaths: Array<ICovidDeath> }>;
+    }
 }
