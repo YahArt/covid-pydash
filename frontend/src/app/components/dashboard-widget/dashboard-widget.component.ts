@@ -50,16 +50,18 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   private subscribeDashboardDataChanged() {
-    this.dashboardService.dashboardDataChanged$.pipe(filter(e => e.findIndex(b => b.identifier === this.item.identifier) >= 0), takeUntil(this.destroy)).subscribe(data => {
-      // There should only ever be one widget data item per identifier so we can take the first one...
-      const widgetValue = data[0];
-      this.error = widgetValue.error;
-      this.noData = widgetValue.noData;
+    this.dashboardService.dashboardDataChanged$.pipe(takeUntil(this.destroy)).subscribe(dashboardData => {
+      const widgetSpecificData = dashboardData.find(d => d.identifier === this.item.identifier);
+      if (!widgetSpecificData) {
+        return;
+      }
+      this.error = widgetSpecificData.error;
+      this.noData = widgetSpecificData.noData;
       if (this.error || this.noData) {
         this._changeDetectorRef.markForCheck();
         return;
       }
-      this.widgetInstance?.onDataChanged(widgetValue);
+      this.widgetInstance?.onDataChanged(widgetSpecificData);
     });
   }
 
@@ -71,7 +73,7 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   public ngAfterViewInit(): void {
-    const chartConfig = ChartConfig.getConfig(this.item.type, this.item.informationAbout);
+    const chartConfig = ChartConfig.getConfig(this.item);
     switch (this.item.type) {
       case DashboardWidgetType.LineChart: {
         const lineChartWidget = this.itemTemplate.createComponent(LineChartWidgetComponent);

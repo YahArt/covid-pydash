@@ -4,6 +4,7 @@ import { Guid } from 'guid-typescript';
 import { Observable, map, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { GridConfig } from '../config/grid-config';
+import { CovidInformationSubType } from '../enums/covid-information-sub-type.enum';
 import { CovidInformationType } from '../enums/covid-information-type.enum';
 import { DashboardWidgetType } from '../enums/dashboard-widget-type.enum';
 import { Region } from '../enums/region.enum';
@@ -56,7 +57,7 @@ export class DashboardService {
   constructor(private readonly httpClient: HttpClient) { }
 
   // TODO: Add other supported visualization types...
-  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, widgetType: DashboardWidgetType): ILineChartSeries | null {
+  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ILineChartSeries | null {
     switch (informationType) {
       case CovidInformationType.CovidDeaths:
         {
@@ -68,10 +69,17 @@ export class DashboardService {
                   return {
                     name: d.region,
                     series: d.deaths.map(deaths => {
+                      let value = 0;
+                      if (informationSubType === CovidInformationSubType.DailyDeaths) {
+                        value = deaths.current;
+                      }
+                      else if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
+                        value = deaths.sumTotal;
+                      }
+                      // Depending on the subtype we choose different values
                       const seriesData: ILineChartData = {
                         ticks: deaths.date,
-                        value: deaths.current
-
+                        value
                       }
                       return seriesData;
                     })
@@ -139,21 +147,20 @@ export class DashboardService {
   }
 
   public loadData$(dashboardFilter: IDashboardFilter, dashboard: Array<IDashboardWidgetItem>): Observable<IDashboardData[]> {
-    const informationAbout = dashboard.map(d => d.informationAbout);
-    // TODO: Convert dashboard response to appropriate data types
+    const informationType = dashboard.map(d => d.informationType);
     return this.httpClient.post<IDashboardDataResponse>(`${environment.restApi}/dashboard_data`, {
       startDateEpochTicks: dashboardFilter.timeRange.start.getTime() / 1000,
       endDateEpochTicks: dashboardFilter.timeRange.end.getTime() / 1000,
       regions: dashboardFilter.regions,
-      informationAbout
+      informationType
     }).pipe(map(dashboardResponse => {
       let dasbhoardData: Array<IDashboardData> = [];
       // The response contains all the values PER INFORMATION TYPE in order to save network bandwith
       // Otherwise we would send the same data multiplied by each widget (e.g having two data trends widget for information type covid deaths etc.)
       dashboardResponse.dashboardData.forEach(v => {
-        const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationAbout === v.informationAbout);
+        const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationType === v.informationType);
         dasbhoardData = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
-          const value = this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationAbout, widgetWithSameInformationType.type);
+          const value = this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
           return {
             identifier: widgetWithSameInformationType.identifier,
             error: v.error,

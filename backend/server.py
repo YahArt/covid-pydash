@@ -172,11 +172,11 @@ def dashboard_data():
     start_date = datetime.datetime.fromtimestamp(start_date_ticks)
     end_date = datetime.datetime.fromtimestamp(end_date_ticks)
 
-    information_about = body.get('informationAbout')
-    information_about_unique = list(set(information_about))
+    information_type = body.get('informationType')
+    information_type_unique = list(set(information_type))
     dashboard_data = []
 
-    for information in information_about_unique:
+    for information in information_type_unique:
         try:
             value = None
             no_data = False
@@ -188,7 +188,7 @@ def dashboard_data():
         except BaseException as exception_error:
             error = str(exception_error)
         finally:
-            response_obj = {'informationAbout': information,
+            response_obj = {'informationType': information,
                             'value': value, 'noData': no_data, 'error': error}
             dashboard_data.append(response_obj)
     response_data = {'dashboardData': dashboard_data}

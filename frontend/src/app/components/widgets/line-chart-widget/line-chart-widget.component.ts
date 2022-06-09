@@ -13,6 +13,7 @@ import { IChartConfig } from 'src/app/interfaces/ichart-config';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LineChartWidgetComponent extends WidgetBase {
+
   private optionsSubject = new Subject<Highcharts.Options>();
   private defaultOptions: Highcharts.Options = {
     chart: {
@@ -89,5 +90,4 @@ export class LineChartWidgetComponent extends WidgetBase {
     };
     this.optionsSubject.next(newOptions);
   }
-
 }

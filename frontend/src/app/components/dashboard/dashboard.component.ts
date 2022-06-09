@@ -243,7 +243,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
           {
             ...GridConfig.getDefaultForWidgetType(selectedWidget.type),
             identifier: Guid.create().toString(),
-            informationAbout: selectedWidget.informationAbout,
+            informationType: selectedWidget.informationType,
+            informationSubType: selectedWidget.informationSubType,
             type: selectedWidget.type,
           },
         )

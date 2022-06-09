@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatRadioChange } from '@angular/material/radio';
+import { CovidInformationSubType } from 'src/app/enums/covid-information-sub-type.enum';
 import { CovidInformationType } from 'src/app/enums/covid-information-type.enum';
 import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
 import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
@@ -14,21 +15,22 @@ export class CreateWidgetDialogComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<CreateWidgetDialogComponent>) { }
 
-  public readonly supportedWidgets: { type: DashboardWidgetType, informationAbout: CovidInformationType }[] = [
+  public readonly supportedWidgets: { type: DashboardWidgetType, informationType: CovidInformationType, informationSubType: CovidInformationSubType }[] = [
     {
       type: DashboardWidgetType.LineChart,
-      informationAbout: CovidInformationType.CovidDeaths,
+      informationType: CovidInformationType.CovidDeaths,
+      informationSubType: CovidInformationSubType.SumTotalDeaths
     },
   ];
 
   public selectedElement: ICreateWidgetDialogEntry | null = null;
 
   public readonly dataSource: Array<ICreateWidgetDialogEntry> = [
-    { informationCategory: 'Severity of Pandemic', informationAbout: CovidInformationType.CovidDeaths, informationAboutDesc: 'Covid Deaths', description: 'Covid Deaths accumulated over time', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
-    { informationCategory: 'Severity of Pandemic', informationAbout: CovidInformationType.CovidDeaths, informationAboutDesc: 'Covid Deaths', description: 'Covid Deaths accumulated over time', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
+    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.DailyDeaths, informationSubTypeDesc: 'Daily deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
+    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
   ];
 
-  public readonly displayedColumns: string[] = ['selection', 'informationCategory', 'informationAbout', 'description', 'visualizationType'];
+  public readonly displayedColumns: string[] = ['selection', 'informationCategory', 'informationType', 'informationSubType', 'visualizationType'];
 
   public ngOnInit(): void {
   }
