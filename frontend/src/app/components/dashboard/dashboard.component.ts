@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private initGridster() {
     this.options = {
       ...GridConfig.DEFAULT,
-      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier, itemComponent.width, itemComponent.height)
+      itemResizeCallback: (item: any, itemComponent: any) => this.dashboardService.notifyWidgetSizeChanged(item.identifier)
     }
   }
 

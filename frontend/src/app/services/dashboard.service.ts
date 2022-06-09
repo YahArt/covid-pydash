@@ -18,8 +18,6 @@ import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
 import { ILineChartData } from '../interfaces/iline-chart-data';
 import { ILineChartSeries } from '../interfaces/iline-chart-series';
-import { IWidgetSize } from '../interfaces/iwidget-size';
-import { TimeRange } from '../models/time-range';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +37,7 @@ export class DashboardService {
     ]
   }
 
-  private widgetSizeChangedSubject = new Subject<IWidgetSize>();
+  private widgetSizeChangedSubject = new Subject<string>();
   private editModeChangedSubject = new Subject<boolean>();
   private dashboardDataSubject = new Subject<Array<IDashboardData>>();
 
@@ -59,8 +57,8 @@ export class DashboardService {
                     name: d.region,
                     series: d.deaths.map(deaths => {
                       const seriesData: ILineChartData = {
-                        ticks: deaths.datum,
-                        value: deaths.sumTotal
+                        ticks: deaths.date,
+                        value: deaths.current
 
                       }
                       return seriesData;
@@ -87,11 +85,11 @@ export class DashboardService {
     this.dashboardDataSubject.next(data);
   }
 
-  public notifyWidgetSizeChanged(identifier: string, width: number, height: number) {
-    this.widgetSizeChangedSubject.next({ identifier, width, height });
+  public notifyWidgetSizeChanged(identifier: string) {
+    this.widgetSizeChangedSubject.next(identifier);
   }
 
-  public get widgetSizeChanged$(): Observable<IWidgetSize> {
+  public get widgetSizeChanged$(): Observable<string> {
     return this.widgetSizeChangedSubject.asObservable();
   }
 

@@ -1,4 +1,4 @@
 export interface ILineChartData {
-    ticks: number;
+    ticks: number; // UNIX Epoch Ticks
     value: number;
 }

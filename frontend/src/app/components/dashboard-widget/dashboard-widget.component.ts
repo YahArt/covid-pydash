@@ -3,8 +3,6 @@ import { filter, Subject, takeUntil } from 'rxjs';
 import { ChartConfig } from 'src/app/config/chart-config';
 import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/interfaces/idashboard-widget-item';
-import { ILineChartConfig } from 'src/app/interfaces/iline-chart-config';
-import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { LineChartWidgetComponent } from '../widgets/line-chart-widget/line-chart-widget.component';
 import { WidgetBase } from '../widgets/widget-base';
@@ -21,9 +19,6 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
 
   @ViewChild("itemTemplate", { read: ViewContainerRef })
   public itemTemplate!: ViewContainerRef;
-
-  @ViewChild("chartContainer")
-  public chartContainer!: ElementRef;
 
   @Input()
   public item!: IDashboardWidgetItem;
@@ -42,13 +37,8 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   constructor(private readonly _changeDetectorRef: ChangeDetectorRef, private readonly dashboardService: DashboardService) { }
 
   private subscribeWidgetResize() {
-    this.dashboardService.widgetSizeChanged$.pipe(filter(e => e.identifier === this.item.identifier), takeUntil(this.destroy)).subscribe(() => {
-      const widgetSizeChangedEvent: IWidgetSize = {
-        width: this.chartContainer.nativeElement.offsetWidth,
-        height: this.chartContainer.nativeElement.offsetHeight,
-        identifier: this.item.identifier
-      }
-      this.widgetInstance?.onWidgetResize(widgetSizeChangedEvent);
+    this.dashboardService.widgetSizeChanged$.pipe(filter(identifier => identifier === this.item.identifier), takeUntil(this.destroy)).subscribe(() => {
+      this.widgetInstance?.onWidgetResize();
     });
   }
 
@@ -81,14 +71,14 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   public ngAfterViewInit(): void {
+    const chartConfig = ChartConfig.getConfig(this.item.type, this.item.informationAbout);
     switch (this.item.type) {
       case DashboardWidgetType.LineChart: {
         const lineChartWidget = this.itemTemplate.createComponent(LineChartWidgetComponent);
-        const chartConfig = ChartConfig.getConfig(this.item.type, this.item.informationAbout) as ILineChartConfig;
         this.widgetInstance = lineChartWidget.instance;
         this.widgetInstance.setConfig(chartConfig);
-        this.title = chartConfig.title;
-        this.subtitle = chartConfig.subtitle;
+        this.title = chartConfig?.title ?? '';
+        this.subtitle = chartConfig?.subtitle ?? '';
         break;
       }
       default:

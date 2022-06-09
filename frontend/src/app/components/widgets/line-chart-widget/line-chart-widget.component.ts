@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { IDashboardData } from 'src/app/interfaces/idashboard-data';
-import { ILineChartConfig } from 'src/app/interfaces/iline-chart-config';
 import { ILineChartSeries } from 'src/app/interfaces/iline-chart-series';
-import { IWidgetSize } from 'src/app/interfaces/iwidget-size';
 import { WidgetBase } from '../widget-base';
 import * as Highcharts from 'highcharts';
+import { Subject } from 'rxjs';
+import { IChartConfig } from 'src/app/interfaces/ichart-config';
 
 @Component({
   selector: 'line-chart-widget',
@@ -13,37 +13,32 @@ import * as Highcharts from 'highcharts';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LineChartWidgetComponent extends WidgetBase {
-  public readonly options: Highcharts.Options = {
+  private optionsSubject = new Subject<Highcharts.Options>();
+  private defaultOptions: Highcharts.Options = {
     chart: {
       zoomType: 'x'
     },
     xAxis: {
-      type: 'datetime'
+      type: 'datetime',
+      title: {
+        text: ''
+      }
+    },
+    yAxis: {
+      title: {
+        text: ''
+      }
     },
     title: {
       text: ''
     },
-    plotOptions: {
-      area: {
-        marker: {
-          radius: 2
-        },
-        lineWidth: 1,
-        states: {
-          hover: {
-            lineWidth: 1
-          }
-        },
-        threshold: null
-      }
-    },
     series: [],
+    colors: []
   };
 
-  private chartInstance: Highcharts.Chart | undefined;
+  public options$ = this.optionsSubject.asObservable();
 
-  public config!: ILineChartConfig;
-
+  public oneToOne = true;
 
   public Highcharts: typeof Highcharts = Highcharts;
 
@@ -51,16 +46,26 @@ export class LineChartWidgetComponent extends WidgetBase {
     super();
   }
 
-  public onWidgetResize(widgetSize: IWidgetSize): void {
+  public onWidgetResize(): void {
     window.dispatchEvent(new Event('resize'));
   }
 
-  public setConfig(config: ILineChartConfig): void {
-    this.config = config;
-  }
-
-  public chartInstanceCallback(chart: Highcharts.Chart) {
-    this.chartInstance = chart;
+  public setConfig(config: IChartConfig): void {
+    this.defaultOptions = {
+      ...this.defaultOptions,
+      colors: [...config.colors],
+      yAxis: {
+        title: {
+          text: config.yAxisTitle
+        }
+      },
+      xAxis: {
+        type: 'datetime',
+        title: {
+          text: config.xAxisTitle
+        }
+      },
+    };
   }
 
   public onDataChanged(data: IDashboardData | undefined): void {
@@ -79,10 +84,10 @@ export class LineChartWidgetComponent extends WidgetBase {
     });
 
     const newOptions: Highcharts.Options = {
-      ...this.options,
+      ...this.defaultOptions,
       series: [...highChartSeries]
     };
-    this.chartInstance?.update(newOptions, true, true, false);
+    this.optionsSubject.next(newOptions);
   }
 
 }
