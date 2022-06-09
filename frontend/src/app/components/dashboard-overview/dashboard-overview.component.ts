@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { finalize, Subject, takeUntil } from 'rxjs';
@@ -9,12 +9,11 @@ import { RouteHeadingService } from 'src/app/services/route-heading.service';
 @Component({
   selector: 'app-dashboard-overview',
   templateUrl: './dashboard-overview.component.html',
-  styleUrls: ['./dashboard-overview.component.scss']
+  styleUrls: ['./dashboard-overview.component.scss'],
 })
 export class DashboardOverviewComponent implements OnInit, OnDestroy {
 
   private destroy = new Subject<void>();
-  private numberOfDashboards = 0;
 
   public loading = false;
 
@@ -31,8 +30,7 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.dashboardService.getDashboards$().pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       this.dashboards = response.dashboards;
-      this.numberOfDashboards = response.dashboards?.length || 0;
-      this.hasDashboards = this.numberOfDashboards > 0;
+      this.hasDashboards = response.dashboards.length > 0;
     });
     this.routeHeadingService.updateRouteHeadingTitle("Dashboard Overview");
   }
@@ -52,10 +50,10 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.dashboardService.deleteDashboard$(dashboard.identifier).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       if (!response.error) {
-        this.numberOfDashboards -= 1;
-        this.hasDashboards = this.numberOfDashboards > 0;
         const deleteIndex = this.dashboards.findIndex(d => d.identifier === dashboard.identifier);
         this.dashboards.splice(deleteIndex, 1);
+        this.dashboards = [...this.dashboards];
+        this.hasDashboards = response.numberOfDashboards > 0;
       }
       const message = response.error ? `Failed to deleted dashboard "${response.dashboard.title}", Error: ${response.error}` : `Dashboard: "${response.dashboard.title}" was successfully deleted`
       this.snackbar.open(message, undefined, {

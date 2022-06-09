@@ -59,6 +59,11 @@ def get_dashboards():
     return dashboards
 
 
+def get_dashboards_count():
+    dashboard_files = glob.glob("./dashboards/*.json")
+    return len(dashboard_files)
+
+
 def load_dashboard_file(full_path):
     dashboard = None
     with open(full_path) as dashboard_file:
@@ -118,8 +123,9 @@ def dashboards():
 def dashboard_by_identifier(identifier):
     dashboard = None
     error = None
-
+    number_of_dashboards = 0
     try:
+
         dashboard_full_path = get_dashboard_full_path(identifier)
         if request.method == 'GET':
             dashboard = load_dashboard_file(dashboard_full_path)
@@ -131,7 +137,9 @@ def dashboard_by_identifier(identifier):
     except BaseException as exception_error:
         error = str(exception_error)
     finally:
-        response_data = {'dashboard': dashboard, 'error': error}
+        number_of_dashboards = get_dashboards_count()
+        response_data = {'dashboard': dashboard, 'error': error,
+                         'numberOfDashboards': number_of_dashboards}
         return make_response(jsonify(response_data), 201)
 
 
