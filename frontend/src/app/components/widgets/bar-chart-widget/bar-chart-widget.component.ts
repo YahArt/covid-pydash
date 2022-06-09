@@ -5,32 +5,41 @@ import * as Highcharts from 'highcharts';
 import { Subject } from 'rxjs';
 import { IChartConfig } from 'src/app/interfaces/ichart-config';
 import { Component } from '@angular/core';
+import { IBarChartSeries } from 'src/app/interfaces/ibar-chart-series';
 
 @Component({
-  selector: 'line-chart-widget',
-  templateUrl: './line-chart-widget.component.html',
-  styleUrls: ['./line-chart-widget.component.scss']
+  selector: 'bar-chart-widget',
+  templateUrl: './bar-chart-widget.component.html',
+  styleUrls: ['./bar-chart-widget.component.scss']
 })
-export class LineChartWidgetComponent extends WidgetBase {
+export class BarChartWidgetComponent extends WidgetBase {
 
   private optionsSubject = new Subject<Highcharts.Options>();
   private defaultOptions: Highcharts.Options = {
     chart: {
-      zoomType: 'x'
+      type: 'column'
     },
     xAxis: {
-      type: 'datetime',
+      categories: ['Regions'],
       title: {
         text: ''
-      }
+      },
+      crosshair: true
     },
     yAxis: {
+      min: 0,
       title: {
         text: ''
       }
     },
     title: {
       text: ''
+    },
+    plotOptions: {
+      column: {
+        pointPadding: 0.2,
+        borderWidth: 0
+      }
     },
     series: [],
     colors: []
@@ -55,37 +64,31 @@ export class LineChartWidgetComponent extends WidgetBase {
       ...this.defaultOptions,
       colors: [...config.colors],
       yAxis: {
+        ...this.defaultOptions.yAxis,
         title: {
           text: config.yAxisTitle
         }
       },
       xAxis: {
-        type: 'datetime',
-        title: {
-          text: config.xAxisTitle
-        }
+        ...this.defaultOptions.xAxis,
+        categories: [config.xAxisTitle],
       },
     };
   }
 
   public onDataChanged(data: IDashboardData | undefined): void {
-    const seriesData = data?.value as ILineChartSeries
-    const highChartSeries: Array<Highcharts.SeriesOptionsType> = seriesData.series.map(s => {
+    const barChartSeries = data?.value as IBarChartSeries;
+    const highChartSerie: Array<Highcharts.SeriesColumnOptions> = barChartSeries.series.map(s => {
       return {
-        type: 'line',
         name: s.name,
-        data: s.series.map(s => {
-          return [
-            s.ticks,
-            s.value
-          ]
-        })
-      }
-    });
+        data: s.data,
+        type: 'column'
+      };
+    })
 
     const newOptions: Highcharts.Options = {
       ...this.defaultOptions,
-      series: [...highChartSeries]
+      series: [...highChartSerie],
     };
     this.optionsSubject.next(newOptions);
   }

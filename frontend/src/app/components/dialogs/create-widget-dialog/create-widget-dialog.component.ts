@@ -15,19 +15,12 @@ export class CreateWidgetDialogComponent implements OnInit {
 
   constructor(private readonly dialogRef: MatDialogRef<CreateWidgetDialogComponent>) { }
 
-  public readonly supportedWidgets: { type: DashboardWidgetType, informationType: CovidInformationType, informationSubType: CovidInformationSubType }[] = [
-    {
-      type: DashboardWidgetType.LineChart,
-      informationType: CovidInformationType.CovidDeaths,
-      informationSubType: CovidInformationSubType.SumTotalDeaths
-    },
-  ];
-
   public selectedElement: ICreateWidgetDialogEntry | null = null;
 
   public readonly dataSource: Array<ICreateWidgetDialogEntry> = [
     { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.DailyDeaths, informationSubTypeDesc: 'Daily deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
     { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
+    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.BarChart, typeDesc: 'BarChart' },
   ];
 
   public readonly displayedColumns: string[] = ['selection', 'informationCategory', 'informationType', 'informationSubType', 'visualizationType'];

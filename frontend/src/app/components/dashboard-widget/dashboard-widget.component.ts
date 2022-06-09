@@ -4,6 +4,7 @@ import { ChartConfig } from 'src/app/config/chart-config';
 import { DashboardWidgetType } from 'src/app/enums/dashboard-widget-type.enum';
 import { IDashboardWidgetItem } from 'src/app/interfaces/idashboard-widget-item';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { BarChartWidgetComponent } from '../widgets/bar-chart-widget/bar-chart-widget.component';
 import { LineChartWidgetComponent } from '../widgets/line-chart-widget/line-chart-widget.component';
 import { WidgetBase } from '../widgets/widget-base';
 
@@ -78,6 +79,14 @@ export class DashboardWidgetComponent implements OnInit, AfterViewInit, OnDestro
       case DashboardWidgetType.LineChart: {
         const lineChartWidget = this.itemTemplate.createComponent(LineChartWidgetComponent);
         this.widgetInstance = lineChartWidget.instance;
+        this.widgetInstance.setConfig(chartConfig);
+        this.title = chartConfig?.title ?? '';
+        this.subtitle = chartConfig?.subtitle ?? '';
+        break;
+      }
+      case DashboardWidgetType.BarChart: {
+        const barChartWidget = this.itemTemplate.createComponent(BarChartWidgetComponent);
+        this.widgetInstance = barChartWidget.instance;
         this.widgetInstance.setConfig(chartConfig);
         this.title = chartConfig?.title ?? '';
         this.subtitle = chartConfig?.subtitle ?? '';

@@ -8,6 +8,7 @@ import { CovidInformationSubType } from '../enums/covid-information-sub-type.enu
 import { CovidInformationType } from '../enums/covid-information-type.enum';
 import { DashboardWidgetType } from '../enums/dashboard-widget-type.enum';
 import { Region } from '../enums/region.enum';
+import { IBarChartSeries } from '../interfaces/ibar-chart-series';
 import { ICovidDeathsReponse } from '../interfaces/icovid-deaths-response';
 import { ICreateDashboardResponse } from '../interfaces/icreate-dashboard-response';
 import { IDashboard } from '../interfaces/idashboard';
@@ -20,7 +21,9 @@ import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
 import { ILineChartData } from '../interfaces/iline-chart-data';
 import { ILineChartSeries } from '../interfaces/iline-chart-series';
+import { ResponseValueConverted } from '../models/response-value-converted';
 import { TimeRange } from '../models/time-range';
+
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +60,7 @@ export class DashboardService {
   constructor(private readonly httpClient: HttpClient) { }
 
   // TODO: Add other supported visualization types...
-  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ILineChartSeries | null {
+  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
     switch (informationType) {
       case CovidInformationType.CovidDeaths:
         {
@@ -87,6 +90,18 @@ export class DashboardService {
                 })
               };
               return lineChartSeries;
+            }
+            case DashboardWidgetType.BarChart: {
+              const barChartSeries: IBarChartSeries = {
+                series: covidDeathsResponse.covidDeath.data.map(d => {
+                  const totalAmount = d.deaths[d.deaths.length - 1].sumTotal;
+                  return {
+                    name: d.region,
+                    data: [totalAmount]
+                  }
+                })
+              }
+              return barChartSeries;
             }
             default:
               // Not supported yet...
@@ -160,7 +175,8 @@ export class DashboardService {
       dashboardResponse.dashboardData.forEach(v => {
         const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationType === v.informationType);
         dasbhoardData = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
-          const value = this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
+
+          const value = v.noData === true ? null : this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
           return {
             identifier: widgetWithSameInformationType.identifier,
             error: v.error,

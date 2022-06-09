@@ -34,6 +34,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
+import { BarChartWidgetComponent } from './components/widgets/bar-chart-widget/bar-chart-widget.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { CreateDashboardComponent } from './components/create-dashboard/create-d
     HomeComponent,
     RouteHeadingComponent,
     CreateWidgetDialogComponent,
-    CreateDashboardComponent
+    CreateDashboardComponent,
+    BarChartWidgetComponent
   ],
   imports: [
     BrowserModule,
