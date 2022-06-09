@@ -9,12 +9,13 @@ export class Colors {
     ]
 
     public static getColors(widgetType: DashboardWidgetType, informationType: CovidInformationType): string[] {
+        // Colors are handpicked with: https://color.adobe.com/create/color-wheel
         switch (widgetType) {
             case DashboardWidgetType.LineChart: {
                 if (informationType === CovidInformationType.CovidDeaths) {
-                    // We only support up to 5 data series due to the validator so there is no need to specify any more colors...
+                    // We only support up to 4 data series due to the validator so there is no need to specify any more colors...
                     return [
-                        "#000000", "#484848", "#90a4ae", "#c1d5e0", "#62757f"]
+                        "#000000", "#E3E164", "E34D4D", "36A0E3", "2C6D96"]
                 }
                 break;
             }
