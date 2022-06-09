@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment';
 import { GridConfig } from '../config/grid-config';
 import { CovidInformationType } from '../enums/covid-information-type.enum';
 import { DashboardWidgetType } from '../enums/dashboard-widget-type.enum';
+import { Region } from '../enums/region.enum';
 import { ICovidDeathsReponse } from '../interfaces/icovid-deaths-response';
 import { ICreateDashboardResponse } from '../interfaces/icreate-dashboard-response';
 import { IDashboard } from '../interfaces/idashboard';
@@ -18,22 +19,33 @@ import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
 import { ILineChartData } from '../interfaces/iline-chart-data';
 import { ILineChartSeries } from '../interfaces/iline-chart-series';
+import { TimeRange } from '../models/time-range';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
 
+  private readonly DEFAULT_REGION = Region.CH;
+  private readonly DEFAULT_TIME_RANGE = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
+
+
   private readonly DEFAULT_DASHBOARD: IDashboard = {
     title: '',
     identifier: '',
-    widgets: [
+    widgets: [],
+    selectedTimeRange: {
+      start: this.DEFAULT_TIME_RANGE.start.getTime() / 1000,
+      end: this.DEFAULT_TIME_RANGE.end.getTime() / 1000
+    },
+    selectedRegions: [
+      this.DEFAULT_REGION
+    ],
+    savedTimeRanges: [
       {
-        ...GridConfig.getDefaultForWidgetType(DashboardWidgetType.LineChart),
-        identifier: Guid.create().toString(),
-        informationAbout: CovidInformationType.CovidDeaths,
-        type: DashboardWidgetType.LineChart,
-      },
+        start: this.DEFAULT_TIME_RANGE.start.getTime() / 1000,
+        end: this.DEFAULT_TIME_RANGE.end.getTime() / 1000
+      }
     ]
   }
 

@@ -3,10 +3,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSidenav } from '@angular/material/sidenav';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GridsterConfig } from 'angular-gridster2';
 import { Guid } from "guid-typescript";
 import { filter, finalize, Subject, takeUntil } from 'rxjs';
+import { AppRoutes } from 'src/app/config/app-routes';
 import { GridConfig } from 'src/app/config/grid-config';
 import { Region } from 'src/app/enums/region.enum';
 import { ICreateWidgetDialogEntry } from 'src/app/interfaces/icreate-widget-dialog-entry';
@@ -24,25 +25,26 @@ import { CreateWidgetDialogComponent } from '../dialogs/create-widget-dialog/cre
 export class DashboardComponent implements OnInit, OnDestroy {
 
   private editModeEnabled = false;
-  private selectedTimeRange = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
-  private selectedRegions: Region[] = [Region.CH];
+  private selectedTimeRange!: TimeRange;
+  private selectedRegions: Region[] = [];
 
   private destroy = new Subject<void>();
 
   public options!: GridsterConfig;
   public dashboard!: IDashboard;
+  public noDashboard = true; // Be pessimistic
 
   public filters = new FormGroup(
     {
-      startDate: new FormControl<Date>(this.selectedTimeRange.start, Validators.required),
-      endDate: new FormControl<Date>(this.selectedTimeRange.end, Validators.required),
-      regions: new FormControl<Array<Region>>(this.selectedRegions, [Validators.required, Validators.maxLength(4)])
+      startDate: new FormControl<Date | null>(null, Validators.required),
+      endDate: new FormControl<Date | null>(null, Validators.required),
+      regions: new FormControl<Array<Region> | null>(null, [Validators.required, Validators.maxLength(4)])
     }
   );
 
-  regionList: Region[] = Object.values(Region);
+  public regionList: Region[] = Object.values(Region);
 
-  public timeRanges: TimeRange[] = [
+  public savedTimeRanges: TimeRange[] = [
     this.selectedTimeRange
   ];
 
@@ -51,7 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @ViewChild('filterSidebar')
   public filterSidebar!: MatSidenav;
 
-  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute, private readonly routeHeadingService: RouteHeadingService) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly dialog: MatDialog, private readonly snackbar: MatSnackBar, private route: ActivatedRoute, private readonly routeHeadingService: RouteHeadingService, private readonly router: Router) { }
 
   private initGridster() {
     this.options = {
@@ -61,7 +63,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private loadDashboardData(dashboardFilter: IDashboardFilter): void {
-    // TODO: Currently we always load all data for all available widgets, single widget refresh is not implemented yet
+    // No need to load any data if we do not have any widgets on the dashboard
+    if (this.dashboard.widgets.length === 0) {
+      return;
+    }
     this.loading = true;
     this.dashboardService.loadData$(dashboardFilter, this.dashboard.widgets).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       const errors = response.filter(r => r.error !== null).map(r => r.error);
@@ -84,13 +89,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private loadDashboardByIdentifier(identifier: string) {
     this.loading = true;
     this.dashboardService.getDashboard$(identifier).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
+      if (response.error === "DASHBOARD_NOT_FOUND") {
+        this.snackbar.open(`The dashboard you are currently on was deleted and does not exist anymore`, 'Close');
+        this.routeHeadingService.updateRouteHeadingTitle(`Not found :(`);
+        return;
+      }
       if (response.error) {
         this.snackbar.open(`An error occurred: ${response.error}`, 'Close');
         return;
       }
       this.routeHeadingService.updateRouteHeadingTitle(`Welcome to your Dashboard: "${response.dashboard.title}"`);
       this.dashboard = response.dashboard;
+
+      const start = new Date(this.dashboard.selectedTimeRange.start * 1000)
+      const end = new Date(this.dashboard.selectedTimeRange.end * 1000)
+      this.noDashboard = false;
+
+      // Restore selected filters
+      this.selectedTimeRange = new TimeRange(start, end);
+      this.selectedRegions = [...this.dashboard.selectedRegions] as Region[]
+      this.savedTimeRanges = [...this.dashboard.savedTimeRanges.map(range => {
+        const start = new Date(range.start * 1000);
+        const end = new Date(range.end * 1000);
+        return new TimeRange(start, end);
+      })]
+
+      // Update filter sidebar
+      this.filters.patchValue({
+        startDate: this.selectedTimeRange.start,
+        endDate: this.selectedTimeRange.end,
+        regions: this.selectedRegions
+      });
+
+      // Trigger data loading with current filters
       const filter = this.getCurrentFilter();
+
       this.loadDashboardData(filter);
     });
   }
@@ -99,10 +132,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     $event.preventDefault();
     const timeRange = new TimeRange(this.filters.value.startDate as Date, this.filters.value.endDate as Date);
     // Time range already exists...
-    if (this.timeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
+    if (this.savedTimeRanges.findIndex(t => t.identifier === timeRange.identifier) >= 0) {
       return;
     }
-    this.timeRanges.push(timeRange);
+    this.savedTimeRanges.push(timeRange);
     this.selectedTimeRange = timeRange;
   }
 
@@ -115,11 +148,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public removeTimeRange(timeRange: TimeRange) {
-    const removeIndex = this.timeRanges.findIndex(t => t.identifier === timeRange.identifier);
+    const removeIndex = this.savedTimeRanges.findIndex(t => t.identifier === timeRange.identifier);
     if (removeIndex < 0) {
       return;
     }
-    this.timeRanges.splice(removeIndex, 1);
+    this.savedTimeRanges.splice(removeIndex, 1);
   }
 
   public setSelectedTimeRange(timeRange: TimeRange) {
@@ -146,7 +179,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public canRemoveTimeRange(): boolean {
-    return this.timeRanges.length > 1;
+    return this.savedTimeRanges.length > 1;
   }
 
 
@@ -222,6 +255,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   public saveDashboard() {
     this.loading = true;
+    this.dashboard.selectedRegions = [...this.selectedRegions];
+    this.dashboard.savedTimeRanges = this.savedTimeRanges.map(timeRange => {
+      return {
+        start: timeRange.start.getTime() / 1000,
+        end: timeRange.end.getTime() / 1000
+      }
+    });
+    this.dashboard.selectedTimeRange = {
+      start: this.selectedTimeRange.start.getTime() / 1000,
+      end: this.selectedTimeRange.end.getTime() / 1000
+    };
+
     this.dashboardService.createDashboard$(this.dashboard).pipe(finalize(() => this.loading = false), takeUntil(this.destroy)).subscribe(response => {
       if (response.error) {
         this.snackbar.open(`Failed to save dashboard: "${this.dashboard.title}", Error: ${response.error}`, 'Close');
@@ -234,12 +279,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     })
   }
 
-
-
   public onApplyFilters() {
     this.selectedRegions = this.filters.value.regions as Region[];
     const filter = this.getCurrentFilter();
     this.filterSidebar.toggle();
     this.loadDashboardData(filter);
+  }
+
+  public navigateToCreateDashboard($event: any): void {
+    $event.preventDefault();
+    this.router.navigate([AppRoutes.CREATE_DASHBOARD]);
   }
 }

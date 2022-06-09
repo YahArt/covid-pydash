@@ -127,7 +127,7 @@ def dashboard_by_identifier(identifier):
             dashboard = load_dashboard_file(dashboard_full_path)
             delete_dashboard_file(dashboard_full_path)
     except FileNotFoundError:
-        error = 'Dashboard could not be found...'
+        error = 'DASHBOARD_NOT_FOUND'
     except BaseException as exception_error:
         error = str(exception_error)
     finally:

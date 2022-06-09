@@ -1,5 +1,13 @@
 @import "../../../styles.scss";
 
+.no-dashboard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: $big-margin
+}
+
 .filters-form {
     display: flex;
     flex-direction: column;
@@ -12,8 +20,6 @@
     mat-chip-list {
         padding: 0 $default-margin;
     }
-
-
 }
 
 .filter-area {
