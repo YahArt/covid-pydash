@@ -81,6 +81,29 @@ export class ValuesConverter {
         return mapSeries;
     }
 
+    private static convertCovidHospitalityCapacityToBarChartSeries(informationSubType: CovidInformationSubType, capacity: ICovidHospitalityCapacityResponse): IBarChartSeries {
+        let name = 'NOT DEFINED';
+        if (informationSubType == CovidInformationSubType.AmmountOfCapacityUsed) {
+            name = 'Amount of capacity used'
+        }
+        const barChartSeries: IBarChartSeries = {
+            categories: ['Region'],
+            series: capacity.covidHospitalCapacity.data.map(d => {
+                let value = 0;
+                // Depending on the subtype we choose different values
+                if (informationSubType === CovidInformationSubType.AmmountOfCapacityUsed) {
+                    value = d.capacities[d.capacities.length - 1].totalUsedCapacity;
+                }
+
+                return {
+                    name: d.region,
+                    data: [value]
+                }
+            })
+        }
+        return barChartSeries;
+    }
+
     public static convertBackendResponseValue(responseValue: ResponseValue, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
         switch (informationType) {
             case CovidInformationType.CovidDeaths: {
@@ -106,6 +129,10 @@ export class ValuesConverter {
                     case DashboardWidgetType.Map: {
                         const mapSeries = ValuesConverter.convertCovidHospitalityCapacityToMapSeries(informationSubType, covidHospitalityResponse);
                         return mapSeries;
+                    }
+                    case DashboardWidgetType.BarChart: {
+                        const barChartSeries = ValuesConverter.convertCovidHospitalityCapacityToBarChartSeries(informationSubType, covidHospitalityResponse);
+                        return barChartSeries;
                     }
                     default:
                         // Not supported yet...

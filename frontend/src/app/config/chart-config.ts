@@ -53,6 +53,23 @@ export class ChartConfig {
                     };
                     return config;
                 }
+                else if (widget.informationType === CovidInformationType.CovidHospitalCapacity) {
+                    let title = 'Covid Hospital Capacity';
+                    let yAxisTitle = 'NOT DEFINED';
+                    let xAxisTitle = 'Region';
+                    if (widget.informationSubType === CovidInformationSubType.AmmountOfCapacityUsed) {
+                        title = "Amount of used hospital capacity"
+                        yAxisTitle = "Total Ammount of Capacity used";
+                    }
+                    const config: IChartConfig = {
+                        title: title,
+                        subtitle: 'Severity of Pandemic',
+                        yAxisTitle: yAxisTitle,
+                        xAxisTitle: xAxisTitle,
+                        colors
+                    };
+                    return config;
+                }
                 break;
             }
             case DashboardWidgetType.Map: {
