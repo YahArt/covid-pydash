@@ -59,6 +59,51 @@ export class DashboardService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
+  private convertCovidDeathsToLineChartSeries(informationSubType: CovidInformationSubType, covidDeaths: ICovidDeathsReponse): ILineChartSeries {
+    const lineChartSeries: ILineChartSeries = {
+      series: covidDeaths.covidDeath.data.map(d => {
+        return {
+          name: d.region,
+          series: d.deaths.map(deaths => {
+            let value = 0;
+            // Depending on the subtype we choose different values
+            if (informationSubType === CovidInformationSubType.DailyDeaths) {
+              value = deaths.current;
+            }
+            else if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
+              value = deaths.sumTotal;
+            }
+            const seriesData: ILineChartData = {
+              ticks: deaths.date,
+              value
+            }
+            return seriesData;
+          })
+        }
+      })
+    };
+    return lineChartSeries;
+  }
+
+  private convertCovidDeathsToBarChartSeries(informationSubType: CovidInformationSubType, covidDeaths: ICovidDeathsReponse): IBarChartSeries {
+    const barChartSeries: IBarChartSeries = {
+      categories: ['Region'],
+      series: covidDeaths.covidDeath.data.map(d => {
+        let value = 0;
+        // Depending on the subtype we choose different values
+        if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
+          value = d.deaths[d.deaths.length - 1].sumTotal;
+        }
+
+        return {
+          name: d.region,
+          data: [value]
+        }
+      })
+    }
+    return barChartSeries;
+  }
+
   // TODO: Add other supported visualization types...
   private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
     switch (informationType) {
@@ -67,40 +112,11 @@ export class DashboardService {
           const covidDeathsResponse = responseValue as ICovidDeathsReponse;
           switch (widgetType) {
             case DashboardWidgetType.LineChart: {
-              const lineChartSeries: ILineChartSeries = {
-                series: covidDeathsResponse.covidDeath.data.map(d => {
-                  return {
-                    name: d.region,
-                    series: d.deaths.map(deaths => {
-                      let value = 0;
-                      if (informationSubType === CovidInformationSubType.DailyDeaths) {
-                        value = deaths.current;
-                      }
-                      else if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
-                        value = deaths.sumTotal;
-                      }
-                      // Depending on the subtype we choose different values
-                      const seriesData: ILineChartData = {
-                        ticks: deaths.date,
-                        value
-                      }
-                      return seriesData;
-                    })
-                  }
-                })
-              };
+              const lineChartSeries = this.convertCovidDeathsToLineChartSeries(informationSubType, covidDeathsResponse);
               return lineChartSeries;
             }
             case DashboardWidgetType.BarChart: {
-              const barChartSeries: IBarChartSeries = {
-                series: covidDeathsResponse.covidDeath.data.map(d => {
-                  const totalAmount = d.deaths[d.deaths.length - 1].sumTotal;
-                  return {
-                    name: d.region,
-                    data: [totalAmount]
-                  }
-                })
-              }
+              const barChartSeries = this.convertCovidDeathsToBarChartSeries(informationSubType, covidDeathsResponse);
               return barChartSeries;
             }
             default:

@@ -20,7 +20,7 @@ export class BarChartWidgetComponent extends WidgetBase {
       type: 'column'
     },
     xAxis: {
-      categories: ['Regions'],
+      categories: [],
       title: {
         text: ''
       },
@@ -88,6 +88,10 @@ export class BarChartWidgetComponent extends WidgetBase {
 
     const newOptions: Highcharts.Options = {
       ...this.defaultOptions,
+      xAxis: {
+        ...this.defaultOptions.xAxis,
+        categories: [...barChartSeries.categories]
+      },
       series: [...highChartSerie],
     };
     this.optionsSubject.next(newOptions);
