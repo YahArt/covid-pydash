@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, Subject } from 'rxjs';
+import { Observable, map, Subject, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ValuesConverter } from '../converters/values.converter';
+import { CovidTemplates } from '../enums/covid-templates-enum';
 import { Region } from '../enums/region.enum';
 import { ICreateDashboardResponse } from '../interfaces/icreate-dashboard-response';
 import { IDashboard } from '../interfaces/idashboard';
@@ -12,6 +13,7 @@ import { IDashboardFilter } from '../interfaces/idashboard-filter';
 import { IDashboardWidgetItem } from '../interfaces/idashboard-widget-item';
 import { IDeleteDashboardResponse } from '../interfaces/idelete-dashboard-response';
 import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
+import { IGetDashboardTemplateResponse } from '../interfaces/iget-dashboard-template-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
 import { TimeRange } from '../models/time-range';
 
@@ -75,11 +77,15 @@ export class DashboardService {
     return this.dashboardDataSubject.asObservable();
   }
 
-  public createDashboardFromTemplate(template: string | null): IDashboard {
-    if (template) {
-      // TODO: Add handling for creating dashboard via template
+  public getDashboardFromTemplate$(template: CovidTemplates): Observable<IGetDashboardTemplateResponse> {
+    if (template === CovidTemplates.None) {
+      const noTemplateDashboard: IGetDashboardTemplateResponse = {
+        dashboard: this.DEFAULT_DASHBOARD,
+        error: null
+      }
+      return of(noTemplateDashboard);
     }
-    return this.DEFAULT_DASHBOARD;
+    return this.httpClient.get<IGetDashboardTemplateResponse>(`${environment.restApi}/dashboard/templates/${template}`)
   }
 
   public createDashboard$(dashboard: IDashboard): Observable<ICreateDashboardResponse> {

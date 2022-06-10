@@ -25,10 +25,18 @@ CORS(app)
 
 def get_dashboard_full_path(dashboard_identifier):
 
-    unique_dashboard_file_name_full_path = './dashboards/' + \
+    full_path = './dashboards/' + \
         dashboard_identifier + '.json'
 
-    return unique_dashboard_file_name_full_path
+    return full_path
+
+
+def get_dashboard_template_full_path(template):
+
+    full_path = './templates/' + \
+        template + '.json'
+
+    return full_path
 
 
 def get_dashboard_information_from_full_path(full_path):
@@ -144,6 +152,21 @@ def dashboards():
     finally:
         response_data = {'dashboards': dashboards, 'error': error}
         return make_response(jsonify(response_data), response_code)
+
+
+@app.route('/dashboard/templates/<template>', methods=['GET'])
+def dashboard_by_template(template):
+    dashboard = None
+    error = None
+    try:
+        dashboard_template_full_path = get_dashboard_template_full_path(
+            template)
+        dashboard = load_dashboard_file(dashboard_template_full_path)
+    except BaseException as exception_error:
+        error = str(exception_error)
+    finally:
+        response_data = {'dashboard': dashboard, 'error': error}
+        return make_response(jsonify(response_data), 201)
 
 
 @app.route('/dashboard/<identifier>', methods=['GET', 'DELETE'])

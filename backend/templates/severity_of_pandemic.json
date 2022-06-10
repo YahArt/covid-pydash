@@ -1,0 +1,69 @@
+{
+  "identifier": "04ecacae-e037-7d2a-2909-afa89cac9e9f",
+  "savedTimeRanges": [
+    {
+      "start": 1580511600,
+      "end": 1656108000
+    }
+  ],
+  "selectedRegions": [
+    "ZH",
+    "SG",
+    "TG"
+  ],
+  "selectedTimeRange": {
+    "start": 1580511600,
+    "end": 1656108000
+  },
+  "title": "Severity of Pandemic Template",
+  "widgets": [
+    {
+      "cols": 6,
+      "rows": 4,
+      "y": 4,
+      "x": 0,
+      "minItemRows": 4,
+      "minItemCols": 4,
+      "identifier": "1850a450-281b-f33c-85e8-2e578bdc6fce",
+      "informationType": "covid_hospital_capacity",
+      "informationSubType": "ammount_of_capacity_used",
+      "type": 2
+    },
+    {
+      "cols": 4,
+      "rows": 4,
+      "y": 0,
+      "x": 0,
+      "minItemRows": 4,
+      "minItemCols": 4,
+      "identifier": "8cada71d-585b-bb20-d309-aebb6ecd3b8e",
+      "informationType": "covid_death",
+      "informationSubType": "daily_deaths",
+      "type": 0
+    },
+    {
+      "cols": 6,
+      "rows": 4,
+      "y": 0,
+      "x": 4,
+      "minItemRows": 4,
+      "minItemCols": 4,
+      "identifier": "71032c58-10e8-a71f-d388-cbf8a9c4ef20",
+      "informationType": "covid_hospital_capacity",
+      "informationSubType": "ammount_of_capacity_used",
+      "type": 1
+    },
+    {
+      "cols": 4,
+      "rows": 4,
+      "y": 4,
+      "x": 6,
+      "minItemRows": 4,
+      "minItemCols": 4,
+      "identifier": "13b4a15c-9836-2178-ee3b-b77fdab4ce9d",
+      "informationType": "covid_death",
+      "informationSubType": "sum_total_deaths",
+      "type": 0
+    }
+  ]
+}

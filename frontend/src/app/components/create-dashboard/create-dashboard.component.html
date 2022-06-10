@@ -10,9 +10,8 @@
     <mat-form-field>
         <mat-label>Select a Template if you wish</mat-label>
         <mat-select formControlName="selectedTemplate">
-            <mat-option value="none">None</mat-option>
-            <mat-option value="one">Template 1</mat-option>
-            <mat-option value="two">Template 2</mat-option>
+            <mat-option *ngFor="let template of templates" [value]="template">{{getTemplateFriendlyName(template)}}
+            </mat-option>
         </mat-select>
     </mat-form-field>
 
