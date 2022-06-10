@@ -24,6 +24,16 @@ export class GridConfig {
                     minItemCols: 4,
                 };
             }
+            case DashboardWidgetType.Map: {
+                return {
+                    cols: 4,
+                    rows: 4,
+                    y: 0,
+                    x: 0,
+                    minItemRows: 4,
+                    minItemCols: 4,
+                };
+            }
             default:
                 return {
                     cols: 1,

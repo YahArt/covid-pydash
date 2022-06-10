@@ -1,15 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Guid } from 'guid-typescript';
 import { Observable, map, Subject } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { GridConfig } from '../config/grid-config';
-import { CovidInformationSubType } from '../enums/covid-information-sub-type.enum';
-import { CovidInformationType } from '../enums/covid-information-type.enum';
-import { DashboardWidgetType } from '../enums/dashboard-widget-type.enum';
+import { ValuesConverter } from '../converters/values.converter';
 import { Region } from '../enums/region.enum';
-import { IBarChartSeries } from '../interfaces/ibar-chart-series';
-import { ICovidDeathsReponse } from '../interfaces/icovid-deaths-response';
 import { ICreateDashboardResponse } from '../interfaces/icreate-dashboard-response';
 import { IDashboard } from '../interfaces/idashboard';
 import { IDashboardData } from '../interfaces/idashboard-data';
@@ -19,9 +13,6 @@ import { IDashboardWidgetItem } from '../interfaces/idashboard-widget-item';
 import { IDeleteDashboardResponse } from '../interfaces/idelete-dashboard-response';
 import { IGetDashboardResponse } from '../interfaces/iget-dashboard-response';
 import { IGetDashboardsResponse } from '../interfaces/iget-dashboards-response';
-import { ILineChartData } from '../interfaces/iline-chart-data';
-import { ILineChartSeries } from '../interfaces/iline-chart-series';
-import { ResponseValueConverted } from '../models/response-value-converted';
 import { TimeRange } from '../models/time-range';
 
 
@@ -30,7 +21,7 @@ import { TimeRange } from '../models/time-range';
 })
 export class DashboardService {
 
-  private readonly DEFAULT_REGION = Region.CH;
+  private readonly DEFAULT_REGIONS = [Region.ZH, Region.SG, Region.TG];
   private readonly DEFAULT_TIME_RANGE = new TimeRange(new Date(2020, 1, 1), new Date(2022, 5, 25));
 
 
@@ -42,9 +33,7 @@ export class DashboardService {
       start: this.DEFAULT_TIME_RANGE.start.getTime() / 1000,
       end: this.DEFAULT_TIME_RANGE.end.getTime() / 1000
     },
-    selectedRegions: [
-      this.DEFAULT_REGION
-    ],
+    selectedRegions: this.DEFAULT_REGIONS,
     savedTimeRanges: [
       {
         start: this.DEFAULT_TIME_RANGE.start.getTime() / 1000,
@@ -59,74 +48,8 @@ export class DashboardService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  private convertCovidDeathsToLineChartSeries(informationSubType: CovidInformationSubType, covidDeaths: ICovidDeathsReponse): ILineChartSeries {
-    const lineChartSeries: ILineChartSeries = {
-      series: covidDeaths.covidDeath.data.map(d => {
-        return {
-          name: d.region,
-          series: d.deaths.map(deaths => {
-            let value = 0;
-            // Depending on the subtype we choose different values
-            if (informationSubType === CovidInformationSubType.DailyDeaths) {
-              value = deaths.current;
-            }
-            else if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
-              value = deaths.sumTotal;
-            }
-            const seriesData: ILineChartData = {
-              ticks: deaths.date,
-              value
-            }
-            return seriesData;
-          })
-        }
-      })
-    };
-    return lineChartSeries;
-  }
-
-  private convertCovidDeathsToBarChartSeries(informationSubType: CovidInformationSubType, covidDeaths: ICovidDeathsReponse): IBarChartSeries {
-    const barChartSeries: IBarChartSeries = {
-      categories: ['Region'],
-      series: covidDeaths.covidDeath.data.map(d => {
-        let value = 0;
-        // Depending on the subtype we choose different values
-        if (informationSubType === CovidInformationSubType.SumTotalDeaths) {
-          value = d.deaths[d.deaths.length - 1].sumTotal;
-        }
-
-        return {
-          name: d.region,
-          data: [value]
-        }
-      })
-    }
-    return barChartSeries;
-  }
-
   // TODO: Add other supported visualization types...
-  private convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
-    switch (informationType) {
-      case CovidInformationType.CovidDeaths:
-        {
-          const covidDeathsResponse = responseValue as ICovidDeathsReponse;
-          switch (widgetType) {
-            case DashboardWidgetType.LineChart: {
-              const lineChartSeries = this.convertCovidDeathsToLineChartSeries(informationSubType, covidDeathsResponse);
-              return lineChartSeries;
-            }
-            case DashboardWidgetType.BarChart: {
-              const barChartSeries = this.convertCovidDeathsToBarChartSeries(informationSubType, covidDeathsResponse);
-              return barChartSeries;
-            }
-            default:
-              // Not supported yet...
-              break;
-          }
-        }
-    }
-    return null;
-  }
+
 
   public notifyEditModeChanged(enabled: boolean) {
     this.editModeChangedSubject.next(enabled);
@@ -192,7 +115,7 @@ export class DashboardService {
         const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationType === v.informationType);
         dasbhoardData = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
 
-          const value = v.noData === true ? null : this.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
+          const value = v.noData === true ? null : ValuesConverter.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
           return {
             identifier: widgetWithSameInformationType.identifier,
             error: v.error,

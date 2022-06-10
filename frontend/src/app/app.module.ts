@@ -35,6 +35,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
 import { BarChartWidgetComponent } from './components/widgets/bar-chart-widget/bar-chart-widget.component';
+import { MapWidgetComponent } from './components/widgets/map-widget/map-widget.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { BarChartWidgetComponent } from './components/widgets/bar-chart-widget/b
     RouteHeadingComponent,
     CreateWidgetDialogComponent,
     CreateDashboardComponent,
-    BarChartWidgetComponent
+    BarChartWidgetComponent,
+    MapWidgetComponent
   ],
   imports: [
     BrowserModule,

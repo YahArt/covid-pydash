@@ -20,7 +20,8 @@ export class CreateWidgetDialogComponent implements OnInit {
   public readonly dataSource: Array<ICreateWidgetDialogEntry> = [
     { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.DailyDeaths, informationSubTypeDesc: 'Daily deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
     { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.LineChart, typeDesc: 'Line Chart' },
-    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.BarChart, typeDesc: 'BarChart' },
+    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.BarChart, typeDesc: 'Bar Chart' },
+    { informationCategory: 'Severity of Pandemic', informationType: CovidInformationType.CovidDeaths, informationTypeDesc: 'Covid Deaths', informationSubType: CovidInformationSubType.SumTotalDeaths, informationSubTypeDesc: 'Sum of total deaths', type: DashboardWidgetType.Map, typeDesc: 'Map' },
   ];
 
   public readonly displayedColumns: string[] = ['selection', 'informationCategory', 'informationType', 'informationSubType', 'visualizationType'];

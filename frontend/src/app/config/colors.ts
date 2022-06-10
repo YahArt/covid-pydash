@@ -17,6 +17,20 @@ export class Colors {
                 }
                 break;
             }
+            case DashboardWidgetType.BarChart: {
+                if (widget.informationType === CovidInformationType.CovidDeaths) {
+                    // We only support up to 4 data series due to the validator so there is no need to specify any more colors...
+                    return ["#000000", "#E3E164", "#E34D4D", "#36A0E3", "#2C6D96"];
+                }
+                break;
+            }
+            case DashboardWidgetType.Map: {
+                if (widget.informationType === CovidInformationType.CovidDeaths) {
+                    // The map is a shows value via gradient therefore we only need 2 colors
+                    return ["#E69393", "#613E3E"];
+                }
+                break;
+            }
         }
         return this.DEFAULT_COLORS;
     }

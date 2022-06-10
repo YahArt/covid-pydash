@@ -55,6 +55,26 @@ export class ChartConfig {
                 }
                 break;
             }
+            case DashboardWidgetType.Map: {
+                if (widget.informationType === CovidInformationType.CovidDeaths) {
+                    let title = 'Covid Deaths over time';
+                    let yAxisTitle = 'Deaths Accumulated';
+                    let xAxisTitle = 'Region';
+                    if (widget.informationSubType === CovidInformationSubType.SumTotalDeaths) {
+                        title = 'Sum of Covid Deaths Total';
+                        yAxisTitle = "Total Ammount of Deaths";
+                    }
+                    const config: IChartConfig = {
+                        title: title,
+                        subtitle: 'Severity of Pandemic',
+                        yAxisTitle: yAxisTitle,
+                        xAxisTitle: xAxisTitle,
+                        colors
+                    };
+                    return config;
+                }
+                break;
+            }
         }
         return null;
     }

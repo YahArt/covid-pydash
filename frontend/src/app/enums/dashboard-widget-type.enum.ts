@@ -1,4 +1,5 @@
 export enum DashboardWidgetType {
     LineChart,
-    BarChart
+    BarChart,
+    Map,
 }

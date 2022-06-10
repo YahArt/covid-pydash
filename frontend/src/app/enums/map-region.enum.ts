@@ -1,0 +1,32 @@
+export enum MapRegion {
+    CH = 'ch-ch',
+    CHFL = 'ch-fl',
+    AG = 'ch-ag',
+    AI = 'ch-ai',
+    AR = 'ch-ar',
+    BE = 'ch-be',
+    BL = 'ch-bl',
+    BS = 'ch-bs',
+    FL = 'ch-fl',
+    FR = 'ch-fr',
+    GE = 'ch-ge',
+    GL = 'ch-gl',
+    GR = 'ch-gr',
+    JU = 'ch-ju',
+    LU = 'ch-lu',
+    NE = 'ch-ne',
+    NW = 'ch-ni', // Little bit strange but this is as it is coded in ch-all.geo.json
+    OW = 'ch-nw', // Little bit strange but this is as it is coded in ch-all.geo.json
+    SG = 'ch-sg',
+    SH = 'ch-sh',
+    SO = 'ch-so',
+    SZ = 'ch-sz',
+    TG = 'ch-tg',
+    TI = 'ch-ti',
+    UR = 'ch-ur',
+    VD = 'ch-vd',
+    VS = 'ch-vs',
+    ZG = 'ch-zg',
+    ZH = 'ch-zh',
+    UNDEFINED = 'undefined'
+}
