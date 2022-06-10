@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBadgeModule } from '@angular/material/badge';
 
 import { HighchartsChartModule } from 'highcharts-angular';
 
@@ -36,6 +37,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
 import { BarChartWidgetComponent } from './components/widgets/bar-chart-widget/bar-chart-widget.component';
 import { MapWidgetComponent } from './components/widgets/map-widget/map-widget.component';
+import { AboutComponent } from './components/about/about.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +52,9 @@ import { MapWidgetComponent } from './components/widgets/map-widget/map-widget.c
     CreateWidgetDialogComponent,
     CreateDashboardComponent,
     BarChartWidgetComponent,
-    MapWidgetComponent
+    MapWidgetComponent,
+    AboutComponent,
+    FaqComponent
   ],
   imports: [
     BrowserModule,
@@ -74,6 +79,7 @@ import { MapWidgetComponent } from './components/widgets/map-widget/map-widget.c
     MatChipsModule,
     MatTableModule,
     MatRadioModule,
+    MatBadgeModule,
     BrowserAnimationsModule,
     HighchartsChartModule
   ],

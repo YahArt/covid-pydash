@@ -1,1 +1,79 @@
-<p>home works!</p>
+<div class="container">
+    <h1>Welcome to Covid PyDash where you can create your own personalized Corona Dashboard!</h1>
+
+    <h2>As a starting point you have a few possibilities to choose from:</h2>
+
+    <div class="card-container">
+        <mat-card class="information-card">
+            <mat-card-subtitle>Create a dashboard</mat-card-subtitle>
+            <mat-card-title>
+                <p>
+                    <span matBadge="1" matBadgeOverlap="false">Create your own dashboard</span>
+                </p>
+            </mat-card-title>
+            <mat-card-content>
+                <p>You can create a Corona Dashboard either from a template or completely from scratch. While you are
+                    there you have the option to keep creating dashboards or open the dashboard directly once it is
+                    created. Once you have opened a dashboard you can dynamically add all kind of different widgets
+                    related to Covid. You also have the possibility to activate edit mode. Once you are in edit mode you
+                    can move, edit and delete your widgets. Of course you also have a saving functionality, so don't
+                    worry about loosing your progress</p>
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button mat-button (click)="navigateToCreateDashboard($event)">HAVE A LOOK</button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="information-card">
+            <mat-card-subtitle>Dashboard Overview</mat-card-subtitle>
+            <mat-card-title>
+                <p>
+                    <span matBadge="2" matBadgeOverlap="false">Manage your created dashboard</span>
+                </p>
+            </mat-card-title>
+            <mat-card-content>
+                <p>In the dashboard overview you can easily manage all your created dashboards. This includes
+                    functionality such as opening the dashboard, deleting and sharing functionality</p>
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button mat-button (click)="navigateToDashboardOverview($event)">HAVE A LOOK</button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="information-card">
+            <mat-card-subtitle>FAQ</mat-card-subtitle>
+            <mat-card-title>
+                <p>
+                    <span matBadge="3" matBadgeOverlap="false">Need some information about Corona?</span>
+                </p>
+            </mat-card-title>
+            <mat-card-content>
+                <p>Here you can get to know the most relevant facts about Corona.</p>
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button mat-button (click)="navigateToFAQ($event)">HAVE A LOOK</button>
+            </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="information-card">
+            <mat-card-subtitle>About</mat-card-subtitle>
+            <mat-card-title>
+                <p>
+                    <span matBadge="4" matBadgeOverlap="false">Interested in the purpose and the technology?</span>
+                </p>
+            </mat-card-title>
+            <mat-card-content>
+                <p>If you would like to know what libraries etc. were used to create this Web Application, you have come
+                    to the right place</p>
+            </mat-card-content>
+            <mat-divider inset></mat-divider>
+            <mat-card-actions>
+                <button mat-button (click)="navigateToAbout($event)">HAVE A LOOK</button>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</div>

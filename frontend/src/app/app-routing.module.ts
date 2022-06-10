@@ -5,6 +5,8 @@ import { DashboardOverviewComponent } from './components/dashboard-overview/dash
 import { AppRoutes } from './config/app-routes';
 import { HomeComponent } from './components/home/home.component';
 import { CreateDashboardComponent } from './components/create-dashboard/create-dashboard.component';
+import { AboutComponent } from './components/about/about.component';
+import { FaqComponent } from './components/faq/faq.component';
 
 const routes: Routes = [
   { path: '', redirectTo: AppRoutes.HOME, pathMatch: 'full' },
@@ -12,6 +14,8 @@ const routes: Routes = [
   { path: AppRoutes.CREATE_DASHBOARD, component: CreateDashboardComponent },
   { path: AppRoutes.DASHBOARD, component: DashboardComponent },
   { path: AppRoutes.DASHBOARD_OVERVIEW, component: DashboardOverviewComponent },
+  { path: AppRoutes.FAQ, component: FaqComponent },
+  { path: AppRoutes.ABOUT, component: AboutComponent },
 ];
 
 @NgModule({

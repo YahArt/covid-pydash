@@ -1,7 +1,4 @@
 <mat-toolbar class="mat-elevation-z4 app-header" color="primary">
-  <a mat-flat-button color="primary" routerLinkActive="active-link" routerLink="/home">
-    Home
-  </a>
   <a *ngFor="let toolbarElement of TOOLBAR_ELEMENTS" mat-flat-button color="primary" routerLinkActive="active-link"
     [routerLink]="toolbarElement.route">
     {{toolbarElement.title}}
