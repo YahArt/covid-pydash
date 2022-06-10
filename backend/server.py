@@ -90,7 +90,7 @@ def handle_covid_death_request(start_date, end_date, regions):
         no_data_per_region_list.append(no_data_per_region)
         result = {
             'region': region,
-            'deaths': json.loads(deaths_for_region.to_json(orient="records")),
+            'deaths': deaths,
         }
         covid_death_obj['data'].append(result)
 
@@ -98,6 +98,33 @@ def handle_covid_death_request(start_date, end_date, regions):
         no_data == True for no_data in no_data_per_region_list)
     result = {
         'covidDeath': covid_death_obj
+    }
+    return (result, no_data_overall)
+
+
+@cache.memoize(timeout=50)
+def handle_covid_hospital_capacity_request(start_date, end_date, regions):
+    covid_hospital_capacity_obj = {'data': []}
+    capacity_in_time_range = covid_service.get_hospital_capacity_in_time_range(
+        start_date, end_date)
+    no_data_per_region_list = []
+    for region in regions:
+        capacity_for_region = covid_service.filter_hospital_capacity_by_region(
+            capacity_in_time_range, region)
+        capacities = json.loads(capacity_for_region.to_json(orient="records"))
+
+        no_data_per_region = len(capacities) == 0
+        no_data_per_region_list.append(no_data_per_region)
+        result = {
+            'region': region,
+            'capacities': capacities,
+        }
+        covid_hospital_capacity_obj['data'].append(result)
+
+    no_data_overall = all(
+        no_data == True for no_data in no_data_per_region_list)
+    result = {
+        'covidHospitalCapacity': covid_hospital_capacity_obj
     }
     return (result, no_data_overall)
 
@@ -184,6 +211,10 @@ def dashboard_data():
             # TODO: Handle other information types...
             if information == "covid_death":
                 value, no_data = handle_covid_death_request(
+                    start_date, end_date, regions)
+
+            elif information == "covid_hospital_capacity":
+                value, no_data = handle_covid_hospital_capacity_request(
                     start_date, end_date, regions)
         except BaseException as exception_error:
             error = str(exception_error)

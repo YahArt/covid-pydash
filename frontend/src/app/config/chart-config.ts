@@ -56,19 +56,16 @@ export class ChartConfig {
                 break;
             }
             case DashboardWidgetType.Map: {
-                if (widget.informationType === CovidInformationType.CovidDeaths) {
-                    let title = 'Covid Deaths over time';
-                    let yAxisTitle = 'Deaths Accumulated';
-                    let xAxisTitle = 'Region';
-                    if (widget.informationSubType === CovidInformationSubType.SumTotalDeaths) {
-                        title = 'Sum of Covid Deaths Total';
-                        yAxisTitle = "Total Ammount of Deaths";
+                if (widget.informationType === CovidInformationType.CovidHospitalCapacity) {
+                    let title = 'Covid Hospitality';
+                    if (widget.informationSubType === CovidInformationSubType.AmmountOfCapacityUsed) {
+                        title = 'Amount of used hospital capacity';
                     }
                     const config: IChartConfig = {
                         title: title,
                         subtitle: 'Severity of Pandemic',
-                        yAxisTitle: yAxisTitle,
-                        xAxisTitle: xAxisTitle,
+                        yAxisTitle: '',
+                        xAxisTitle: '',
                         colors
                     };
                     return config;

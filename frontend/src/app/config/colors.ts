@@ -25,7 +25,7 @@ export class Colors {
                 break;
             }
             case DashboardWidgetType.Map: {
-                if (widget.informationType === CovidInformationType.CovidDeaths) {
+                if (widget.informationType === CovidInformationType.CovidHospitalCapacity) {
                     // The map is a shows value via gradient therefore we only need 2 colors
                     return ["#E69393", "#613E3E"];
                 }

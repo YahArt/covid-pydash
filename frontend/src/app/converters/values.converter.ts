@@ -3,10 +3,12 @@ import { CovidInformationType } from "../enums/covid-information-type.enum";
 import { DashboardWidgetType } from "../enums/dashboard-widget-type.enum";
 import { IBarChartSeries } from "../interfaces/ibar-chart-series";
 import { ICovidDeathsReponse } from "../interfaces/icovid-deaths-response";
+import { ICovidHospitalityCapacityResponse } from "../interfaces/icovid-hospitality-capacity-response";
 import { ILineChartData } from "../interfaces/iline-chart-data";
 import { ILineChartSeries } from "../interfaces/iline-chart-series";
 import { IMapData } from "../interfaces/imap-data";
 import { IMapSeries } from "../interfaces/imap-series";
+import { ResponseValue } from "../models/response-value";
 import { ResponseValueConverted } from "../models/response-value-converted";
 import { EnumConverter } from "./enum-converter";
 
@@ -57,19 +59,19 @@ export class ValuesConverter {
         return barChartSeries;
     }
 
-    private static convertCovidDeathsToMapSeries(informationSubType: CovidInformationSubType, covidDeaths: ICovidDeathsReponse): IMapSeries {
+    private static convertCovidHospitalityCapacityToMapSeries(informationSubType: CovidInformationSubType, capacity: ICovidHospitalityCapacityResponse): IMapSeries {
         let name = 'NOT DEFINED';
-        if (informationSubType == CovidInformationSubType.SumTotalDeaths) {
-            name = 'Sum of total Covid Deaths'
+        if (informationSubType == CovidInformationSubType.AmmountOfCapacityUsed) {
+            name = 'Amount of capacity used'
         }
         const mapSeries: IMapSeries = {
             series: [
                 {
                     name,
-                    data: covidDeaths.covidDeath.data.map(d => {
+                    data: capacity.covidHospitalCapacity.data.map(d => {
                         const data: IMapData = {
                             region: EnumConverter.convertRegionToMapRegion(d.region),
-                            value: d.deaths[d.deaths.length - 1].sumTotal
+                            value: d.capacities[d.capacities.length - 1].totalUsedCapacity
                         }
                         return data;
                     })
@@ -79,29 +81,39 @@ export class ValuesConverter {
         return mapSeries;
     }
 
-    public static convertBackendResponseValue(responseValue: ICovidDeathsReponse, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
+    public static convertBackendResponseValue(responseValue: ResponseValue, informationType: CovidInformationType, informationSubType: CovidInformationSubType, widgetType: DashboardWidgetType): ResponseValueConverted {
         switch (informationType) {
-            case CovidInformationType.CovidDeaths:
-                {
-                    const covidDeathsResponse = responseValue as ICovidDeathsReponse;
-                    switch (widgetType) {
-                        case DashboardWidgetType.LineChart: {
-                            const lineChartSeries = ValuesConverter.convertCovidDeathsToLineChartSeries(informationSubType, covidDeathsResponse);
-                            return lineChartSeries;
-                        }
-                        case DashboardWidgetType.BarChart: {
-                            const barChartSeries = ValuesConverter.convertCovidDeathsToBarChartSeries(informationSubType, covidDeathsResponse);
-                            return barChartSeries;
-                        }
-                        case DashboardWidgetType.Map: {
-                            const mapSeries = ValuesConverter.convertCovidDeathsToMapSeries(informationSubType, covidDeathsResponse);
-                            return mapSeries;
-                        }
-                        default:
-                            // Not supported yet...
-                            break;
+            case CovidInformationType.CovidDeaths: {
+                const covidDeathsResponse = responseValue as ICovidDeathsReponse;
+                switch (widgetType) {
+                    case DashboardWidgetType.LineChart: {
+                        const lineChartSeries = ValuesConverter.convertCovidDeathsToLineChartSeries(informationSubType, covidDeathsResponse);
+                        return lineChartSeries;
                     }
+                    case DashboardWidgetType.BarChart: {
+                        const barChartSeries = ValuesConverter.convertCovidDeathsToBarChartSeries(informationSubType, covidDeathsResponse);
+                        return barChartSeries;
+                    }
+                    default:
+                        // Not supported yet...
+                        break;
                 }
+                break;
+            }
+            case CovidInformationType.CovidHospitalCapacity: {
+                const covidHospitalityResponse = responseValue as ICovidHospitalityCapacityResponse;
+                switch (widgetType) {
+                    case DashboardWidgetType.Map: {
+                        const mapSeries = ValuesConverter.convertCovidHospitalityCapacityToMapSeries(informationSubType, covidHospitalityResponse);
+                        return mapSeries;
+                    }
+                    default:
+                        // Not supported yet...
+                        break;
+                }
+                break;
+
+            }
         }
         return null;
     }
