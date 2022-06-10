@@ -113,7 +113,7 @@ export class DashboardService {
       // Otherwise we would send the same data multiplied by each widget (e.g having two data trends widget for information type covid deaths etc.)
       dashboardResponse.dashboardData.forEach(v => {
         const dashboardWidgetsWithSameInformationType = dashboard.filter(d => d.informationType === v.informationType);
-        dasbhoardData = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
+        const dataForWidgetsWithSameInformationType = dashboardWidgetsWithSameInformationType.map(widgetWithSameInformationType => {
 
           const value = v.noData === true ? null : ValuesConverter.convertBackendResponseValue(v.value, widgetWithSameInformationType.informationType, widgetWithSameInformationType.informationSubType, widgetWithSameInformationType.type);
           return {
@@ -123,6 +123,7 @@ export class DashboardService {
             noData: v.noData
           }
         })
+        dasbhoardData.push(...dataForWidgetsWithSameInformationType);
       });
       return dasbhoardData;
     }));
