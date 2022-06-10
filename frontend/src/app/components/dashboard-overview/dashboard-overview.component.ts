@@ -5,6 +5,7 @@ import { finalize, Subject, takeUntil } from 'rxjs';
 import { AppRoutes } from 'src/app/config/app-routes';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { RouteHeadingService } from 'src/app/services/route-heading.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
   selector: 'app-dashboard-overview',
@@ -24,7 +25,7 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
   public readonly displayedColumns: string[] = ['title', 'identifier', 'actions'];
 
 
-  constructor(private readonly dashboardService: DashboardService, private readonly router: Router, private readonly routeHeadingService: RouteHeadingService, private readonly snackbar: MatSnackBar) { }
+  constructor(private readonly dashboardService: DashboardService, private readonly router: Router, private readonly routeHeadingService: RouteHeadingService, private readonly snackbar: MatSnackBar, private readonly clipboard: Clipboard) { }
 
   public ngOnInit(): void {
     this.loading = true;
@@ -44,6 +45,13 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
     this.router.navigate([AppRoutes.DASHBOARD], {
       queryParams: { identifier: dashboard.identifier }
     });
+  }
+
+  public copyShareLink(dashboard: { identifier: string, title: string }) {
+    const shareLink = `http://localhost:4200/dashboard?identifier=${dashboard.identifier}`
+    this.clipboard.copy(shareLink);
+    const message = `A share link was copied into your clipboard, please open a new tab and paste it`
+    this.snackbar.open(message, 'Close');
   }
 
   public deleteDashboard(dashboard: { identifier: string, title: string }) {

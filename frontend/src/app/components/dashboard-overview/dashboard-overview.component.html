@@ -16,7 +16,8 @@
             <th mat-header-cell *matHeaderCellDef>Actions</th>
             <td mat-cell *matCellDef="let dashboard" class="actions">
                 <button mat-flat-button color="primary" (click)="openDashboard(dashboard)">Open Dashboard</button>
-                <button mat-flat-button color="primary" (click)="deleteDashboard(dashboard)">Delete Dashboard</button>
+                <button mat-flat-button (click)="deleteDashboard(dashboard)">Delete Dashboard</button>
+                <button mat-flat-button (click)="copyShareLink(dashboard)">Share</button>
             </td>
         </ng-container>
 
