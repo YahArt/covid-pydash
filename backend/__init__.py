@@ -51,7 +51,8 @@ def save_dashboard(dashboard):
 
 
 def get_dashboards():
-    dashboard_files = glob.glob("./dashboards/*.json")
+    dashboard_files_path = os.path.join(app.static_folder, 'dashboards/*.json')
+    dashboard_files = glob.glob(dashboard_files_path)
     dashboards = []
     for dashboard_file in dashboard_files:
         dashboards.append(
