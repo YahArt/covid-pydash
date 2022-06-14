@@ -1,14 +1,18 @@
 import pandas as pd
 import json
+import os
 
 
 class CovidService:
-    def __init__(self):
+    def __init__(self, app):
+        self.app = app
         self.covid_deaths = self.initialize_covid_deaths_data()
         self.covid_hospital_capacity = self.initialize_covid_hospital_capacity_data()
 
     def initialize_covid_deaths_data(self):
-        covid_deaths = pd.read_csv('./data/COVID19Death_geoRegion.csv')
+        data_covid_death_path = os.path.join(
+            self.app.static_folder, 'data', 'COVID19Death_geoRegion.csv')
+        covid_deaths = pd.read_csv(data_covid_death_path)
         covid_deaths = covid_deaths[[
             'geoRegion', 'datum', 'entries', 'sumTotal']]
 
@@ -23,8 +27,10 @@ class CovidService:
         return covid_deaths
 
     def initialize_covid_hospital_capacity_data(self):
+        data_covid_hospital_capacity_path = os.path.join(
+            self.app.static_folder, 'data', 'COVID19HospCapacity_geoRegion.csv')
         covid_hospital_capacity = pd.read_csv(
-            './data/COVID19HospCapacity_geoRegion.csv')
+            data_covid_hospital_capacity_path)
         covid_hospital_capacity = covid_hospital_capacity[[
             'geoRegion', 'date', 'TotalPercent_AllPatients']]
 

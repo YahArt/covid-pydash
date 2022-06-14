@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_cors import CORS
 from flask import request
 from flask import Flask
-from services.covid_service import CovidService
+from .services.covid_service import CovidService
 import json
 import glob
 import os
@@ -12,31 +12,23 @@ import datetime
 from flask_caching import Cache
 
 
-app = Flask(__name__)
+app = Flask("backend")
 
 # Initialize cache
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 # Create covid service for data handling
-covid_service = CovidService()
+covid_service = CovidService(app)
 
 CORS(app)
 
 
 def get_dashboard_full_path(dashboard_identifier):
-
-    full_path = './dashboards/' + \
-        dashboard_identifier + '.json'
-
-    return full_path
+    return os.path.join(app.static_folder, 'dashboards', dashboard_identifier + '.json')
 
 
 def get_dashboard_template_full_path(template):
-
-    full_path = './templates/' + \
-        template + '.json'
-
-    return full_path
+    return os.path.join(app.static_folder, 'templates', template + '.json')
 
 
 def get_dashboard_information_from_full_path(full_path):
@@ -247,6 +239,3 @@ def dashboard_data():
             dashboard_data.append(response_obj)
     response_data = {'dashboardData': dashboard_data}
     return make_response(jsonify(response_data), 201)
-
-
-app.run(host='0.0.0.0', port=81)
