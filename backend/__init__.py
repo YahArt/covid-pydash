@@ -4,7 +4,7 @@ from flask import jsonify
 from flask_cors import CORS
 from flask import request
 from flask import Flask
-import services.covid_service
+from services.covid_service import CovidService
 import json
 import glob
 import os
@@ -12,13 +12,13 @@ import datetime
 from flask_caching import Cache
 
 
-app = Flask("Covid-PyDash REST API")
+app = Flask(__name__)
 
 # Initialize cache
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
 # Create covid service for data handling
-covid_service = services.covid_service.CovidService()
+covid_service = CovidService()
 
 CORS(app)
 
