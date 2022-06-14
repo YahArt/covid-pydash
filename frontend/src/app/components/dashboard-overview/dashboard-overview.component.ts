@@ -6,6 +6,7 @@ import { AppRoutes } from 'src/app/config/app-routes';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { RouteHeadingService } from 'src/app/services/route-heading.service';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dashboard-overview',
@@ -48,7 +49,7 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
   }
 
   public copyShareLink(dashboard: { identifier: string, title: string }) {
-    const shareLink = `http://localhost:4200/dashboard?identifier=${dashboard.identifier}`
+    const shareLink = `${environment.shareLinkPrefix}/dashboard?identifier=${dashboard.identifier}`
     this.clipboard.copy(shareLink);
     const message = `A share link was copied into your clipboard, please open a new tab and paste it`
     this.snackbar.open(message, 'Close');

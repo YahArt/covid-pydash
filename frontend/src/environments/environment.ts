@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  restApi: 'http://localhost:5000'
+  restApi: 'http://172.104.156.50:5000',
+  shareLinkPrefix: 'http://172.104.156.50:80'
 };
 
 /*
