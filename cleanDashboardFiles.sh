@@ -1,0 +1,1 @@
+rm -rf ./backend/static/dashboards/*.json
