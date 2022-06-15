@@ -61,7 +61,8 @@ def get_dashboards():
 
 
 def get_dashboards_count():
-    dashboard_files = glob.glob("./dashboards/*.json")
+    dashboard_files_path = os.path.join(app.static_folder, 'dashboards/*.json')
+    dashboard_files = glob.glob(dashboard_files_path)
     return len(dashboard_files)
 
 
