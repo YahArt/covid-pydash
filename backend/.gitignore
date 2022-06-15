@@ -1,7 +1,14 @@
-# Byte-compiled / optimized / DLL files
+# Ignore pycache directories
 services/__pycache__/
-*.py[cod]
+/__pycache__/
+
+# Ignore generated dashboard files
+static/dashboards/
+
+
+# Byte-compiled / optimized / DLL files
 *$py.class
+*.py[cod]
 
 # C extensions
 *.so
