@@ -23,6 +23,17 @@ With these dependencies installed please do the following steps next:
 * Navigate to the **frontend** directory
 * Start the wep application with `ng serve`
 
+## Deployment on LeNode
+* Clone Repository into local virtual machine
+* Do setup steps (see Setup)
+* sudo apt-get install nginx
+* sudo apt-get install gunicorn
+* Navigate into cloned repository
+* Run setup.sh script
+* Create nginx config
+* Reload nginx
+* Start gunicorn with ``gunicorn -w 5 backend:app -b 0.0.0.0:5000``
+
 ## How does it look like?
 
 ### Home Section
