@@ -1,1 +1,1 @@
-gunicorn -w 5 backend:app
+gunicorn -w 5 backend:app -b 0.0.0.0:5000
