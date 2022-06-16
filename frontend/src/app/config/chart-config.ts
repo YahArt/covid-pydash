@@ -7,7 +7,6 @@ import { Colors } from "./colors";
 
 export class ChartConfig {
 
-    // TODO: Add further config types for other widgets...
     public static getConfig(widget: IDashboardWidgetItem): IChartConfig | null {
         const colors = Colors.getColors(widget);
         switch (widget.type) {

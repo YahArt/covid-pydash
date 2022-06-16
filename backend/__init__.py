@@ -225,7 +225,6 @@ def dashboard_data():
             value = None
             no_data = False
             error = None
-            # TODO: Handle other information types...
             if information == "covid_death":
                 value, no_data = handle_covid_death_request(
                     start_date, end_date, regions)

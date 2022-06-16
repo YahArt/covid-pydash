@@ -50,8 +50,6 @@ export class DashboardService {
 
   constructor(private readonly httpClient: HttpClient) { }
 
-  // TODO: Add other supported visualization types...
-
 
   public notifyEditModeChanged(enabled: boolean) {
     this.editModeChangedSubject.next(enabled);
